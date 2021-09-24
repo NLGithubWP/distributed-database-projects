@@ -5,7 +5,6 @@ import random
 import logging
 from argparse import ArgumentParser, RawTextHelpFormatter
 import psycopg2
-from psycopg2.errors import SerializationFailure
 
 
 def tx1():
@@ -32,12 +31,29 @@ def tx6():
     pass
 
 
-def tx7():
-    pass
+def tx7(conn):
+    with conn.cursor() as cur:
+        cur.execute(
+            '''WITH top_customers AS 
+            (SELECT c_first, c_middle, c_last, c_balance, c_d_id, c_w_id FROM customer
+            ORDER BY customer.c_balance DESC LIMIT 10)
+            SELECT c_first, c_middle, c_last, c_balance, w_name, d_name
+            FROM top_customers 
+            JOIN district ON d_id=top_customers.c_d_id AND d_w_id=top_customers.c_w_id
+            JOIN warehouse ON w_id=top_customers.c_w_id
+            ORDER BY top_customers.c_balance DESC;''')
+        rows = cur.fetchall()
+        conn.commit()
+        print("Top 10 customers ranked in descending order of outstanding balance:")
+        for row in rows:
+            print(row)
 
 
-def tx8():
-    pass
+def tx8(conn, c_w_id, c_d_id, c_id):
+    with conn.cursor() as cur:
+        cur.execute("SELECT C_ID FROM customer WHERE C_W_ID != %s", (c_w_id, ))
+
+    conn.commit()
 
 
 def main():
@@ -59,9 +75,9 @@ def main():
         elif opt.txId == "6":
             tx6()
         elif opt.txId == "7":
-            tx7()
+            tx7(conn)
         elif opt.txId == "8":
-            tx8()
+            tx8(conn)
         # The function below is used to test the transaction retry logic.  It
         # can be deleted from production code.
         # run_transaction(conn, test_retry_loop)
