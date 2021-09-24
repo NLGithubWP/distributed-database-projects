@@ -138,7 +138,7 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
         c_credit = res[2]
 
         total_amount = total_amount * (1 + d_tax + w_tax) * (1 - c_discount)
-    m_conn.rollback()
+    m_conn.commit()
     print(cur.statusmessage)
 
     print("------------ result is ---------")
