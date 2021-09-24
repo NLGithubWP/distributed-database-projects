@@ -7,10 +7,22 @@ from argparse import ArgumentParser, RawTextHelpFormatter
 import psycopg2
 from psycopg2.errors import SerializationFailure
 from psycopg2.extras import LoggingConnection, LoggingCursor
+import sys
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 update_batch_size = 100
 select_batch_size = 1000
 
+# time spent running all transactions
+total_tx_time = 0
+# total number of transactions
+total_tx_num = 0
+# time spent running each transaction
+each_tx_time = 0
+# tx time list
+time_used_list = []
 
 NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
@@ -21,6 +33,33 @@ NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 
+
+# MyLoggingCursor simply sets self.timestamp at start of each query
+class MyLoggingCursor(LoggingCursor):
+    def execute(self, query, vars=None):
+        self.timestamp = time.time()
+        return super(MyLoggingCursor, self).execute(query, vars)
+
+    def callproc(self, procname, vars=None):
+        self.timestamp = time.time()
+        return super(MyLoggingCursor, self).callproc(procname, vars)
+
+
+# MyLogging Connection:
+#   a) calls MyLoggingCursor rather than the default
+#   b) adds resulting execution (+ transport) time via filter()
+class MyLoggingConnection(LoggingConnection):
+    def filter(self, msg, curs):
+        global total_tx_time
+        global each_tx_time
+        time_used = int((time.time() - curs.timestamp) * 1000)
+        total_tx_time += time_used
+        each_tx_time += time_used
+        return "[" + str(msg)[2:-1] + "]:   %d ms" % int((time.time() - curs.timestamp) * 1000)
+
+    def cursor(self, *args, **kwargs):
+        kwargs.setdefault('cursor_factory', MyLoggingCursor)
+        return LoggingConnection.cursor(self, *args, **kwargs)
 
 class NewOrderTxParams:
     def __init__(self):
@@ -76,7 +115,8 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
                 break
 
         cur.execute("INSERT INTO order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D) "
-                    "VALUES (%s,%s,%s,%s,%s,%s, now()) RETURNING O_ENTRY_D", (w_id, d_id, n, c_id, num_items, all_local))
+                    "VALUES (%s,%s,%s,%s,%s,%s, now()) RETURNING O_ENTRY_D",
+                    (w_id, d_id, n, c_id, num_items, all_local))
         entry_d = cur.fetchone()[0]
 
         # 4. Initialize TOTAL AMOUNT = 0
@@ -97,6 +137,7 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
             s_dist_xx_value = res[1]
 
             adjusted_qty = s_quantity - quantity[i]
+
             if adjusted_qty < 10:
                 adjusted_qty = adjusted_qty + 100
 
@@ -139,7 +180,6 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
 
         total_amount = total_amount * (1 + d_tax + w_tax) * (1 - c_discount)
     m_conn.commit()
-    print(cur.statusmessage)
 
     print("------------ result is ---------")
     print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C DISCOUNT")
@@ -189,6 +229,13 @@ def tx8():
 
 
 def execute_tx(m_conn, m_params):
+    global total_tx_time
+    global total_tx_num
+    global time_used_list
+    global each_tx_time
+
+    total_tx_num += 1
+    is_success = True
     try:
 
         if params.__class__.__name__ == NewOrderTxName:
@@ -198,19 +245,32 @@ def execute_tx(m_conn, m_params):
         # can be deleted from production code.
         # run_transaction(conn, test_retry_loop)
     except ValueError as ve:
+        is_success = False
         # Below, we print the error and continue on so this example is easy to
         # run (and run, and run...).  In real code you should handle this error
         # and any others thrown by the database interaction.
         logging.debug("run_transaction(conn, op) failed: %s", ve)
         pass
     except Exception as e:
+        is_success = False
         raise
+
+    if is_success:
+        # record time used
+        time_used_list.append(each_tx_time)
+        each_tx_time = 0
+    else:
+        total_tx_num -= 1
 
 
 def parse_stdin(m_inputs: [str]):
+    """
+    :param m_inputs: N, P, D, O, S, I, T, or R
+    :return:
+    """
     tmp_list = m_inputs[0].split(",")
     if tmp_list[0] == "N":
-        if len(m_inputs) < int(tmp_list[4])+1:
+        if len(m_inputs) < int(tmp_list[4]) + 1:
             return False, None
         else:
             m_params = NewOrderTxParams()
@@ -228,59 +288,87 @@ def parse_stdin(m_inputs: [str]):
                 m_params.quantity.append(int(tmp_remain_line_list[2]))
 
             return True, m_params
+    elif tmp_list[0] == "P":
+        return False, "not-implemented"
+    elif tmp_list[0] == "D":
+        return False, "not-implemented"
+    elif tmp_list[0] == "O":
+        return False, "not-implemented"
+    elif tmp_list[0] == "S":
+        return False, "not-implemented"
+    elif tmp_list[0] == "I":
+        return False, "not-implemented"
+    elif tmp_list[0] == "T":
+        return False, "not-implemented"
+    elif tmp_list[0] == "R":
+        return False, "not-implemented"
     else:
-        return False, _
+        return False, None
 
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+def evaluate():
+    """
+    • Total number of transactions processed
+    • Total elapsed time for processing the transactions (in seconds)
+    • Transaction throughput (number of transactions processed per second)
+    • Average transaction latency (in ms)
+    • Median transaction latency (in ms)
+    • 95th percentile transaction latency (in ms)
+    • 99th percentile transaction latency (in ms)
+    :return:
+    """
+    global total_tx_time
+    global total_tx_num
 
+    time_used_list.sort()
 
-# MyLoggingCursor simply sets self.timestamp at start of each query
-class MyLoggingCursor(LoggingCursor):
-    def execute(self, query, vars=None):
-        self.timestamp = time.time()
-        return super(MyLoggingCursor, self).execute(query, vars)
-
-    def callproc(self, procname, vars=None):
-        self.timestamp = time.time()
-        return super(MyLoggingCursor, self).callproc(procname, vars)
-
-
-# MyLogging Connection:
-#   a) calls MyLoggingCursor rather than the default
-#   b) adds resulting execution (+ transport) time via filter()
-class MyLoggingConnection(LoggingConnection):
-    def filter(self, msg, curs):
-        return "["+str(msg)[2:-1] + "]:   %d ms" % int((time.time() - curs.timestamp) * 1000)
-
-    def cursor(self, *args, **kwargs):
-        kwargs.setdefault('cursor_factory', MyLoggingCursor)
-        return LoggingConnection.cursor(self, *args, **kwargs)
+    print("------------time spent list", time_used_list)
+    print("------------Total time spent in tx", total_tx_time, "ms or", total_tx_time / 1000, "s", "------", )
+    print("------------Throughout is", total_tx_num / (total_tx_time / 1000), "------", )
+    print("------------Average transaction latency (in ms) is", total_tx_time / total_tx_num, "ms------", )
+    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)], "ms------")
 
 
 # python3 cockroachDB_driver.py "postgresql://naili:naili@localhost:26257/cs5424?sslmode=require"
 if __name__ == "__main__":
+
     isDebug = True
     addr = "postgresql://naili:naili@localhost:26257/cs5424?sslmode=require"
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
 
+    inputs = []
+
     if isDebug:
-        inputs = ["N,1144,1,1,7",
-                  "34981,1,1", "77989,1,7", "73381,1,5", "28351,1,1", "40577,1,4", "89822,1,4", "57015,1,2"]
-        triggered, params = parse_stdin(inputs)
-        execute_tx(conn, params)
-        conn.close()
+        # read from file
+        f = open(
+            "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/project_files/xact_files_A/0.txt")
+        line_content = f.readline()
+        while line_content.strip():
+            inputs.append(line_content.strip())
+            triggered, params = parse_stdin(inputs)
+            if triggered:
+                execute_tx(conn, params)
+                inputs = []
+            elif params == "not-implemented":
+                inputs = []
+            line_content = f.readline()
+
+            if total_tx_num > 20:
+                break
+
+        f.close()
+        evaluate()
         exit(0)
 
-    inputs = []
-    while True:
-        typed_msg = input()
-        if typed_msg.strip() != "":
-            inputs.append(typed_msg.strip())
+    # read from stdin
+    for user_input in sys.stdin:
+        if user_input.strip() == "":
+            continue
+        inputs.append(user_input.strip())
         triggered, params = parse_stdin(inputs)
         if triggered:
             execute_tx(conn, params)
             inputs = []
+
     conn.close()
