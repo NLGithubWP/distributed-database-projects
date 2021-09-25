@@ -148,11 +148,13 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
 
             if supplier_warehouse[i] != w_id:
                 cur.execute(
-                    "UPDATE stock SET S_QUANTITY=%s,S_YTD=%s,S_ORDER_CNT=S_ORDER_CNT+1 WHERE S_W_ID = %s and S_I_ID = %s",
+                    "UPDATE stock SET S_QUANTITY = %s, S_YTD = %s,S_ORDER_CNT=S_ORDER_CNT+1 "
+                    "WHERE S_W_ID = %s and S_I_ID = %s",
                     (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
             else:
                 cur.execute(
-                    "UPDATE stock SET S_QUANTITY=%s,S_YTD=%s,S_ORDER_CNT=S_ORDER_CNT+1,S_REMOTE_CNT=S_REMOTE_CNT+1 WHERE S_W_ID = %s and S_I_ID = %s",
+                    "UPDATE stock SET S_QUANTITY = %s,S_YTD = %s,S_ORDER_CNT=S_ORDER_CNT+1,S_REMOTE_CNT=S_REMOTE_CNT+1 "
+                    "WHERE S_W_ID = %s and S_I_ID = %s",
                     (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
 
             cur.execute("SELECT I_PRICE, I_NAME FROM item WHERE I_ID = %s", [item_number[i]])
@@ -165,7 +167,8 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
             total_amount += item_amount
 
             cur.execute(
-                "INSERT INTO order_line (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) "
+                "INSERT INTO order_line "
+                "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) "
                 "values (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                 (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx))
 
@@ -438,6 +441,7 @@ if __name__ == "__main__":
 
         f.close()
         evaluate()
+        conn.close()
         exit(0)
 
     # read from stdin
