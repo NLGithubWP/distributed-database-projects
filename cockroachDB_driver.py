@@ -415,7 +415,7 @@ def evaluate():
 if __name__ == "__main__":
 
     isDebug = True
-    addr = "postgresql://user1:password@localhost:26258/cs5424?sslmode=require"
+    addr = "postgresql://naili:naili@localhost:26257/cs5424?sslmode=require"
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
 
@@ -424,7 +424,7 @@ if __name__ == "__main__":
     if isDebug:
         # read from file
         f = open(
-            "/mnt/c/a.SCHOOL/Master/distributed_database/project_files/xact_files_B/2.txt")
+            "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/project_files/xact_files_A/0.txt")
         line_content = f.readline()
         while line_content.strip():
             inputs.append(line_content.strip())
