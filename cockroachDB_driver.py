@@ -30,8 +30,7 @@ NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 PopItemTxName = "PopItemTxParams"
-# NewOrderTxName = "NewOrderTxParams"
-# NewOrderTxName = "NewOrderTxParams"
+RelCustomerTxName = "RelCustomerTxParams"
 
 
 # MyLoggingCursor simply sets self.timestamp at start of each query
@@ -76,6 +75,12 @@ class PopItemTxParams:
         self.w_id: int = 0
         self.d_id: int = 0
         self.l: int = 0
+
+class RelCustomerTxParams:
+    def __init__(self):
+        self.w_id: int = 0
+        self.d_id: int = 0
+        self.c_id: int = 0
 
 def new_order_transaction(m_conn, m_params: NewOrderTxParams):
     """
@@ -225,22 +230,28 @@ def tx5():
 
 
 def popular_item_transaction(m_conn, m_params: PopItemTxParams):
-    print("tx6 triggered")
     w_id = m_params.w_id
     d_id = m_params.d_id
     l = m_params.l
+    pop_item_set = set()
 
+    print("-------------------------------")
+    print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id) )
+    print("Number of orders to be examined: %s" % (l,))
     with m_conn.cursor() as cur:
         # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
         cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
         res = cur.fetchone()
         n = res[0]
+        print("n is %s"%(n,))
 
         #2. Let S denote the set of last L orders for district (W ID,D ID)
-        cur.execute("SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST\
-         FROM order_ori JOIN customer ON order_ori.O_W_ID = customer.C_W_ID AND order_ori.O_C_ID = customer.C_ID\
-         WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s",
-                    (w_id, d_id, n-l, n))
+        cur.execute(
+            '''SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST
+            FROM order_ori JOIN customer ON order_ori.O_W_ID = customer.C_W_ID AND 
+            order_ori.O_D_ID = customer.C_D_ID AND order_ori.O_C_ID = customer.C_ID
+            WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
+            ''', (w_id, d_id, n-l, n))
         s = cur.fetchall()
 
         #3. For each order number x in S
@@ -255,10 +266,10 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
 
             cur.execute(
             '''WITH order_line_items AS
-            (SELECT item.I_NAME, order_line.OL_QUANTITY 
+            (SELECT item.I_ID, item.I_NAME, order_line.OL_QUANTITY 
             FROM order_line JOIN item ON order_line.OL_I_ID = item.I_ID
             WHERE OL_O_ID = %s AND OL_D_ID = %s AND OL_W_ID = %s)
-            SELECT I_NAME, OL_QUANTITY
+            SELECT I_ID, I_NAME, OL_QUANTITY
             FROM order_line_items
             WHERE OL_QUANTITY = (SELECT MAX(OL_QUANTITY) FROM order_line_items);
             ''', (x[0], d_id, w_id))
@@ -266,9 +277,19 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
 
             print("popular item: I_NAME, OL_QUANTITY")
             for item in p_x:
-                print(item)
+                print(item[1], item[2])
+                pop_item_set.add(item[0])
 
-        #TODO: reuqirement 4, optimaise 3
+        #4. for each distinct popular item, the percentage of orders in S that contain the popular item
+        for item in pop_item_set:
+            cur.execute(
+                '''SELECT COUNT(OL_NUMBER) FROM order_line
+                WHERE OL_I_ID = %s AND OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
+                ''', (item, w_id, d_id, n-l, n)
+            )
+            count = cur.fetchone()[0]
+            print("%% of orders that contain the popular item with I_ID (%s) is %s %%"% (item, (count/l)*100))
+
         m_conn.commit()
 
 
@@ -288,14 +309,14 @@ def top_balance_transaction(m_conn):
         rows = cur.fetchall()
         m_conn.commit()
 
-        print("------------ result is ---------")
+        print("-------------------------------")
         print("Top 10 customers ranked in descending order of outstanding balance:")
         print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
         for row in rows:
             print(row)
 
 
-def tx8():
+def Related_customer_transaction(m_conn, m_params: RelCustomerTxParams):
     pass
 
 
@@ -314,7 +335,6 @@ def execute_tx(m_conn, m_params):
         elif params is None:
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
-            print("param type is detected")
             popular_item_transaction(m_conn, m_params)
 
 
@@ -374,16 +394,21 @@ def parse_stdin(m_inputs: [str]):
     elif tmp_list[0] == "S":
         return False, "not-implemented"
     elif tmp_list[0] == "I":
-        print("I detected")
         m_params = PopItemTxParams()
         m_params.w_id = int(tmp_list[1])
         m_params.d_id = int(tmp_list[2])
         m_params.l = int(tmp_list[3])
+
         return True, m_params
     elif tmp_list[0] == "T":
         return True, None
     elif tmp_list[0] == "R":
-        return False, "not-implemented"
+        m_params = RelCustomerTxParams()
+        m_params.w_id = int(tmp_list[1])
+        m_params.d_id = int(tmp_list[2])
+        m_params.c_id = int(tmp_list[3])
+
+        return True, m_params
     else:
         return False, None
 
@@ -436,7 +461,7 @@ if __name__ == "__main__":
                 inputs = []
             line_content = f.readline()
 
-            if total_tx_num > 2:
+            if total_tx_num > 20:
                 break
 
         f.close()
