@@ -276,14 +276,14 @@ def payment_transaction(m_conn, m_params: PaymentTxName):
               "d_state: %s,"
               "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
 
-        cur.execute("UPDATE customer SET C_BALANCE = C_BALANCE - %s, "
-                    "C_YTD_PAYMENT = C_YTD_PAYMENT + %s, "
-                    "C_PAYMENT_CNT = C_PAYMENT_CNT + 1 "
-                    "WHERE C_W_ID = %s and C_D_ID = %s and C_ID = %s "
-                    "returning C_W_ID, C_D_ID, C_ID, "
-                    "C_FIRST, C_MIDDLE, C_LAST, "
-                    "C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, "
-                    "C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE",
+        cur.execute('''UPDATE customer SET C_BALANCE = C_BALANCE - %s, 
+                    C_YTD_PAYMENT = C_YTD_PAYMENT + %s, 
+                    C_PAYMENT_CNT = C_PAYMENT_CNT + 1 
+                    WHERE C_W_ID = %s and C_D_ID = %s and C_ID = %s 
+                    returning C_W_ID, C_D_ID, C_ID, 
+                    C_FIRST, C_MIDDLE, C_LAST, 
+                    C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, 
+                    C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE''',
                     (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
 
         res = cur.fetchone()
@@ -309,11 +309,12 @@ def delivery_transaction(m_conn, m_params:DeliveryTxParams):
             # who placed this order
 
             # Update the order X by setting O CARRIER ID to CARRIER ID
-            cur.execute("update order_ori set o_carrier_id = %s "
-                        "where (o_w_id, o_d_id, o_id) in "
-                        "  (select o_w_id, o_d_id, o_id from order_ori "
-                        "   where o_w_id = %s and o_d_id = %s and o_carrier_id is null order by o_id limit 1) "
-                        "returning o_id, o_c_id;",
+            cur.execute('''
+                        update order_ori set o_carrier_id = %s 
+                        where (o_w_id, o_d_id, o_id) in 
+                          (select o_w_id, o_d_id, o_id from order_ori 
+                           where o_w_id = %s and o_d_id = %s and o_carrier_id is null order by o_id limit 1) 
+                        returning o_id, o_c_id;''',
                         (carrier_id, w_id, d_id))
 
             res = cur.fetchone()
@@ -321,19 +322,21 @@ def delivery_transaction(m_conn, m_params:DeliveryTxParams):
             c_id = res[1]
 
             # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
-            cur.execute("update order_line set OL_DELIVERY_D =now() "
-                        "where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))",
+            cur.execute('''
+                        update order_line set OL_DELIVERY_D =now() 
+                        where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))''',
                         (w_id, d_id, n))
 
             # Update customer C as follows:
             # 1. Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
             # 2. Increment C DELIVERY CNT by 1
 
-            cur.execute("update customer set (C_BALANCE, C_DELIVERY_CNT) = "
-                        "   ((select sum(ol_amount) from order_line "
-                        "     where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))"
-                        "     group by ol_o_id ), C_DELIVERY_CNT+1) "
-                        "where (c_w_id, c_d_id, c_id) in ((%s, %s, %s));",
+            cur.execute('''
+                        update customer set (C_BALANCE, C_DELIVERY_CNT) = 
+                           ((select sum(ol_amount) from order_line 
+                             where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))
+                             group by ol_o_id ), C_DELIVERY_CNT+1) 
+                        where (c_w_id, c_d_id, c_id) in ((%s, %s, %s));''',
                         (w_id, d_id, n, w_id, d_id, c_id))
 
         m_conn.commit()
@@ -347,13 +350,51 @@ def order_status_transaction(m_conn, m_params: OrderStatusTxParams):
               O,1,1,1219
               O,1,2,310
        """
+    def print_res(m_res: [tuple]):
+
+        for m_ele in m_res:
+
+            print(
+                "[c_first: %s, c_middle: %s, c_last: %s, c_balance: %s, o_id: %s, o_entry_d: %s, o_carrier_id: %s"
+                "ol_i_id: %s, ol_supply_w_id: %s, ol_quantity: %s, ol_amount: %s, ol_delivery_d: %s]"
+                % (m_ele[0], m_ele[1], m_ele[2],
+                   str(m_ele[3]), m_ele[4], str(m_ele[5]),
+                   m_ele[6], m_ele[7], m_ele[8], str(m_ele[9]), str(m_ele[10]), str(m_ele[11]))
+            )
+
     w_id = m_params.c_w_id
     d_id = m_params.c_d_id
     c_id = m_params.c_id
     with m_conn.cursor() as cur:
 
+        cur.execute('''
+                    WITH 
+                        customer_ny AS 
+                          (select C_ID, C_W_ID, C_D_ID, C_FIRST, C_MIDDLE, C_LAST, C_BALANCE 
+                            from customer
+                            where (C_ID, C_W_ID, C_D_ID) in ((%s, %s, %s))),
+                        order_ny AS 
+                          (select o_w_id, o_d_id, o_c_id, o_id, o_entry_d, o_carrier_id 
+                            from order_ori 
+                            where (o_w_id, o_d_id, o_c_id) in ((%s, %s, %s)) order by o_entry_d desc limit 1)
+                        select C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, o_id, o_entry_d, o_carrier_id, 
+                               ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d 
+                        from order_line 
+                        join order_ny ON order_line.ol_w_id=order_ny.o_w_id 
+                            and order_line.ol_d_id=order_ny.o_d_id 
+                            and order_line.ol_o_id=order_ny.o_id
+                        join customer_ny ON order_ny.o_w_id=customer_ny.C_W_ID 
+                            and order_ny.o_d_id=customer_ny.C_D_ID 
+                            and order_ny.o_c_id=customer_ny.C_ID;
+                    ''',
+                    (c_id, w_id, d_id, w_id, d_id, c_id))
 
-
+        res = cur.fetchall()
+        print_res(res)
+        # print("[ c_first, c_middle, c_last, c_balance, o_id, o_entry_d, o_carrier_id, "
+        #       "ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d ] are as following")
+        # for ele in res:
+        #     print(ele)
 
         m_conn.commit()
 
@@ -541,6 +582,7 @@ def parse_stdin(m_inputs: [str]):
 
     elif tmp_list[0] == "O":
         # O,1,1,1219
+        # o,1,1,1144
         m_params = OrderStatusTxParams()
         m_params.c_w_id = int(tmp_list[1])
         m_params.c_d_id = int(tmp_list[2])
@@ -612,7 +654,7 @@ if __name__ == "__main__":
             triggered, params = parse_stdin(inputs)
             if triggered:
                 # test only one tx
-                if params.__class__.__name__ != DeliveryTxName: inputs = [];  line_content = f.readline(); continue
+                if params.__class__.__name__ != OrderStatusTxName: inputs = [];  line_content = f.readline(); continue
                 execute_tx(conn, params)
                 inputs = []
             elif params == "not-implemented":
