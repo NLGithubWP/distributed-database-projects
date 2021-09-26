@@ -391,11 +391,6 @@ def order_status_transaction(m_conn, m_params: OrderStatusTxParams):
 
         res = cur.fetchall()
         print_res(res)
-        # print("[ c_first, c_middle, c_last, c_balance, o_id, o_entry_d, o_carrier_id, "
-        #       "ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d ] are as following")
-        # for ele in res:
-        #     print(ele)
-
         m_conn.commit()
 
 
