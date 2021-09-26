@@ -27,9 +27,8 @@ time_used_list = []
 NewOrderTxName = "NewOrderTxParams"
 PaymentTxName = "PaymentTxParams"
 DeliveryTxName = "DeliveryTxParams"
-# NewOrderTxName = "NewOrderTxParams"
-# NewOrderTxName = "NewOrderTxParams"
-# NewOrderTxName = "NewOrderTxParams"
+OrderStatusTxName = "OrderStatusTxParams"
+StockLevelTxName = "StockLevelTxParams"
 PopItemTxName = "PopItemTxParams"
 RelCustomerTxName = "RelCustomerTxParams"
 
@@ -82,6 +81,12 @@ class DeliveryTxParams:
     def __init__(self):
         self.w_id: int = 0
         self.carrier_id: int = 0
+
+class OrderStatusTxParams:
+    def __init__(self):
+        self.c_w_id: int = 0
+        self.c_d_id: int = 0
+        self.c_id: int = 0
 
 class PopItemTxParams:
     def __init__(self):
@@ -333,8 +338,24 @@ def delivery_transaction(m_conn, m_params:DeliveryTxParams):
 
         m_conn.commit()
 
-def tx4():
-    pass
+
+def order_status_transaction(m_conn, m_params: OrderStatusTxParams):
+    """
+       This transaction queries the status of the last order of a customer.
+       Order-Status Transaction consists of one line of input with four comma-separated values: O,C W ID,C D ID,C ID.
+       eg:
+              O,1,1,1219
+              O,1,2,310
+       """
+    w_id = m_params.c_w_id
+    d_id = m_params.c_d_id
+    c_id = m_params.c_id
+    with m_conn.cursor() as cur:
+
+
+
+
+        m_conn.commit()
 
 
 def tx5():
@@ -447,6 +468,8 @@ def execute_tx(m_conn, m_params):
             payment_transaction(m_conn, m_params)
         elif params.__class__.__name__ == DeliveryTxName:
             delivery_transaction(m_conn, m_params)
+        elif params.__class__.__name__ == OrderStatusTxName:
+            order_status_transaction(m_conn, m_params)
         elif params is None:
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
@@ -517,7 +540,13 @@ def parse_stdin(m_inputs: [str]):
         return True, m_params
 
     elif tmp_list[0] == "O":
-        return False, "not-implemented"
+        # O,1,1,1219
+        m_params = OrderStatusTxParams()
+        m_params.c_w_id = int(tmp_list[1])
+        m_params.c_d_id = int(tmp_list[2])
+        m_params.c_id = int(tmp_list[2])
+        return True, m_params
+
     elif tmp_list[0] == "S":
         return False, "not-implemented"
     elif tmp_list[0] == "I":
