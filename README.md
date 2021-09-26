@@ -12,6 +12,9 @@ And then, run python file http sever.
   python -m http.server 3000
 
 ```
+
+and then, can run load.sql to load tables, 
+
 and then run 
 
 ```bash
