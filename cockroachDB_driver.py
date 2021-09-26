@@ -26,6 +26,7 @@ time_used_list = []
 
 NewOrderTxName = "NewOrderTxParams"
 PaymentTxName = "PaymentTxParams"
+DeliveryTxName = "DeliveryTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
@@ -76,6 +77,11 @@ class PaymentTxParams:
         self.c_d_id: int = 0
         self.c_id: int = 0
         self.payment_amount: float = 0.0
+
+class DeliveryTxParams:
+    def __init__(self):
+        self.w_id: int = 0
+        self.carrier_id: int = 0
 
 class PopItemTxParams:
     def __init__(self):
@@ -281,9 +287,51 @@ def payment_transaction(m_conn, m_params: PaymentTxName):
         m_conn.commit()
 
 
-def tx3():
-    pass
+def delivery_transaction(m_conn, m_params:DeliveryTxParams):
+    """
+    Order-Status Transaction consists of one line of input with four comma-separated values: O,C W ID,C D ID,C ID.
+    eg:
+           D,1,6
+    """
+    w_id = m_params.w_id
+    carrier_id = m_params.carrier_id
+    with m_conn.cursor() as cur:
 
+        for d_id in range(1, 10, 1):
+            # 1. Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
+            # with O CARRIER ID = null;
+            # Let X denote the order corresponding to order number N, and let C denote the customer
+            # who placed this order
+
+            # Update the order X by setting O CARRIER ID to CARRIER ID
+            cur.execute("update order_ori set o_carrier_id = %s "
+                        "where (o_w_id, o_d_id, o_id) in "
+                        "  (select o_w_id, o_d_id, o_id from order_ori "
+                        "   where o_w_id = %s and o_d_id = %s and o_carrier_id is null order by o_id limit 1) "
+                        "returning o_id, o_c_id;",
+                        (carrier_id, w_id, d_id))
+
+            res = cur.fetchone()
+            n = res[0]
+            c_id = res[1]
+
+            # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
+            cur.execute("update order_line set OL_DELIVERY_D =now() "
+                        "where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))",
+                        (w_id, d_id, n))
+
+            # Update customer C as follows:
+            # 1. Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
+            # 2. Increment C DELIVERY CNT by 1
+
+            cur.execute("update customer set (C_BALANCE, C_DELIVERY_CNT) = "
+                        "   ((select sum(ol_amount) from order_line "
+                        "     where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))"
+                        "     group by ol_o_id ), C_DELIVERY_CNT+1) "
+                        "where (c_w_id, c_d_id, c_id) in ((%s, %s, %s));",
+                        (w_id, d_id, n, w_id, d_id, c_id))
+
+        m_conn.commit()
 
 def tx4():
     pass
@@ -397,6 +445,8 @@ def execute_tx(m_conn, m_params):
             new_order_transaction(m_conn, m_params)
         elif params.__class__.__name__ == PaymentTxName:
             payment_transaction(m_conn, m_params)
+        elif params.__class__.__name__ == DeliveryTxName:
+            delivery_transaction(m_conn, m_params)
         elif params is None:
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
@@ -460,7 +510,12 @@ def parse_stdin(m_inputs: [str]):
         return True, m_params
 
     elif tmp_list[0] == "D":
-        return False, "not-implemented"
+        # D,1,6
+        m_params = DeliveryTxParams()
+        m_params.w_id = int(tmp_list[1])
+        m_params.carrier_id = int(tmp_list[2])
+        return True, m_params
+
     elif tmp_list[0] == "O":
         return False, "not-implemented"
     elif tmp_list[0] == "S":
@@ -528,7 +583,7 @@ if __name__ == "__main__":
             triggered, params = parse_stdin(inputs)
             if triggered:
                 # test only one tx
-                if params.__class__.__name__ != PaymentTxName: inputs = [];  line_content = f.readline(); continue
+                if params.__class__.__name__ != DeliveryTxName: inputs = [];  line_content = f.readline(); continue
                 execute_tx(conn, params)
                 inputs = []
             elif params == "not-implemented":
