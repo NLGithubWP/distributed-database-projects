@@ -633,7 +633,11 @@ def evaluate():
 if __name__ == "__main__":
 
     isDebug = True
+    idDebugSingleTx = True
+    SingleTxName = OrderStatusTxName
     addr = "postgresql://naili:naili@localhost:26257/cs5424?sslmode=require"
+    test_file_path = "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/project_files/xact_files_A/0.txt"
+
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
 
@@ -641,15 +645,14 @@ if __name__ == "__main__":
 
     if isDebug:
         # read from file
-        f = open(
-            "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/project_files/xact_files_A/0.txt")
+        f = open(test_file_path)
         line_content = f.readline()
         while line_content.strip():
             inputs.append(line_content.strip())
             triggered, params = parse_stdin(inputs)
             if triggered:
                 # test only one tx
-                if params.__class__.__name__ != OrderStatusTxName: inputs = [];  line_content = f.readline(); continue
+                if idDebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
                 execute_tx(conn, params)
                 inputs = []
             elif params == "not-implemented":
