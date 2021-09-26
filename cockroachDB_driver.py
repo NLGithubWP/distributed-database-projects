@@ -25,7 +25,7 @@ each_tx_time = 0
 time_used_list = []
 
 NewOrderTxName = "NewOrderTxParams"
-# NewOrderTxName = "NewOrderTxParams"
+PaymentTxName = "PaymentTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
 # NewOrderTxName = "NewOrderTxParams"
@@ -69,6 +69,13 @@ class NewOrderTxParams:
         self.item_number: [int] = []
         self.supplier_warehouse: [int] = []
         self.quantity: [int] = []
+
+class PaymentTxParams:
+    def __init__(self):
+        self.c_w_id: int = 0
+        self.c_d_id: int = 0
+        self.c_id: int = 0
+        self.payment_amount: float = 0.0
 
 class PopItemTxParams:
     def __init__(self):
@@ -195,7 +202,7 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
     m_conn.commit()
 
     print("------------ result is ---------")
-    print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C DISCOUNT")
+    print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
     print(w_id, d_id, c_id, c_last, c_credit, c_discount)
     print("Warehouse tax rate W TAX, District tax rate D TAX")
     print(w_tax, d_tax)
@@ -213,8 +220,65 @@ def new_order_transaction(m_conn, m_params: NewOrderTxParams):
         print("S_QUANTITY: ", s_quantity_list[i])
 
 
-def tx2():
-    pass
+def payment_transaction(m_conn, m_params: PaymentTxName):
+    """
+    Payment Transaction consists of one line of input with
+    five comma-separated values: P, C_W_ID, C_D_ID, C_ID, PAYMENT.
+    eg:
+                P,1,1,2203,3261.87
+    """
+    c_w_id = m_params.c_w_id
+    c_d_id = m_params.c_d_id
+    c_id = m_params.c_id
+    payment_amount = m_params.payment_amount
+    with m_conn.cursor() as cur:
+        cur.execute("UPDATE warehouse SET W_YTD = W_YTD + %s "
+                    "WHERE W_ID = %s RETURNING W_STREET_1, W_STREET_2, W_CITY, W_STATE, W_ZIP",
+                    (payment_amount, c_w_id))
+        res = cur.fetchone()
+        w_street_1 = res[0]
+        w_street_2 = res[1]
+        w_city = res[2]
+        w_state = res[3]
+        w_zip = res[4]
+        print("payment_transaction, "
+              "w_street_1: %s,"
+              "w_street_2: %s,"
+              "w_city: %s,"
+              "w_state: %s,"
+              "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
+
+        cur.execute("UPDATE district SET D_YTD = D_YTD + %s "
+                    "WHERE D_W_ID = %s and D_ID = %s "
+                    "returning D_STREET_1, D_STREET_2, D_CITY, D_STATE, D_ZIP",
+                    (payment_amount, c_w_id, c_d_id))
+        res = cur.fetchone()
+        d_street_1 = res[0]
+        d_street_2 = res[1]
+        d_city = res[2]
+        d_state = res[3]
+        d_zip = res[4]
+        print("payment_transaction, "
+              "d_street_1: %s,"
+              "d_street_2: %s,"
+              "d_city: %s,"
+              "d_state: %s,"
+              "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
+
+        cur.execute("UPDATE customer SET C_BALANCE = C_BALANCE - %s, "
+                    "C_YTD_PAYMENT = C_YTD_PAYMENT + %s, "
+                    "C_PAYMENT_CNT = C_PAYMENT_CNT + 1 "
+                    "WHERE C_W_ID = %s and C_D_ID = %s and C_ID = %s "
+                    "returning C_W_ID, C_D_ID, C_ID, "
+                    "C_FIRST, C_MIDDLE, C_LAST, "
+                    "C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, "
+                    "C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE",
+                    (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
+
+        res = cur.fetchone()
+        print("customer:, ", res)
+
+        m_conn.commit()
 
 
 def tx3():
@@ -293,7 +357,6 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
         m_conn.commit()
 
 
-
 def top_balance_transaction(m_conn):
     with m_conn.cursor() as cur:
         cur.execute(
@@ -332,11 +395,12 @@ def execute_tx(m_conn, m_params):
 
         if params.__class__.__name__ == NewOrderTxName:
             new_order_transaction(m_conn, m_params)
+        elif params.__class__.__name__ == PaymentTxName:
+            payment_transaction(m_conn, m_params)
         elif params is None:
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
             popular_item_transaction(m_conn, m_params)
-
 
         # The function below is used to test the transaction retry logic.  It
         # can be deleted from production code.
@@ -386,7 +450,15 @@ def parse_stdin(m_inputs: [str]):
 
             return True, m_params
     elif tmp_list[0] == "P":
-        return False, "not-implemented"
+        # eg: P,1,1,2203,3261.87
+        m_params = PaymentTxParams()
+        m_params.c_w_id = int(tmp_list[1])
+        m_params.c_d_id = int(tmp_list[2])
+        m_params.c_id = int(tmp_list[3])
+        m_params.payment_amount = float(tmp_list[4])
+
+        return True, m_params
+
     elif tmp_list[0] == "D":
         return False, "not-implemented"
     elif tmp_list[0] == "O":
@@ -455,6 +527,8 @@ if __name__ == "__main__":
             inputs.append(line_content.strip())
             triggered, params = parse_stdin(inputs)
             if triggered:
+                # test only one tx
+                if params.__class__.__name__ != PaymentTxName: inputs = [];  line_content = f.readline(); continue
                 execute_tx(conn, params)
                 inputs = []
             elif params == "not-implemented":
