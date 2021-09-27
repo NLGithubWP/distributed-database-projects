@@ -88,6 +88,13 @@ class OrderStatusTxParams:
         self.c_d_id: int = 0
         self.c_id: int = 0
 
+class StockLevelTxParams:
+    def __init__(self):
+        self.c_w_id: int = 0
+        self.c_d_id: int = 0
+        self.threshold: int = 0
+        self.l: int = 0
+
 class PopItemTxParams:
     def __init__(self):
         self.w_id: int = 0
@@ -394,8 +401,33 @@ def order_status_transaction(m_conn, m_params: OrderStatusTxParams):
         m_conn.commit()
 
 
-def tx5():
-    pass
+def stock_level_transaction(m_conn, m_params: StockLevelTxParams):
+    w_id = m_params.w_id
+    d_id = m_params.d_id
+    threshold = m_params.threshold
+    l = m_params.l
+
+    with m_conn.cursor() as cur:
+        # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
+        cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
+        res = cur.fetchone()
+        n = res[0]
+
+        # 2. Let S denote the set of items from the last L orders for district (W ID,D ID)
+        cur.execute(
+            '''SELECT COUNT(DISTINCT OL_I_ID)
+            FROM order_line JOIN stock ON OL_I_ID = stock.S_I_ID AND OL_W_ID = stock.S_W_ID
+            WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s AND S_QUANTITY < %s
+            ''', (w_id, d_id, n - l, n, threshold))
+        count = cur.fetchone()[0]
+        m_conn.commit()
+
+        # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
+        print("-------------------------------")
+        print("the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
+              %(w_id, d_id, threshold, l))
+        print(count)
+
 
 
 def popular_item_transaction(m_conn, m_params: PopItemTxParams):
@@ -506,6 +538,8 @@ def execute_tx(m_conn, m_params):
             delivery_transaction(m_conn, m_params)
         elif params.__class__.__name__ == OrderStatusTxName:
             order_status_transaction(m_conn, m_params)
+        elif params.__class__.__name__ == StockLevelTxName:
+            stock_level_transaction(m_conn, m_params)
         elif params is None:
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
@@ -585,23 +619,30 @@ def parse_stdin(m_inputs: [str]):
         return True, m_params
 
     elif tmp_list[0] == "S":
-        return False, "not-implemented"
+        m_params = StockLevelTxParams()
+        m_params.w_id = int(tmp_list[1])
+        m_params.d_id = int(tmp_list[2])
+        m_params.threshold = (tmp_list[3])
+        m_params.l = int(tmp_list[4])
+        return True, m_params
+
     elif tmp_list[0] == "I":
         m_params = PopItemTxParams()
         m_params.w_id = int(tmp_list[1])
         m_params.d_id = int(tmp_list[2])
         m_params.l = int(tmp_list[3])
-
         return True, m_params
+
     elif tmp_list[0] == "T":
         return True, None
+
     elif tmp_list[0] == "R":
         m_params = RelCustomerTxParams()
         m_params.w_id = int(tmp_list[1])
         m_params.d_id = int(tmp_list[2])
         m_params.c_id = int(tmp_list[3])
-
         return True, m_params
+
     else:
         return False, None
 
@@ -659,7 +700,7 @@ if __name__ == "__main__":
                 inputs = []
             line_content = f.readline()
 
-            if total_tx_num > 20:
+            if total_tx_num > 1:
                 break
 
         f.close()
