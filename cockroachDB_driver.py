@@ -402,6 +402,10 @@ def order_status_transaction(m_conn, m_params: OrderStatusTxParams):
 
 
 def stock_level_transaction(m_conn, m_params: StockLevelTxParams):
+    """
+    This transaction examines the items from the last L orders at a specified warehouse district and reports
+    the number of those items that have a stock level below a specified threshold.
+    """
     w_id = m_params.w_id
     d_id = m_params.d_id
     threshold = m_params.threshold
@@ -415,8 +419,10 @@ def stock_level_transaction(m_conn, m_params: StockLevelTxParams):
 
         # 2. Let S denote the set of items from the last L orders for district (W ID,D ID)
         cur.execute(
-            '''SELECT COUNT(DISTINCT OL_I_ID)
-            FROM order_line JOIN stock ON OL_I_ID = stock.S_I_ID AND OL_W_ID = stock.S_W_ID
+            '''
+            SELECT COUNT(DISTINCT OL_I_ID)
+            FROM order_line 
+            JOIN stock ON OL_I_ID = stock.S_I_ID AND OL_W_ID = stock.S_W_ID
             WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s AND S_QUANTITY < %s
             ''', (w_id, d_id, n - l, n, threshold))
         count = cur.fetchone()[0]
@@ -429,8 +435,12 @@ def stock_level_transaction(m_conn, m_params: StockLevelTxParams):
         print(count)
 
 
-
 def popular_item_transaction(m_conn, m_params: PopItemTxParams):
+    """
+    This transaction finds the most popular item(s) in each of the last L orders at a specified warehouse
+    district. Given two items X and Y in the same order O, X is defined to be more popular than Y in O
+    if the quantity ordered for X in O is greater than the quantity ordered for Y in O
+    """
     w_id = m_params.w_id
     d_id = m_params.d_id
     l = m_params.l
@@ -439,6 +449,7 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
     print("-------------------------------")
     print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id) )
     print("Number of orders to be examined: %s" % (l,))
+
     with m_conn.cursor() as cur:
         # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
         cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
@@ -448,16 +459,18 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
 
         #2. Let S denote the set of last L orders for district (W ID,D ID)
         cur.execute(
-            '''SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST
-            FROM order_ori JOIN customer ON order_ori.O_W_ID = customer.C_W_ID AND 
-            order_ori.O_D_ID = customer.C_D_ID AND order_ori.O_C_ID = customer.C_ID
+            '''
+            SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST
+            FROM order_ori 
+            JOIN customer ON order_ori.O_W_ID = customer.C_W_ID
+            AND order_ori.O_D_ID = customer.C_D_ID AND order_ori.O_C_ID = customer.C_ID
             WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
             ''', (w_id, d_id, n-l, n))
         s = cur.fetchall()
 
         #3. For each order number x in S
         #Let Ix denote the set of order-lines for this order;
-        # Let Px ⊆ Ix denote the subset of popular items in Ix
+        #Let Px ⊆ Ix denote the subset of popular items in Ix
         for x in s:
             print("order: O_ID, O_ENTRY_ID")
             print(x[0], x[1])
@@ -466,13 +479,15 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
             print(x[2], x[3], x[4])
 
             cur.execute(
-            '''WITH order_line_items AS
-            (SELECT item.I_ID, item.I_NAME, order_line.OL_QUANTITY 
-            FROM order_line JOIN item ON order_line.OL_I_ID = item.I_ID
-            WHERE OL_O_ID = %s AND OL_D_ID = %s AND OL_W_ID = %s)
-            SELECT I_ID, I_NAME, OL_QUANTITY
-            FROM order_line_items
-            WHERE OL_QUANTITY = (SELECT MAX(OL_QUANTITY) FROM order_line_items);
+            '''
+            WITH 
+                order_line_items AS
+                    (SELECT item.I_ID, item.I_NAME, order_line.OL_QUANTITY 
+                    FROM order_line JOIN item ON order_line.OL_I_ID = item.I_ID
+                    WHERE OL_O_ID = %s AND OL_D_ID = %s AND OL_W_ID = %s)
+                SELECT I_ID, I_NAME, OL_QUANTITY
+                FROM order_line_items
+                WHERE OL_QUANTITY = (SELECT MAX(OL_QUANTITY) FROM order_line_items);
             ''', (x[0], d_id, w_id))
             p_x = cur.fetchall()
 
@@ -495,16 +510,23 @@ def popular_item_transaction(m_conn, m_params: PopItemTxParams):
 
 
 def top_balance_transaction(m_conn):
+    """
+    This transaction finds the top-10 customers ranked in descending order of their outstanding balance
+    payments.
+    """
     with m_conn.cursor() as cur:
         cur.execute(
-            '''WITH top_customers AS
-            (SELECT c_first, c_middle, c_last, c_balance, c_d_id, c_w_id FROM customer
-            ORDER BY customer.c_balance DESC LIMIT 10)
-            SELECT c_first, c_middle, c_last, c_balance, w_name, d_name
-            FROM top_customers 
-            JOIN district ON d_id=top_customers.c_d_id AND d_w_id=top_customers.c_w_id
-            JOIN warehouse ON w_id=top_customers.c_w_id
-            ORDER BY top_customers.c_balance DESC;
+            '''
+            WITH 
+                top_customers AS
+                    (SELECT c_first, c_middle, c_last, c_balance, c_d_id, c_w_id 
+                    FROM customer
+                    ORDER BY customer.c_balance DESC LIMIT 10)
+                SELECT c_first, c_middle, c_last, c_balance, w_name, d_name
+                FROM top_customers 
+                JOIN district ON d_id = top_customers.c_d_id AND d_w_id = top_customers.c_w_id
+                JOIN warehouse ON w_id = top_customers.c_w_id
+                ORDER BY top_customers.c_balance DESC;
         ''')
         rows = cur.fetchall()
         m_conn.commit()
@@ -516,8 +538,56 @@ def top_balance_transaction(m_conn):
             print(row)
 
 
-def Related_customer_transaction(m_conn, m_params: RelCustomerTxParams):
-    pass
+def related_customer_transaction(m_conn, m_params: RelCustomerTxParams):
+    """
+    This transaction finds all the customers who are related to a specific customer. Given a customer C,
+    another customer C is defined to be related to C if C and C are associated with different warehouses,
+    and C and C each has placed some order, O and O′respectively,where both O and O′contain at least two items in common.
+    """
+    w_id = m_params.w_id
+    d_id = m_params.d_id
+    c_id = m_params.c_id
+    related_customers = set()
+
+    with m_conn.cursor() as cur:
+        cur.execute(
+            '''
+            SELECT O_ID, O_W_ID, O_D_ID
+            FROM order_ori
+            WHERE O_W_ID = %s AND O_D_ID = %s AND O_C_ID = %s
+            ''', (w_id, d_id, c_id)
+        )
+        orders = cur.fetchall()
+
+        for order in orders:
+            cur.execute(
+                '''
+                WITH
+                    items AS
+                        (SELECT OL_I_ID
+                        FROM order_line
+                        WHERE OL_O_ID = %s AND OL_W_ID = %s AND OL_D_ID = %s),
+                    customer_ol AS
+                        (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
+                        FROM order_ori
+                        JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+                        WHERE O_W_ID <> %s
+                        )
+                    SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID
+                    FROM items
+                    LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
+                    GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID
+                    HAVING COUNT(*) >= 2
+                ''', (order[0], w_id, d_id, w_id)
+            )
+            customers = cur.fetchall()
+            related_customers.update(customers)
+        m_conn.commit()
+
+        print("-------------------------------")
+        print("Related customers (W_ID, D_ID, C_ID):")
+        for customer in related_customers:
+            print(customer)
 
 
 def execute_tx(m_conn, m_params):
@@ -544,6 +614,8 @@ def execute_tx(m_conn, m_params):
             top_balance_transaction(m_conn)
         elif params.__class__.__name__ == PopItemTxName:
             popular_item_transaction(m_conn, m_params)
+        elif params.__class__.__name__ == RelCustomerTxName:
+            related_customer_transaction(m_conn, m_params)
 
         # The function below is used to test the transaction retry logic.  It
         # can be deleted from production code.
@@ -700,7 +772,7 @@ if __name__ == "__main__":
                 inputs = []
             line_content = f.readline()
 
-            if total_tx_num > 1:
+            if total_tx_num > 20:
                 break
 
         f.close()
