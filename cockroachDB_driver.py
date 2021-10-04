@@ -217,14 +217,15 @@ def parse_cmdline():
 
 if __name__ == "__main__":
 
-    # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    # test_file_path = "/opt/project_files/xact_files_A/0.txt"
-
     # parser result
     opt = parse_cmdline()
     addr = opt.url
     file_path = opt.path
     workload_type = opt.workload_type
+
+    # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
+    # file_path = "/opt/project_files/xact_files_A/0.txt"
+    # workload_type = "A"
 
     # if debug single transaction, assign name here
     DebugSingleTx = True
