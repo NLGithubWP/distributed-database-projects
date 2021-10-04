@@ -2,7 +2,7 @@
 
 project
 
-To use load.sql
+To use dbinit-workload-A.sql
 
 firstly run a cockroachDB cluster
 
@@ -13,11 +13,16 @@ And then, run python file http sever.
 
 ```
 
-and then, can run load.sql to load tables, 
+and then, can run dbinit-workload-A.sql to load tables, 
 
-and then run 
 
 ```bash
-  cockroach sql --certs-dir=certs --host=localhost:26258
+
+cockroach sql \
+    --host=localhost:26258 \
+    --certs-dir=certs \
+    --user=root \
+    -f ./sqls/dbinit-workload-A.sql
+
 
 ```

@@ -1,10 +1,3 @@
-1. Give user select and update privilege
-
-    GRANT all on database cs5424 to naili;
-    GRANT all on TABLE cs5424.public.* to naili;
-    SHOW GRANTS ON DATABASE cs5424;
-    SHOW GRANTS ON TABLE cs5424.public.*;
-
 
 2. create indexs on some tables
 
