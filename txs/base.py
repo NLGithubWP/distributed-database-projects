@@ -6,6 +6,10 @@ from abc import abstractmethod
 
 class Transactions(object):
 
+    def __init__(self, update_batch_size: int, select_batch_size:int):
+        self.update_batch_size = update_batch_size
+        self.select_batch_size = select_batch_size
+
     @abstractmethod
     def new_order_transaction(self, m_conn, m_params: NewOrderTxParams):
         raise NotImplementedError

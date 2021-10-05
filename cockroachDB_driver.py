@@ -219,7 +219,7 @@ if __name__ == "__main__":
 
     # batch used to insert or select
     update_batch_size = 100
-    select_batch_size = 1000
+    select_batch_size = 100
 
     # Schema names
     workloadA_schema_name = "workloada"
@@ -237,7 +237,7 @@ if __name__ == "__main__":
 
     # if debug single transaction, assign name here
     DebugSingleTx = True
-    SingleTxName = txs.OrderStatusTxName
+    SingleTxName = txs.NewOrderTxName
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
@@ -248,12 +248,12 @@ if __name__ == "__main__":
         with conn.cursor() as cur:
             cur.execute("set search_path to "+workloadA_schema_name)
             conn.commit()
-        tx_ins = TxForWorkloadA()
+        tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
     elif workload_type == "B":
         with conn.cursor() as cur:
             cur.execute("set search_path to "+workloadB_schema_name)
             conn.commit()
-        tx_ins = TxForWorkloadB()
+        tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
     else:
         exit(0)
 

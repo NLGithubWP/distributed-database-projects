@@ -7,6 +7,9 @@ from .params import *
 
 class TxForWorkloadB(Transactions):
 
+    def __init__(self, update_batch_size: int, select_batch_size: int):
+        super().__init__(update_batch_size, select_batch_size)
+
     def new_order_transaction(self, m_conn, m_params: NewOrderTxParams):
         """
         New Order Transaction consists of M+1 lines, where M denote the number of items in the new order.
