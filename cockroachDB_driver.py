@@ -217,6 +217,14 @@ def parse_cmdline():
 
 if __name__ == "__main__":
 
+    # batch used to insert or select
+    update_batch_size = 100
+    select_batch_size = 1000
+
+    # Schema names
+    workloadA_schema_name = "workloada"
+    workloadB_schema_name = "workloadb"
+
     # parser result
     opt = parse_cmdline()
     addr = opt.url
@@ -231,19 +239,10 @@ if __name__ == "__main__":
     DebugSingleTx = True
     SingleTxName = txs.OrderStatusTxName
 
-    # batch used to insert or select
-    update_batch_size = 100
-    select_batch_size = 1000
-
-    # Schema names
-    workloadA_schema_name = "workloada"
-    workloadB_schema_name = "workloadb"
-
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
 
-    inputs = []
-
+    # choose workload
     tx_ins = None
     if workload_type == "A":
         with conn.cursor() as cur:
@@ -259,6 +258,7 @@ if __name__ == "__main__":
         exit(0)
 
     # read from file
+    inputs = []
     f = open(file_path)
     line_content = f.readline()
     while line_content.strip():
@@ -268,8 +268,6 @@ if __name__ == "__main__":
             # test only one tx
             if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
             execute_tx(tx_ins, conn, params)
-            inputs = []
-        elif params == "not-implemented":
             inputs = []
         line_content = f.readline()
 
