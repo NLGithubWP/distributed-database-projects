@@ -64,12 +64,3 @@ cockroach sql \
 
 ```
 
-optimization:
-
-for TxA, mainly use three heavily write txs, mainly update table 
-    customer,
-    order_ori, 
-    order_line, 
-    warehouse, 
-    district, (D_NEXT_O_ID, )
-    stock

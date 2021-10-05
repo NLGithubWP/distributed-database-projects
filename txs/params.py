@@ -34,8 +34,8 @@ class OrderStatusTxParams:
 
 class StockLevelTxParams:
     def __init__(self):
-        self.c_w_id: int = 0
-        self.c_d_id: int = 0
+        self.w_id: int = 0
+        self.d_id: int = 0
         self.threshold: int = 0
         self.l: int = 0
 
