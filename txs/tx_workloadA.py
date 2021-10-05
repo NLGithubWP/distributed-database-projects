@@ -25,6 +25,8 @@ class TxForWorkloadA(Transactions):
             89822,1,4
             57015,1,2
         """
+
+        # read params
         c_id = m_params.c_id
         w_id = m_params.w_id
         d_id = m_params.d_id
@@ -119,7 +121,7 @@ class TxForWorkloadA(Transactions):
                         "WHERE S_W_ID = %s and S_I_ID = %s",
                         (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
 
-            # 6. update all
+            # 6.  total amount
             cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
             w_tax = cur.fetchone()[0]
 
@@ -163,6 +165,7 @@ class TxForWorkloadA(Transactions):
         c_d_id = m_params.c_d_id
         c_id = m_params.c_id
         payment_amount = m_params.payment_amount
+
         with m_conn.cursor() as cur:
             cur.execute("UPDATE warehouse SET W_YTD = W_YTD + %s "
                         "WHERE W_ID = %s RETURNING W_STREET_1, W_STREET_2, W_CITY, W_STATE, W_ZIP",
@@ -197,15 +200,16 @@ class TxForWorkloadA(Transactions):
                   "d_state: %s,"
                   "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
 
-            cur.execute('''UPDATE customer SET C_BALANCE = C_BALANCE - %s, 
-                        C_YTD_PAYMENT = C_YTD_PAYMENT + %s, 
-                        C_PAYMENT_CNT = C_PAYMENT_CNT + 1 
-                        WHERE C_W_ID = %s and C_D_ID = %s and C_ID = %s 
-                        returning C_W_ID, C_D_ID, C_ID, 
-                        C_FIRST, C_MIDDLE, C_LAST, 
-                        C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, 
-                        C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE''',
-                        (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
+            cur.execute('''UPDATE customer 
+                           SET C_BALANCE = C_BALANCE - %s, 
+                                C_YTD_PAYMENT = C_YTD_PAYMENT + %s, 
+                                C_PAYMENT_CNT = C_PAYMENT_CNT + 1 
+                           WHERE C_W_ID = %s and C_D_ID = %s and C_ID = %s 
+                           RETURNING C_W_ID, C_D_ID, C_ID, 
+                                C_FIRST, C_MIDDLE, C_LAST, 
+                                C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, 
+                                C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE''',
+                            (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
 
             res = cur.fetchone()
             print("customer:, ", res)

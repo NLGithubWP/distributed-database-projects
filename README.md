@@ -1,19 +1,13 @@
 # CS5424
 
-project
-
-To use dbinit-workload-A.sql
-
-firstly run a cockroachDB cluster
-
-And then, run python file http sever.
+1. run python file http sever.
 
 ```bash
   python -m http.server 3000
 
 ```
 
-Start clusters
+2. Start clusters
 
 ```
 
@@ -43,7 +37,7 @@ cockroach start \
 
 ```
 
-And then, can run dbinit-workload-A.sql to load tables, 
+3. run dbinit-workload-A.sql to load tables to test workloadA
 
 
 ```bash
@@ -55,3 +49,27 @@ cockroach sql \
     -f ./sqls/dbinit-workload-A.sql
 
 ```
+
+
+4. run dbinit-workload-A.sql to load tables to test workloadB
+
+
+```bash
+
+cockroach sql \
+    --host=localhost:26258 \
+    --certs-dir=certs \
+    --user=root \
+    -f ./sqls/dbinit-workload-A.sql
+
+```
+
+optimization:
+
+for TxA, mainly use three heavily write txs, mainly update table 
+    customer,
+    order_ori, 
+    order_line, 
+    warehouse, 
+    district, (D_NEXT_O_ID, )
+    stock
