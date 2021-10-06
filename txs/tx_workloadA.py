@@ -66,44 +66,18 @@ class TxForWorkloadA(Transactions):
             i_name_list = []
             o_amount_list = []
             s_dist_xx = "S_DIST_" + str(d_id)
-
-            # select all s_quantity
-            query = "SELECT S_QUANTITY FROM stock WHERE (S_W_ID,S_I_ID ) in ("
-            for i in range(len(item_number)):
-                query += "({},{})".format(supplier_warehouse[i], item_number[i])
-                if i < len(item_number) - 1:
-                    query += ","
-            query += ")"
-            cur.execute(query)
-            s_quantity_list = list(cur.fetchall())
-
-            # select all items
-            query = "SELECT I_PRICE, I_NAME FROM item AS OF SYSTEM TIME follower_read_timestamp() " \
-                    "WHERE I_ID in {}".format(tuple(item_number))
-            cur.execute(query)
-            item_price_name = list(cur.fetchall())
-
-            # batch inserting
-            query = "INSERT INTO order_line (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, " \
-                    "OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) values "
+            s_quantity_list = []
 
             for i in range(len(item_number)):
-                i_price = item_price_name[i][0]
-                item_amount = quantity[i] * i_price
-                total_amount += item_amount
-                i_name_list.append(item_price_name[i][1])
-                o_amount_list.append(item_amount)
+                # query s_quantity
+                query = "SELECT S_QUANTITY FROM stock WHERE (S_W_ID, S_I_ID ) = ({}, {})".format(supplier_warehouse[i], item_number[i])
+                cur.execute(query)
+                s_quantity = cur.fetchone()
+                s_quantity_list.append(s_quantity[0])
 
-                query += "({},{},{},{},{},{},{},{},'{}')".format(
-                    w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx)
+                # update stock
+                adjusted_qty = s_quantity[0]-quantity[i]
 
-                if i < len(item_number) - 1:
-                    query += ","
-
-            cur.execute(query)
-
-            for i in range(0, len(item_number)):
-                adjusted_qty = s_quantity_list[i][0]-quantity[i]
                 if adjusted_qty < 10:
                     adjusted_qty = adjusted_qty + 100
 
@@ -123,7 +97,31 @@ class TxForWorkloadA(Transactions):
                         "WHERE S_W_ID = %s and S_I_ID = %s",
                         (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
 
-            # 6.  total amount
+            # batch inserting into order_line
+            query = "INSERT INTO order_line (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, " \
+                    "OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) values "
+
+            for i in range(len(item_number)):
+                # query item
+                _query = "SELECT I_PRICE, I_NAME FROM item WHERE I_ID = {} ".format(item_number[i])
+                cur.execute(_query)
+                item_price_name = cur.fetchone()
+                i_name_list.append(item_price_name[1])
+
+                i_price = item_price_name[0]
+                item_amount = quantity[i] * i_price
+                total_amount += item_amount
+                o_amount_list.append(item_amount)
+
+                query += "({},{},{},{},{},{},{},{},'{}')".format(
+                    w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx)
+
+                if i < len(item_number) - 1:
+                    query += ","
+
+            cur.execute(query)
+
+            # 6. calculate total amount
             cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
             w_tax = cur.fetchone()[0]
 
@@ -143,18 +141,19 @@ class TxForWorkloadA(Transactions):
         print(w_id, d_id, c_id, c_last, c_credit, c_discount)
         print("Warehouse tax rate W TAX, District tax rate D TAX")
         print(w_tax, d_tax)
-        print("Order number O ID, entry date O ENTRY D")
+        print("Order number O_ID, entry date O_ENTRY_D")
         print(n, entry_d)
         print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
         print(num_items, total_amount)
 
-        for i in range(0, len(item_number)):
+        for i in range(len(item_number)):
             print("ITEM NUMBER[i]: ", item_number[i])
             print("I_NAME: ", i_name_list[i])
             print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
             print("QUANTITY[i]: ", quantity[i])
             print("OL_AMOUNT: ", o_amount_list[i])
-            print("S_QUANTITY: ", s_quantity_list[i][0])
+            print("S_QUANTITY: ", s_quantity_list[i])
+
 
     def payment_transaction(self, m_conn, m_params: PaymentTxName):
         """
@@ -234,36 +233,34 @@ class TxForWorkloadA(Transactions):
                 # who placed this order
 
                 # Update the order X by setting O CARRIER ID to CARRIER ID
-                cur.execute('''
-                            update order_ori set o_carrier_id = %s 
-                            where (o_w_id, o_d_id, o_id) in 
-                              (select o_w_id, o_d_id, o_id from order_ori 
-                               where o_id = (select MIN(o_id)) from order_ori 
-                                where o_w_id = %s and o_d_id = %s and o_carrier_id is null) 
-                            returning o_id, o_c_id;''',
-                            (carrier_id, w_id, d_id))
+                query = "update order_ori set o_carrier_id = {} " \
+                        "where (o_w_id, o_d_id, o_id) in  " \
+                        "(select o_w_id, o_d_id, o_id from order_ori where o_w_id = {} and o_d_id = {} and o_id =" \
+                        "   (select MIN(o_id) from order_ori " \
+                        "       where o_w_id = {} and o_d_id = {} and o_carrier_id is null) and o_carrier_id is null) " \
+                        "returning o_id, o_c_id;".format(carrier_id, w_id, d_id, w_id, d_id)
+
+                cur.execute(query)
 
                 res = cur.fetchone()
                 n = res[0]
                 c_id = res[1]
 
                 # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
-                cur.execute('''
-                            update order_line set OL_DELIVERY_D =now() 
-                            where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))''',
-                            (w_id, d_id, n))
+                query = "update order_line set OL_DELIVERY_D =now() " \
+                        "where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {}))".format(w_id, d_id, n)
+
+                cur.execute(query)
 
                 # Update customer C as follows:
                 # 1. Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
                 # 2. Increment C DELIVERY CNT by 1
 
-                cur.execute('''
-                            update customer set (C_BALANCE, C_DELIVERY_CNT) = 
-                               ((select sum(ol_amount) from order_line 
-                                 where (ol_w_id, ol_d_id, ol_o_id) in ((%s, %s, %s))
-                                 group by ol_o_id ), C_DELIVERY_CNT+1) 
-                            where (c_w_id, c_d_id, c_id) in ((%s, %s, %s));''',
-                            (w_id, d_id, n, w_id, d_id, c_id))
+                query = "update customer set (C_BALANCE, C_DELIVERY_CNT) = " \
+                        "((select sum(ol_amount) from order_line " \
+                        "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id ), C_DELIVERY_CNT+1) "\
+                        "   where (c_w_id, c_d_id, c_id) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
+                cur.execute(query)
 
             m_conn.commit()
 

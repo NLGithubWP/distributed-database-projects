@@ -10,6 +10,23 @@
 2. Start clusters
 
 ```
+mkdir certs my-safe-directory
+
+cockroach cert create-ca \
+--certs-dir=certs \
+--ca-key=my-safe-directory/ca.key
+
+cockroach cert create-node \
+localhost \
+$(hostname) \
+--certs-dir=certs \
+--ca-key=my-safe-directory/ca.key
+
+cockroach cert create-client \
+root \
+--certs-dir=certs \
+--ca-key=my-safe-directory/ca.key
+
 
 cockroach start \
         --certs-dir=certs \
@@ -45,7 +62,7 @@ cockroach init --certs-dir=certs --host=localhost:26257
 ```bash
 
 cockroach sql \
-    --host=localhost:26258 \
+    --host=localhost:26257 \
     --certs-dir=certs \
     --user=root \
     -f /Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/sqls/dbinit-workload-A.sql

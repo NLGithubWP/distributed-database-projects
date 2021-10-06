@@ -13,7 +13,7 @@ SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
 SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
 
 -- Create user
-CREATE USER IF NOT EXISTS naili;
+CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
 
 -- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadA CASCADE;
@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
     INDEX order_ori_joint_id (o_w_id, o_d_id, o_id, o_carrier_id),
     INDEX order_ori_joint_c_id (o_w_id, o_d_id, o_c_id),
     INDEX order_ori_c_id (o_c_id),
+    INDEX order_ori_i_id (o_id),
     INDEX order_ori_entry_d (o_entry_d));
 
 IMPORT INTO cs5424db.workloadA.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)
@@ -129,6 +130,8 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.item (
 IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/item.csv')
     WITH delimiter = e',', nullif = 'null';
+
+ALTER TABLE item SPLIT AT VALUES (20051), (40051), (60051), (80051);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,

@@ -89,13 +89,6 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
         # The function below is used to test the transaction retry logic.  It
         # can be deleted from production code.
         # run_transaction(conn, test_retry_loop)
-    except ValueError as ve:
-        is_success = False
-        # Below, we print the error and continue on so this example is easy to
-        # run (and run, and run...).  In real code you should handle this error
-        # and any others thrown by the database interaction.
-        logging.debug("run_transaction(conn, op) failed: %s", ve)
-        pass
     except Exception as e:
         is_success = False
         raise
@@ -206,7 +199,7 @@ def evaluate():
 
     print("------------time spent list", time_used_list)
     print("------------Total time spent in tx", total_tx_time, "ms or", total_tx_time / 1000, "s", "------", )
-    print("------------Throughout is", total_tx_num / (total_tx_time / 1000), "------", )
+    print("------------Throughout is", total_tx_num / (total_tx_time / 1000), " tx/s ------", )
     print("------------Average transaction latency (in ms) is", total_tx_time / total_tx_num, "ms------", )
     print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)], "ms------")
 
@@ -240,13 +233,13 @@ if __name__ == "__main__":
     workload_type = opt.workload_type
 
     # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    # file_path = "/opt/project_files/xact_files_A/0.txt"
+    file_path = "/opt/project_files/xact_files_A/0.txt"
     # workload_type = "A"
 
-    # if debug single transaction, assign name here
-    DebugSingleTx = True
+    TestTxConfig = False
+    DebugSingleTx = False
     SingleTxName = txs.NewOrderTxName
-    TestTxConfig = True
+    # if debug single transaction, assign name here
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
@@ -276,6 +269,7 @@ if __name__ == "__main__":
         if TestTxConfig == True:
             test_tx(tx_ins, conn)
         if triggered:
+            print("the triggered tx is ", params.__class__.__name__)
             # test only one tx
             if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
             execute_tx(tx_ins, conn, params)
@@ -287,6 +281,8 @@ if __name__ == "__main__":
 
     f.close()
     evaluate()
+    conn.close()
+
 
     # read from stdin
     # for user_input in sys.stdin:
@@ -298,4 +294,4 @@ if __name__ == "__main__":
     #         execute_tx(conn, params)
     #         inputs = []
 
-    conn.close()
+
