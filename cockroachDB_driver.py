@@ -44,7 +44,7 @@ class MyLoggingConnection(LoggingConnection):
         global each_tx_time
         total_tx_time += time_used
         each_tx_time += time_used
-        return "[" + str(msg)[2:-1] + "]:   %d ms" % time_used # us
+        return "[" + str(msg)[2:-1] + "]:   %d us" % time_used # us
 
     def cursor(self, *args, **kwargs):
         kwargs.setdefault('cursor_factory', MyLoggingCursor)
