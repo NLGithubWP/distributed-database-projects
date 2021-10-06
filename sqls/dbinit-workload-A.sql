@@ -214,9 +214,8 @@ WITH dw AS
 UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
     FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
 
--- de-normalization order_line
-ALTER TABLE cs5424db.workloadA.order_line ADD COLUMN OL_I_NAME VARCHAR(24) FAMILY freqRead;
-
-UPDATE order_line SET OL_I_NAME = I_NAME
-    FROM item
-    WHERE order_line.OL_I_ID=item.I_ID;
+-- de-normalization order_line, tooo slow
+-- ALTER TABLE cs5424db.workloadA.order_line ADD COLUMN OL_I_NAME VARCHAR(24) FAMILY freqRead;
+-- UPDATE order_line SET OL_I_NAME = I_NAME
+--     FROM item
+--     WHERE order_line.OL_I_ID=item.I_ID;

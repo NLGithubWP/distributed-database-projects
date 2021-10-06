@@ -35,6 +35,8 @@ cockroach start \
         --join=localhost:26257,localhost:26258,localhost:26259 \
         --background
 
+cockroach init --certs-dir=certs --host=localhost:26257
+
 ```
 
 3. run dbinit-workload-A.sql to load tables to test workloadA
@@ -51,7 +53,7 @@ cockroach sql \
 ```
 
 
-4. run dbinit-workload-A.sql to load tables to test workloadB
+4. run dbinit-workload-B.sql to load tables to test workloadB
 
 
 ```bash
@@ -60,7 +62,7 @@ cockroach sql \
     --host=localhost:26258 \
     --certs-dir=certs \
     --user=root \
-    -f ./sqls/dbinit-workload-A.sql
+    -f ./sqls/dbinit-workload-B.sql
 
 ```
 
