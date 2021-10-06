@@ -46,7 +46,7 @@ cockroach sql \
     --host=localhost:26258 \
     --certs-dir=certs \
     --user=root \
-    -f ./sqls/dbinit-workload-A.sql
+    -f /Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/sqls/dbinit-workload-A.sql
 
 ```
 
@@ -70,6 +70,8 @@ cockroach sql \
 ```bash
 
 cockroach sql --certs-dir=certs --host=localhost:26257
+cockroach sql --certs-dir=certs --host=localhost:26258
+cockroach sql --certs-dir=certs --host=localhost:26259
 
 ```
 

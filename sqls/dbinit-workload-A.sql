@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
     FAMILY freqWrite (pid, O_W_ID, O_D_ID, O_ID, O_CARRIER_ID),
     FAMILY freqRead (O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D),
     INDEX order_ori_joint_id (o_w_id, o_d_id, o_id, o_carrier_id),
+    INDEX order_ori_joint_c_id (o_w_id, o_d_id, o_c_id),
     INDEX order_ori_c_id (o_c_id),
     INDEX order_ori_entry_d (o_entry_d));
 
@@ -188,3 +189,34 @@ select * from item limit 100;
 SHOW INDEX FROM item;
 SHOW COLUMNS FROM item;
 show ranges from table item;
+
+
+-- de-normalization to make read faster
+
+-- de-normalization order_ori
+ALTER TABLE cs5424db.workloadA.order_ori
+    ADD COLUMN O_C_FIRST VARCHAR(16) FAMILY freqRead,
+    ADD COLUMN O_C_MIDDLE CHAR(2) FAMILY freqRead,
+    ADD COLUMN O_C_LAST VARCHAR(16) FAMILY freqRead;
+
+UPDATE order_ori SET O_C_FIRST = C_FIRST, O_C_MIDDLE=C_MIDDLE, O_C_LAST=C_LAST
+    FROM customer
+    WHERE order_ori.O_W_ID=customer.C_W_ID AND order_ori.O_D_ID=customer.C_D_ID AND order_ori.O_C_ID=customer.C_ID;
+
+-- de-normalization customer
+ALTER TABLE cs5424db.workloadA.customer
+    ADD COLUMN C_W_NAME VARCHAR(10) FAMILY freqRead,
+    ADD COLUMN C_D_NAME VARCHAR(10) FAMILY freqRead;
+
+
+WITH dw AS
+    (select D_W_ID, D_ID, W_NAME, D_NAME from district left join warehouse on district.D_W_ID = warehouse.W_ID)
+UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
+    FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
+
+-- de-normalization order_line
+ALTER TABLE cs5424db.workloadA.order_line ADD COLUMN OL_I_NAME VARCHAR(24) FAMILY freqRead;
+
+UPDATE order_line SET OL_I_NAME = I_NAME
+    FROM item
+    WHERE order_line.OL_I_ID=item.I_ID;
