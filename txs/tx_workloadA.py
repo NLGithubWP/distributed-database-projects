@@ -366,48 +366,48 @@ class TxForWorkloadA(Transactions):
         print("Number of orders to be examined: %s" % (l,))
 
         with m_conn.cursor() as cur:
-            # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
+            # Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
             res = cur.fetchone()
             n = res[0]
             print("n is %s" % (n,))
 
-            # 2. Let S denote the set of last L orders for district (W ID,D ID)
+            # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
                 '''
-                SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST
+                SELECT O_ID, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST
                 FROM order_ori 
-                JOIN customer ON order_ori.O_W_ID = customer.C_W_ID
-                AND order_ori.O_D_ID = customer.C_D_ID AND order_ori.O_C_ID = customer.C_ID
                 WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
                 ''', (w_id, d_id, n - l, n))
             s = cur.fetchall()
 
-            # 3. For each order number x in S
-            # Let Ix denote the set of order-lines for this order;
-            # Let Px ⊆ Ix denote the subset of popular items in Ix
-            for x in s:
+            # Get popular items for each order
+            cur.execute(
+                 '''
+                    SELECT OL_O_ID, OL_W_ID, OL_D_ID, OL_I_ID, OL_I_NAME, OL_QUANTITY
+                    FROM order_line ol1
+                    LEFT JOIN
+                        (SELECT OL_O_ID, OL_W_ID, OL_D_ID, MAX(OL_QUANTITY)
+                         FROM order_line
+                         WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
+                         GROUP BY OL_O_ID, OL_W_ID, OL_D_ID) ol2
+                    ON ol1.OL_O_ID=ol2.OL_O_ID AND ol1.OL_W_ID=ol2.OL_W_ID AND ol1.OL_D_ID=ol2.OL_D_ID
+                 ''', (w_id, d_id, n - l, n))
+            p_x = cur.fetchall()
+            print("p_x:")
+            print(p_x)
+
+
+            for i in range(l):
                 print("order: O_ID, O_ENTRY_ID")
-                print(x[0], x[1])
+                print(s[i][0], s[i][1])
 
                 print("customer name")
-                print(x[2], x[3], x[4])
-
-                cur.execute(
-                    '''
-                    WITH 
-                        order_line_items AS
-                            (SELECT item.I_ID, item.I_NAME, order_line.OL_QUANTITY 
-                            FROM order_line JOIN item ON order_line.OL_I_ID = item.I_ID
-                            WHERE OL_O_ID = %s AND OL_D_ID = %s AND OL_W_ID = %s)
-                        SELECT I_ID, I_NAME, OL_QUANTITY
-                        FROM order_line_items
-                        WHERE OL_QUANTITY = (SELECT MAX(OL_QUANTITY) FROM order_line_items);
-                    ''', (x[0], d_id, w_id))
-                p_x = cur.fetchall()
+                print(s[i][2], s[i][3], s[i][4])
 
                 print("popular item: I_NAME, OL_QUANTITY")
-                for item in p_x:
+
+                for item in p_x[i]:
                     print(item[1], item[2])
                     pop_item_set.add(item[0])
 

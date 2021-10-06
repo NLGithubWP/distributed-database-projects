@@ -245,7 +245,7 @@ if __name__ == "__main__":
 
     # if debug single transaction, assign name here
     DebugSingleTx = True
-    SingleTxName = txs.NewOrderTxName
+    SingleTxName = txs.PopItemTxName
     TestTxConfig = True
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
