@@ -1,7 +1,7 @@
 
 SET experimental_enable_hash_sharded_indexes=on;
 SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
-SET CLUSTER SETTING kv.range_split.load_qps_threshold = 3;
+SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
 
 CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
@@ -24,8 +24,10 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.warehouse (
     W_STATE CHAR(2) NOT NULL,
     W_ZIP CHAR(9) NOT NULL,
     W_TAX DECIMAL(4,4) NOT NULL,
-    W_YTD DECIMAL(12,2) NOT NULL);
-
+    W_YTD DECIMAL(12,2) NOT NULL,
+    FAMILY freqWrite (W_ID, W_YTD),
+    FAMILY freqRead (W_NAME, W_STREET_1, W_STREET_2, W_CITY, W_STATE, W_ZIP, W_TAX),
+    PRIMARY KEY (W_ID));
 
 IMPORT INTO cs5424db.workloadA.warehouse
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/warehouse.csv')
@@ -43,7 +45,10 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.district (
     D_ZIP CHAR(9) NOT NULL,
     D_TAX DECIMAL(4,4) NOT NULL,
     D_YTD DECIMAL(12,2) NOT NULL,
-    D_NEXT_O_ID INT NOT NULL);
+    D_NEXT_O_ID INT NOT NULL,
+    FAMILY freqRead (D_NAME, D_STREET_1, D_STREET_2, D_CITY, D_STATE, D_ZIP, D_TAX),
+    FAMILY freqWrite (D_W_ID, D_ID, D_NEXT_O_ID, D_YTD),
+    PRIMARY KEY (D_W_ID, D_ID));
 
 
 IMPORT INTO cs5424db.workloadA.district
@@ -64,7 +69,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.customer (
     C_STATE CHAR(2) NOT NULL,
     C_ZIP CHAR(9) NOT NULL,
     C_PHONE CHAR(16) NOT NULL,
-    C_SINCE TIMESTAMPZ DEFAULT now() NOT NULL,
+    C_SINCE TIMESTAMPTZ DEFAULT now() NOT NULL,
     C_CREDIT CHAR(2) NOT NULL,
     C_CREDIT_LIM DECIMAL(12,2) NOT NULL,
     C_DISCOUNT DECIMAL(4,4) NOT NULL,
@@ -72,36 +77,44 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.customer (
     C_YTD_PAYMENT FLOAT NOT NULL,
     C_PAYMENT_CNT INT NOT NULL,
     C_DELIVERY_CNT INT NOT NULL,
-    C_DATA VARCHAR(500) NOT NULL);
+    C_DATA VARCHAR(500) NOT NULL,
+    FAMILY freqWrite (C_W_ID, C_D_ID, C_ID, C_BALANCE, C_YTD_PAYMENT, C_PAYMENT_CNT, C_DELIVERY_CNT),
+    FAMILY freqRead (C_FIRST, C_MIDDLE, C_LAST, C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_DATA),
+    PRIMARY KEY (C_W_ID, C_D_ID, C_ID));
 
 IMPORT INTO cs5424db.workloadA.customer
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/customer.csv')
     WITH delimiter = e',', nullif = 'null';
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
-    O_W_ID INT,
-    O_D_ID INT,
-    O_ID INT,
-    O_C_ID INT,
+    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    O_W_ID INT NOT NULL,
+    O_D_ID INT NOT NULL,
+    O_ID INT NOT NULL,
+    O_C_ID INT NOT NULL,
     O_CARRIER_ID INT,
-    O_OL_CNT DECIMAL(2,0),
-    O_ALL_LOCAL DECIMAL(1,0),
-    O_ENTRY_D TIMESTAMPZ DEFAULT now());
+    O_OL_CNT DECIMAL(2,0) NOT NULL,
+    O_ALL_LOCAL DECIMAL(1,0) NOT NULL,
+    O_ENTRY_D TIMESTAMPTZ DEFAULT now(),
+    FAMILY freqWrite (pid, O_W_ID, O_D_ID, O_ID, O_CARRIER_ID),
+    FAMILY freqRead (O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D),
+    INDEX order_ori_joint_id (o_w_id, o_d_id, o_id, o_carrier_id),
+    INDEX order_ori_c_id (o_c_id),
+    INDEX order_ori_entry_d (o_entry_d));
 
-IMPORT INTO cs5424db.workloadA.order_ori
+IMPORT INTO cs5424db.workloadA.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.item (
-    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     I_ID INT NOT NULL,
     I_NAME VARCHAR(24) NOT NULL,
     I_PRICE DECIMAL(5,0) NOT NULL,
     I_IM_ID INT NOT NULL,
-    I_DATA VARCHAR(50) NOT NULL);
+    I_DATA VARCHAR(50) NOT NULL,
+    PRIMARY KEY (I_ID));
 
--- ALTER TABLE item SPLIT AT VALUES (40051), (80051);
 
 IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/item.csv')
@@ -113,11 +126,14 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_O_ID INT NOT NULL,
     OL_NUMBER INT NOT NULL,
     OL_I_ID INT NOT NULL,
-    OL_DELIVERY_D TIMESTAMPZ DEFAULT now(),
+    OL_DELIVERY_D TIMESTAMPTZ DEFAULT now(),
     OL_AMOUNT DECIMAL(6,2) NOT NULL,
     OL_SUPPLY_W_ID INT NOT NULL,
     OL_QUANTITY DECIMAL(2,0) NOT NULL,
-    OL_DIST_INFO CHAR(24) NOT NULL);
+    OL_DIST_INFO CHAR(24) NOT NULL,
+    FAMILY freqRead (OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
+    FAMILY freqWrite (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
+    PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
 
 IMPORT INTO cs5424db.workloadA.order_line
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order-line.csv')
@@ -140,7 +156,11 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.stock (
     S_DIST_08 CHAR(24) NOT NULL,
     S_DIST_09 CHAR(24) NOT NULL,
     S_DIST_10 CHAR(24) NOT NULL,
-    S_DATA VARCHAR(50) NOT NULL);
+    S_DATA VARCHAR(50) NOT NULL,
+    FAMILY freqRead (S_DIST_01, S_DIST_02, S_DIST_03, S_DIST_04, S_DIST_05, S_DIST_06, S_DIST_07,
+        S_DIST_08, S_DIST_09, S_DIST_10, S_DATA),
+    FAMILY freqWrite (S_W_ID, S_I_ID, S_QUANTITY, S_YTD, S_ORDER_CNT, S_REMOTE_CNT),
+    PRIMARY KEY (S_W_ID, S_I_ID));
 
 IMPORT INTO cs5424db.workloadA.stock
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/stock.csv')
@@ -149,14 +169,6 @@ IMPORT INTO cs5424db.workloadA.stock
 GRANT all on TABLE cs5424db.workloadA.* to naili;
 
 set search_path to workloadA;
-
-CREATE INDEX s_joint_id ON stock (s_w_id, s_i_id);
-CREATE INDEX c_joint_id ON customer (c_w_id, c_d_id, c_id);
-CREATE INDEX d_joint_id ON district (d_w_id, d_id);
-CREATE INDEX order_ori_joint_id ON order_ori (o_w_id, o_d_id, o_id, o_carrier_id);
-CREATE INDEX order_ori_c_id ON order_ori (o_c_id);
-CREATE INDEX order_ori_entry_d ON order_ori (o_entry_d);
-CREATE INDEX order_line_joint_id ON order_line (ol_w_id, ol_d_id, ol_o_id, ol_number);
 
 select * from item limit 100;
 SHOW INDEX FROM item;
