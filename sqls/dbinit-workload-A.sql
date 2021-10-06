@@ -1,20 +1,29 @@
 
-SET experimental_enable_hash_sharded_indexes=on;
-SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
-SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
 
+-- Create db
 CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
 
+
+-- set hash index enable to true
+SET experimental_enable_hash_sharded_indexes=on;
+
+-- load-splitting threshold to be 400
+SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
+SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
+
+-- Create user
 CREATE USER IF NOT EXISTS naili;
 
 -- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadA CASCADE;
 CREATE SCHEMA workloadA AUTHORIZATION naili;
 
+-- grant to user
 GRANT all on DATABASE cs5424db to naili;
 GRANT all ON SCHEMA workloadA TO naili;
 
+-- Create databases and import data
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.warehouse (
     W_ID INT NOT NULL,
     W_NAME VARCHAR(10) NOT NULL,
@@ -121,6 +130,7 @@ IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     WITH delimiter = e',', nullif = 'null';
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
+    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     OL_W_ID INT NOT NULL,
     OL_D_ID INT NOT NULL,
     OL_O_ID INT NOT NULL,
@@ -133,7 +143,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_DIST_INFO CHAR(24) NOT NULL,
     FAMILY freqRead (OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
     FAMILY freqWrite (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
-    PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+    INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
 
 IMPORT INTO cs5424db.workloadA.order_line
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order-line.csv')
@@ -166,10 +176,14 @@ IMPORT INTO cs5424db.workloadA.stock
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/stock.csv')
     WITH delimiter = e',', nullif = 'null';
 
+-- grant to user
 GRANT all on TABLE cs5424db.workloadA.* to naili;
 
+-- set schema
 set search_path to workloadA;
 
+
+-- run some test sql
 select * from item limit 100;
 SHOW INDEX FROM item;
 SHOW COLUMNS FROM item;
