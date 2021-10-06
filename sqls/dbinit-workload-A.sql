@@ -141,11 +141,11 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_SUPPLY_W_ID INT NOT NULL,
     OL_QUANTITY DECIMAL(2,0) NOT NULL,
     OL_DIST_INFO CHAR(24) NOT NULL,
-    FAMILY freqRead (OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
-    FAMILY freqWrite (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
+    FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
+    FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
     INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
 
-IMPORT INTO cs5424db.workloadA.order_line
+IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO)
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order-line.csv')
     WITH delimiter = e',', nullif = 'null';
 

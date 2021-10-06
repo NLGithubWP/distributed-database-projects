@@ -38,13 +38,14 @@ class TxForWorkloadA(Transactions):
         with m_conn.cursor() as cur:
 
             # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
-            cur.execute("SELECT D_NEXT_O_ID, D_TAX FROM district WHERE D_W_ID = %s and D_ID = %s", (w_id, d_id))
-            res = cur.fetchone()
-            n = res[0]
-            d_tax = res[1]
-
             # 2. Update the district (W ID, D ID) by incrementing D NEXT O ID by one
-            cur.execute("UPDATE district SET D_NEXT_O_ID = %s WHERE D_W_ID = %s and D_ID = %s", (n + 1, w_id, d_id))
+            cur.execute("UPDATE district SET D_NEXT_O_ID = D_NEXT_O_ID + 1 "
+                        "WHERE D_W_ID = %s and D_ID = %s "
+                        "returning D_NEXT_O_ID, d_tax;", (w_id, d_id))
+
+            res = cur.fetchone()
+            n = int(res[0])-1
+            d_tax = res[1]
 
             # 3. Create a new order record, Create a new order
             all_local = 1
@@ -77,7 +78,8 @@ class TxForWorkloadA(Transactions):
             s_quantity_list = list(cur.fetchall())
 
             # select all items
-            query = "SELECT I_PRICE, I_NAME FROM item WHERE I_ID in {}".format(tuple(item_number))
+            query = "SELECT I_PRICE, I_NAME FROM item AS OF SYSTEM TIME follower_read_timestamp() " \
+                    "WHERE I_ID in {}".format(tuple(item_number))
             cur.execute(query)
             item_price_name = list(cur.fetchall())
 
