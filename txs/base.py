@@ -42,3 +42,16 @@ class Transactions(object):
     def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams):
         raise NotImplementedError
 
+    def test_transaction(self, m_conn):
+
+        k = 110102
+
+        while True:
+            with m_conn.cursor() as cur:
+                query = "insert INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA) " \
+                        "values ({}, 'noawtpfynitqxadf' ,330, 108, 'ugmvxubikoestjagbcxiytwclqdosiswxbf')".format(k)
+
+                cur.execute(query)
+                # print(cur.fetchone())
+                m_conn.commit()
+                k += 1

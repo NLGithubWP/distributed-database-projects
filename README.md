@@ -64,3 +64,13 @@ cockroach sql \
 
 ```
 
+
+5. run some sql
+
+```bash
+
+cockroach sql --certs-dir=certs --host=localhost:26257
+
+```
+
+

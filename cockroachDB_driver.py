@@ -51,6 +51,14 @@ class MyLoggingConnection(LoggingConnection):
         return LoggingConnection.cursor(self, *args, **kwargs)
 
 
+def test_tx(tx_ins: Transactions, m_conn):
+    global total_tx_time
+    global total_tx_num
+    global time_used_list
+    global each_tx_time
+    tx_ins.test_transaction(m_conn)
+
+
 def execute_tx(tx_ins: Transactions, m_conn, m_params):
     global total_tx_time
     global total_tx_num
@@ -238,6 +246,7 @@ if __name__ == "__main__":
     # if debug single transaction, assign name here
     DebugSingleTx = True
     SingleTxName = txs.NewOrderTxName
+    TestTxConfig = True
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
@@ -264,6 +273,8 @@ if __name__ == "__main__":
     while line_content.strip():
         inputs.append(line_content.strip())
         triggered, params = parse_stdin(inputs)
+        if TestTxConfig == True:
+            test_tx(tx_ins, conn)
         if triggered:
             # test only one tx
             if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue

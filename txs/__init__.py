@@ -7,3 +7,5 @@ OrderStatusTxName = "OrderStatusTxParams"
 StockLevelTxName = "StockLevelTxParams"
 PopItemTxName = "PopItemTxParams"
 RelCustomerTxName = "RelCustomerTxParams"
+
+TestTxName = "TestTxName"

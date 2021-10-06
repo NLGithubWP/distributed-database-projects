@@ -1,4 +1,8 @@
 
+SET experimental_enable_hash_sharded_indexes=on;
+SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
+SET CLUSTER SETTING kv.range_split.load_qps_threshold = 3;
+
 CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
 
@@ -60,7 +64,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.customer (
     C_STATE CHAR(2) NOT NULL,
     C_ZIP CHAR(9) NOT NULL,
     C_PHONE CHAR(16) NOT NULL,
-    C_SINCE TIMESTAMP NOT NULL,
+    C_SINCE TIMESTAMPZ DEFAULT now() NOT NULL,
     C_CREDIT CHAR(2) NOT NULL,
     C_CREDIT_LIM DECIMAL(12,2) NOT NULL,
     C_DISCOUNT DECIMAL(4,4) NOT NULL,
@@ -82,20 +86,24 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
     O_CARRIER_ID INT,
     O_OL_CNT DECIMAL(2,0),
     O_ALL_LOCAL DECIMAL(1,0),
-    O_ENTRY_D TIMESTAMP);
+    O_ENTRY_D TIMESTAMPZ DEFAULT now());
 
 IMPORT INTO cs5424db.workloadA.order_ori
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
+
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.item (
+    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     I_ID INT NOT NULL,
     I_NAME VARCHAR(24) NOT NULL,
     I_PRICE DECIMAL(5,0) NOT NULL,
     I_IM_ID INT NOT NULL,
     I_DATA VARCHAR(50) NOT NULL);
 
-IMPORT INTO cs5424db.workloadA.item
+-- ALTER TABLE item SPLIT AT VALUES (40051), (80051);
+
+IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/item.csv')
     WITH delimiter = e',', nullif = 'null';
 
@@ -105,7 +113,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_O_ID INT NOT NULL,
     OL_NUMBER INT NOT NULL,
     OL_I_ID INT NOT NULL,
-    OL_DELIVERY_D TIMESTAMP,
+    OL_DELIVERY_D TIMESTAMPZ DEFAULT now(),
     OL_AMOUNT DECIMAL(6,2) NOT NULL,
     OL_SUPPLY_W_ID INT NOT NULL,
     OL_QUANTITY DECIMAL(2,0) NOT NULL,
@@ -149,3 +157,8 @@ CREATE INDEX order_ori_joint_id ON order_ori (o_w_id, o_d_id, o_id, o_carrier_id
 CREATE INDEX order_ori_c_id ON order_ori (o_c_id);
 CREATE INDEX order_ori_entry_d ON order_ori (o_entry_d);
 CREATE INDEX order_line_joint_id ON order_line (ol_w_id, ol_d_id, ol_o_id, ol_number);
+
+select * from item limit 100;
+SHOW INDEX FROM item;
+SHOW COLUMNS FROM item;
+show ranges from table item;
