@@ -236,7 +236,8 @@ class TxForWorkloadA(Transactions):
                             update order_ori set o_carrier_id = %s 
                             where (o_w_id, o_d_id, o_id) in 
                               (select o_w_id, o_d_id, o_id from order_ori 
-                               where o_w_id = %s and o_d_id = %s and o_carrier_id is null order by o_id limit 1) 
+                               where o_id = (select MIN(o_id)) from order_ori 
+                                where o_w_id = %s and o_d_id = %s and o_carrier_id is null) 
                             returning o_id, o_c_id;''',
                             (carrier_id, w_id, d_id))
 
