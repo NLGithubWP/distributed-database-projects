@@ -236,6 +236,7 @@ if __name__ == "__main__":
     file_path = "/opt/project_files/xact_files_A/0.txt"
     # workload_type = "A"
 
+
     TestTxConfig = False
     DebugSingleTx = False
     SingleTxName = txs.NewOrderTxName

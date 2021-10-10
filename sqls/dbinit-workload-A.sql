@@ -1,6 +1,7 @@
 
 
 -- Create db
+DROP DATABASE IF EXISTS cs5424db CASCADE;
 CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
 
@@ -14,6 +15,7 @@ SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
 
 -- Create user
 CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
+
 
 -- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadA CASCADE;
@@ -39,7 +41,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.warehouse (
     PRIMARY KEY (W_ID));
 
 IMPORT INTO cs5424db.workloadA.warehouse
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/warehouse.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/warehouse.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -61,7 +63,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.district (
 
 
 IMPORT INTO cs5424db.workloadA.district
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/district.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/district.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -92,7 +94,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.customer (
     PRIMARY KEY (C_W_ID, C_D_ID, C_ID));
 
 IMPORT INTO cs5424db.workloadA.customer
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/customer.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/customer.csv')
     WITH delimiter = e',', nullif = 'null';
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
@@ -114,7 +116,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
     INDEX order_ori_entry_d (o_entry_d));
 
 IMPORT INTO cs5424db.workloadA.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -128,30 +130,10 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.item (
 
 
 IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/item.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/item.csv')
     WITH delimiter = e',', nullif = 'null';
 
 ALTER TABLE item SPLIT AT VALUES (20051), (40051), (60051), (80051);
-
-CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
-    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    OL_W_ID INT NOT NULL,
-    OL_D_ID INT NOT NULL,
-    OL_O_ID INT NOT NULL,
-    OL_NUMBER INT NOT NULL,
-    OL_I_ID INT NOT NULL,
-    OL_DELIVERY_D TIMESTAMPTZ DEFAULT now(),
-    OL_AMOUNT DECIMAL(6,2) NOT NULL,
-    OL_SUPPLY_W_ID INT NOT NULL,
-    OL_QUANTITY DECIMAL(2,0) NOT NULL,
-    OL_DIST_INFO CHAR(24) NOT NULL,
-    FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
-    FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
-    INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
-
-IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO)
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order-line.csv')
-    WITH delimiter = e',', nullif = 'null';
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.stock (
     S_W_ID INT NOT NULL,
@@ -177,8 +159,32 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.stock (
     PRIMARY KEY (S_W_ID, S_I_ID));
 
 IMPORT INTO cs5424db.workloadA.stock
-    CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/stock.csv')
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/stock.csv')
     WITH delimiter = e',', nullif = 'null';
+
+
+CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
+    pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    OL_W_ID INT NOT NULL,
+    OL_D_ID INT NOT NULL,
+    OL_O_ID INT NOT NULL,
+    OL_NUMBER INT NOT NULL,
+    OL_I_ID INT NOT NULL,
+    OL_DELIVERY_D TIMESTAMPTZ DEFAULT now(),
+    OL_AMOUNT DECIMAL(7,2) NOT NULL,
+    OL_SUPPLY_W_ID INT NOT NULL,
+    OL_QUANTITY DECIMAL(2,0) NOT NULL,
+    OL_DIST_INFO CHAR(24) NOT NULL,
+    OL_I_NAME VARCHAR(24) NOT NULL,
+    OL_C_ID INT NOT NULL,
+    FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
+    FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
+    INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
+
+IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME, OL_C_ID)
+    CSV DATA ('http://localhost:3000/project_files/data_files_A/orderline_denormalised.csv')
+    WITH delimiter = e',', nullif = '';
+
 
 -- grant to user
 GRANT all on TABLE cs5424db.workloadA.* to naili;
@@ -217,8 +223,4 @@ WITH dw AS
 UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
     FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
 
--- de-normalization order_line, tooo slow
--- ALTER TABLE cs5424db.workloadA.order_line ADD COLUMN OL_I_NAME VARCHAR(24) FAMILY freqRead;
--- UPDATE order_line SET OL_I_NAME = I_NAME
---     FROM item
---     WHERE order_line.OL_I_ID=item.I_ID;
+-- de-normalization order_line is done by preprocessing csv

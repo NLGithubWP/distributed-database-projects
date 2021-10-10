@@ -56,7 +56,17 @@ cockroach init --certs-dir=certs --host=localhost:26257
 
 ```
 
-3. run dbinit-workload-A.sql to load tables to test workloadA
+3. preprocess csv file
+
+
+```bash
+
+python3 preprocess.py -f=<path to the folder where project_files is in>
+
+```
+
+
+4. run dbinit-workload-A.sql to load tables to test workloadA
 
 
 ```bash
@@ -70,7 +80,7 @@ cockroach sql \
 ```
 
 
-4. run dbinit-workload-B.sql to load tables to test workloadB
+5. run dbinit-workload-B.sql to load tables to test workloadB
 
 
 ```bash

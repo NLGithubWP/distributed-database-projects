@@ -363,60 +363,71 @@ class TxForWorkloadA(Transactions):
         print("Number of orders to be examined: %s" % (l,))
 
         with m_conn.cursor() as cur:
-            # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
+            # Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
             res = cur.fetchone()
             n = res[0]
             print("n is %s" % (n,))
 
-            # 2. Let S denote the set of last L orders for district (W ID,D ID)
+            # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
                 '''
-                SELECT O_ID, O_ENTRY_D, C_FIRST, customer.C_MIDDLE, customer.C_LAST
+                SELECT O_ID, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST
                 FROM order_ori 
-                JOIN customer ON order_ori.O_W_ID = customer.C_W_ID
-                AND order_ori.O_D_ID = customer.C_D_ID AND order_ori.O_C_ID = customer.C_ID
                 WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
+                ORDER BY O_ID
                 ''', (w_id, d_id, n - l, n))
             s = cur.fetchall()
 
-            # 3. For each order number x in S
-            # Let Ix denote the set of order-lines for this order;
-            # Let Px ⊆ Ix denote the subset of popular items in Ix
-            for x in s:
+            # Get popular items for each order
+            cur.execute(
+                 '''  WITH ol2 AS
+                        (SELECT OL_O_ID, OL_W_ID, OL_D_ID, MAX(OL_QUANTITY) AS MAX
+                         FROM order_line
+                         WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
+                         GROUP BY OL_O_ID, OL_W_ID, OL_D_ID)
+                    SELECT order_line.OL_O_ID, order_line.OL_I_ID, order_line.OL_I_NAME, order_line.OL_QUANTITY
+                    FROM order_line
+                    INNER JOIN ol2
+                    ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX
+                    ORDER BY order_line.OL_O_ID
+                 ''', (w_id, d_id, n - l, n))
+            p_x = cur.fetchall()
+
+
+            # print results
+            j = 0
+            for i in range(l):
                 print("order: O_ID, O_ENTRY_ID")
-                print(x[0], x[1])
+                print(s[i][0], s[i][1])
 
                 print("customer name")
-                print(x[2], x[3], x[4])
-
-                cur.execute(
-                    '''
-                    WITH 
-                        order_line_items AS
-                            (SELECT item.I_ID, item.I_NAME, order_line.OL_QUANTITY 
-                            FROM order_line JOIN item ON order_line.OL_I_ID = item.I_ID
-                            WHERE OL_O_ID = %s AND OL_D_ID = %s AND OL_W_ID = %s)
-                        SELECT I_ID, I_NAME, OL_QUANTITY
-                        FROM order_line_items
-                        WHERE OL_QUANTITY = (SELECT MAX(OL_QUANTITY) FROM order_line_items);
-                    ''', (x[0], d_id, w_id))
-                p_x = cur.fetchall()
+                print(s[i][2], s[i][3], s[i][4])
 
                 print("popular item: I_NAME, OL_QUANTITY")
-                for item in p_x:
-                    print(item[1], item[2])
-                    pop_item_set.add(item[0])
+                while p_x[j][0]==s[i][0]:
+                    print(p_x[j][2], p_x[j][3])
+                    pop_item_set.add(p_x[j][1])
+                    j+=1
+                    if(j==len(p_x)):
+                        break
 
-            # 4. for each distinct popular item, the percentage of orders in S that contain the popular item
-            for item in pop_item_set:
-                cur.execute(
-                    '''SELECT COUNT(OL_NUMBER) FROM order_line
-                    WHERE OL_I_ID = %s AND OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
-                    ''', (item, w_id, d_id, n - l, n)
-                )
-                count = cur.fetchone()[0]
-                print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item, (count / l) * 100))
+
+            # get the number of each item's appearance among order lines, store in a list
+            pop_item_set = list(pop_item_set)
+            cur.execute("""
+                        SELECT OL_I_ID, COUNT(*)
+                        FROM order_line
+                        WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s AND OL_I_ID = ANY %s
+                        GROUP BY OL_I_ID
+                     """, (w_id, d_id, n - l, n, pop_item_set))
+            item_count = cur.fetchall()
+            print("items and their counts")
+            print(item_count)
+
+            # for each distinct popular item, the percentage of orders in S that contain the popular item
+            for item in item_count:
+                print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
             m_conn.commit()
 
