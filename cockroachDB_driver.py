@@ -10,7 +10,7 @@ from txs.base import Transactions
 from txs.params import *
 from txs.tx_workloadA import TxForWorkloadA
 from txs.tx_workloadB import TxForWorkloadB
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename='./txs.log', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # time spent running all transactions
@@ -39,12 +39,12 @@ class MyLoggingCursor(LoggingCursor):
 #   b) adds resulting execution (+ transport) time via filter()
 class MyLoggingConnection(LoggingConnection):
     def filter(self, msg, curs):
+        time_used = int((time.time() - curs.timestamp) * 1000000)  # us
         global total_tx_time
         global each_tx_time
-        time_used = int((time.time() - curs.timestamp) * 1000)
         total_tx_time += time_used
         each_tx_time += time_used
-        return "[" + str(msg)[2:-1] + "]:   %d ms" % int((time.time() - curs.timestamp) * 1000)
+        return "[" + str(msg)[2:-1] + "]:   %d us" % time_used # us
 
     def cursor(self, *args, **kwargs):
         kwargs.setdefault('cursor_factory', MyLoggingCursor)
@@ -89,13 +89,6 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
         # The function below is used to test the transaction retry logic.  It
         # can be deleted from production code.
         # run_transaction(conn, test_retry_loop)
-    except ValueError as ve:
-        is_success = False
-        # Below, we print the error and continue on so this example is easy to
-        # run (and run, and run...).  In real code you should handle this error
-        # and any others thrown by the database interaction.
-        logging.debug("run_transaction(conn, op) failed: %s", ve)
-        pass
     except Exception as e:
         is_success = False
         raise
@@ -205,10 +198,10 @@ def evaluate():
     time_used_list.sort()
 
     print("------------time spent list", time_used_list)
-    print("------------Total time spent in tx", total_tx_time, "ms or", total_tx_time / 1000, "s", "------", )
-    print("------------Throughout is", total_tx_num / (total_tx_time / 1000), "------", )
-    print("------------Average transaction latency (in ms) is", total_tx_time / total_tx_num, "ms------", )
-    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)], "ms------")
+    print("------------Total time spent in tx", total_tx_time, "ms or", total_tx_time / 1000000, "s", "------", )
+    print("------------Throughout is", total_tx_num / (total_tx_time / 1000000), " tx/s ------", )
+    print("------------Average transaction latency (in ms) is", total_tx_time/1000 / total_tx_num, "ms------", )
+    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)]/1000, "ms------")
 
 
 def parse_cmdline():
@@ -240,62 +233,68 @@ if __name__ == "__main__":
     workload_type = opt.workload_type
 
     # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    # file_path = "/opt/project_files/xact_files_A/0.txt"
+    file_path = "/opt/project_files/xact_files_A/0.txt"
     # workload_type = "A"
 
+
+    TestTxConfig = False
+    DebugSingleTx = False
+    SingleTxName = txs.NewOrderTxName
     # if debug single transaction, assign name here
-    DebugSingleTx = True
-    SingleTxName = txs.PopItemTxName
-    TestTxConfig = True
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
     conn.initialize(logger)
 
-    # choose workload
-    tx_ins = None
-    if workload_type == "A":
-        with conn.cursor() as cur:
-            cur.execute("set search_path to "+workloadA_schema_name)
-            conn.commit()
-        tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
-    elif workload_type == "B":
-        with conn.cursor() as cur:
-            cur.execute("set search_path to "+workloadB_schema_name)
-            conn.commit()
-        tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
-    else:
-        exit(0)
+    tx_types = {}
 
-    # read from file
-    inputs = []
-    f = open(file_path)
-    line_content = f.readline()
-    while line_content.strip():
-        inputs.append(line_content.strip())
-        triggered, params = parse_stdin(inputs)
-        if TestTxConfig == True:
-            test_tx(tx_ins, conn)
-        if triggered:
-            # test only one tx
-            if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
-            execute_tx(tx_ins, conn, params)
-            inputs = []
+    for i in range(41):
+
+        file_path = "/opt/project_files/xact_files_A/{}.txt".format(i)
+
+        # choose workload
+        tx_ins = None
+        if workload_type == "A":
+            with conn.cursor() as cur:
+                cur.execute("set search_path to "+workloadA_schema_name)
+                conn.commit()
+            tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
+        elif workload_type == "B":
+            with conn.cursor() as cur:
+                cur.execute("set search_path to "+workloadB_schema_name)
+                conn.commit()
+            tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
+        else:
+            exit(0)
+
+        # read from file
+        inputs = []
+        f = open(file_path)
         line_content = f.readline()
+        while line_content.strip():
+            inputs.append(line_content.strip())
+            triggered, params = parse_stdin(inputs)
+            if TestTxConfig == True:
+                test_tx(tx_ins, conn)
+            if triggered:
+                if params.__class__.__name__ not in tx_types:
+                    tx_types[params.__class__.__name__] = 1
+                else:
+                    tx_types[params.__class__.__name__] += 1
 
-        if total_tx_num > 20:
-            break
+                logger.info("the triggered tx is "+ params.__class__.__name__)
+                # test only one tx
+                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
+                execute_tx(tx_ins, conn, params)
+                inputs = []
+            line_content = f.readline()
 
-    f.close()
-    evaluate()
-
-    # read from stdin
-    # for user_input in sys.stdin:
-    #     if user_input.strip() == "":
-    #         continue
-    #     inputs.append(user_input.strip())
-    #     triggered, params = parse_stdin(inputs)
-    #     if triggered:
-    #         execute_tx(conn, params)
-    #         inputs = []
-
+        f.close()
+        evaluate()
+        logger.info("============================using file " +file_path + "=====================")
+        logger.info(tx_types)
     conn.close()
+
+
+
+
+
