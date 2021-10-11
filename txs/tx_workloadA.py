@@ -11,6 +11,12 @@ class TxForWorkloadA(Transactions):
 
     def new_order_transaction(self, m_conn, m_params: NewOrderTxParams):
         """
+        used index: district (d_w_id, d_id)
+        used index: stock (s_w_id, s_i_id )
+        used index: item (i_id)
+        used index: warehouse (w_id)
+        used index: customer (c_w_id, c_d_id, c_id)
+
         New Order Transaction consists of M+1 lines, where M denote the number of items in the new order.
         The first line consists of five comma-separated values: N, C_ID, W_ID, D_ID, M.
         Each of the M remaining lines specifies an item in the order and consists of
@@ -154,9 +160,12 @@ class TxForWorkloadA(Transactions):
             print("OL_AMOUNT: ", o_amount_list[i])
             print("S_QUANTITY: ", s_quantity_list[i])
 
-
     def payment_transaction(self, m_conn, m_params: PaymentTxName):
         """
+        used index: warehouse (w_id)
+        used index: district (d_w_id, d_id)
+        used index: customer (c_w_id, c_d_id, c_id)
+
         Payment Transaction consists of one line of input with
         five comma-separated values: P, C_W_ID, C_D_ID, C_ID, PAYMENT.
         eg:
@@ -219,6 +228,11 @@ class TxForWorkloadA(Transactions):
 
     def delivery_transaction(self, m_conn, m_params: DeliveryTxParams):
         """
+
+        used index: order_ori (o_w_id, o_d_id, o_id) (o_w_id, o_d_id, o_carrier_id )
+        used index: order_line (ol_w_id, ol_d_id, ol_o_id)
+        used index: customer (c_w_id, c_d_id, c_id)
+
         Order-Status Transaction consists of one line of input with four comma-separated values: O,C W ID,C D ID,C ID.
         eg:
                D,1,6
@@ -266,9 +280,14 @@ class TxForWorkloadA(Transactions):
 
     def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams):
         """
-           This transaction queries the status of the last order of a customer.
-           Order-Status Transaction consists of one line of input with four comma-separated values: O,C W ID,C D ID,C ID.
-           eg:
+
+        used index: order_ori (o_w_id, o_d_id, ol_o_id) (o_w_id, o_d_id, o_c_id)
+        used index: order_line (ol_w_id, ol_d_id, ol_o_id)
+        used index: customer (c_w_id, c_d_id, c_id)
+
+        This transaction queries the status of the last order of a customer.
+        Order-Status Transaction consists of one line of input with four comma-separated values: O,C W ID,C D ID,C ID.
+        eg:
                   O,1,1,1219
                   O,1,2,310
            """
@@ -315,6 +334,11 @@ class TxForWorkloadA(Transactions):
 
     def stock_level_transaction(self, m_conn, m_params: StockLevelTxParams):
         """
+
+        used index: stock
+        used index: order_line (ol_w_id, ol_d_id, ol_o_id)
+        used index: district (d_w_id, d_id)
+
         This transaction examines the items from the last L orders at a specified warehouse district and reports
         the number of those items that have a stock level below a specified threshold.
         """
@@ -461,6 +485,11 @@ class TxForWorkloadA(Transactions):
 
     def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams):
         """
+        order_ori (o_w_id, o_d_id, i_o_id)
+        order_line (o_w_id, o_d_id, ol_i_id)
+        item (ol_i_id)
+        customer (ol_i_id)
+
         This transaction finds all the customers who are related to a specific customer. Given a customer C,
         another customer C is defined to be related to C if C and C are associated with different warehouses,
         and C and C each has placed some order, O and O′respectively,where both O and O′contain at least two items in common.
