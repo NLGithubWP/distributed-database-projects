@@ -7,9 +7,13 @@
 
 ```
 
-2. Start clusters
+2. Start a new clusters
 
 ```
+rm -rf my-safe-directory
+rm -rf certs
+rm -rf node*
+
 mkdir certs my-safe-directory
 
 cockroach cert create-ca \
