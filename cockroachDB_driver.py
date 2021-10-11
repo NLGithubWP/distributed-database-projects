@@ -23,7 +23,6 @@ each_tx_time = 0
 time_used_list = []
 
 
-# MyLoggingCursor simply sets self.timestamp at start of each query
 class MyLoggingCursor(LoggingCursor):
     def execute(self, query, vars=None):
         self.timestamp = time.time()
@@ -34,16 +33,9 @@ class MyLoggingCursor(LoggingCursor):
         return super(MyLoggingCursor, self).callproc(procname, vars)
 
 
-# MyLogging Connection:
-#   a) calls MyLoggingCursor rather than the default
-#   b) adds resulting execution (+ transport) time via filter()
 class MyLoggingConnection(LoggingConnection):
     def filter(self, msg, curs):
         time_used = int((time.time() - curs.timestamp) * 1000000)  # us
-        global total_tx_time
-        global each_tx_time
-        total_tx_time += time_used
-        each_tx_time += time_used
         return "[" + str(msg)[2:-1] + "]:   %d us" % time_used # us
 
     def cursor(self, *args, **kwargs):
@@ -243,6 +235,7 @@ if __name__ == "__main__":
     # if debug single transaction, assign name here
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
+    # conn = psycopg2.connect(dsn=addr)
     conn.initialize(logger)
 
     tx_types = {}
@@ -281,11 +274,13 @@ if __name__ == "__main__":
                 else:
                     tx_types[params.__class__.__name__] += 1
 
-                logger.info("the triggered tx is "+ params.__class__.__name__)
+                logger.info("the triggered tx is " + params.__class__.__name__)
                 # test only one tx
-                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = [];  line_content = f.readline(); continue
+                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
                 execute_tx(tx_ins, conn, params)
                 inputs = []
+                if total_tx_num > 20:
+                    break
             line_content = f.readline()
 
         f.close()
