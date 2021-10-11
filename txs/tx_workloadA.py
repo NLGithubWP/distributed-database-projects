@@ -2,14 +2,14 @@
 from . import *
 from .base import Transactions
 from .params import *
-
+import time
 
 class TxForWorkloadA(Transactions):
 
     def __init__(self, update_batch_size: int, select_batch_size: int):
         super().__init__(update_batch_size, select_batch_size)
 
-    def new_order_transaction(self, m_conn, m_params: NewOrderTxParams):
+    def new_order_transaction(self, m_conn, m_params: NewOrderTxParams) -> float:
         """
         used index: district (d_w_id, d_id)
         used index: stock (s_w_id, s_i_id )
@@ -41,6 +41,7 @@ class TxForWorkloadA(Transactions):
         supplier_warehouse = m_params.supplier_warehouse
         quantity = m_params.quantity
 
+        begin = time.time()
         with m_conn.cursor() as cur:
 
             # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
@@ -141,6 +142,8 @@ class TxForWorkloadA(Transactions):
 
             total_amount = total_amount * (1 + d_tax + w_tax) * (1 - c_discount)
         m_conn.commit()
+        end = time.time()
+        duration = end-begin
 
         print("------------ result is ---------")
         print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
@@ -159,8 +162,9 @@ class TxForWorkloadA(Transactions):
             print("QUANTITY[i]: ", quantity[i])
             print("OL_AMOUNT: ", o_amount_list[i])
             print("S_QUANTITY: ", s_quantity_list[i])
+        return duration
 
-    def payment_transaction(self, m_conn, m_params: PaymentTxName):
+    def payment_transaction(self, m_conn, m_params: PaymentTxName) -> float:
         """
         used index: warehouse (w_id)
         used index: district (d_w_id, d_id)
@@ -175,7 +179,7 @@ class TxForWorkloadA(Transactions):
         c_d_id = m_params.c_d_id
         c_id = m_params.c_id
         payment_amount = m_params.payment_amount
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute("UPDATE warehouse SET W_YTD = W_YTD + %s "
                         "WHERE W_ID = %s RETURNING W_STREET_1, W_STREET_2, W_CITY, W_STATE, W_ZIP",
@@ -186,12 +190,6 @@ class TxForWorkloadA(Transactions):
             w_city = res[2]
             w_state = res[3]
             w_zip = res[4]
-            print("payment_transaction, "
-                  "w_street_1: %s,"
-                  "w_street_2: %s,"
-                  "w_city: %s,"
-                  "w_state: %s,"
-                  "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
 
             cur.execute("UPDATE district SET D_YTD = D_YTD + %s "
                         "WHERE D_W_ID = %s and D_ID = %s "
@@ -203,12 +201,6 @@ class TxForWorkloadA(Transactions):
             d_city = res[2]
             d_state = res[3]
             d_zip = res[4]
-            print("payment_transaction, "
-                  "d_street_1: %s,"
-                  "d_street_2: %s,"
-                  "d_city: %s,"
-                  "d_state: %s,"
-                  "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
 
             cur.execute('''UPDATE customer 
                            SET C_BALANCE = C_BALANCE - %s, 
@@ -222,9 +214,27 @@ class TxForWorkloadA(Transactions):
                             (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
 
             res = cur.fetchone()
-            print("customer:, ", res)
 
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
+
+        print("payment_transaction, "
+              "w_street_1: %s,"
+              "w_street_2: %s,"
+              "w_city: %s,"
+              "w_state: %s,"
+              "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
+
+        print("payment_transaction, "
+              "d_street_1: %s,"
+              "d_street_2: %s,"
+              "d_city: %s,"
+              "d_state: %s,"
+              "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
+
+        print("customer:, ", res)
+        return duration
 
     def delivery_transaction(self, m_conn, m_params: DeliveryTxParams):
         """
@@ -239,6 +249,7 @@ class TxForWorkloadA(Transactions):
         """
         w_id = m_params.w_id
         carrier_id = m_params.carrier_id
+        begin = time.time()
         with m_conn.cursor() as cur:
             for d_id in range(1, 10, 1):
                 # 1. Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
@@ -277,8 +288,11 @@ class TxForWorkloadA(Transactions):
                 cur.execute(query)
 
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
+        return duration
 
-    def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams):
+    def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams) -> float:
         """
 
         used index: order_ori (o_w_id, o_d_id, ol_o_id) (o_w_id, o_d_id, o_c_id)
@@ -305,6 +319,7 @@ class TxForWorkloadA(Transactions):
         w_id = m_params.c_w_id
         d_id = m_params.c_d_id
         c_id = m_params.c_id
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute('''
                         WITH 
@@ -331,6 +346,9 @@ class TxForWorkloadA(Transactions):
             res = cur.fetchall()
             print_res(res)
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
+        return duration
 
     def stock_level_transaction(self, m_conn, m_params: StockLevelTxParams):
         """
@@ -346,7 +364,7 @@ class TxForWorkloadA(Transactions):
         d_id = m_params.d_id
         threshold = m_params.threshold
         l = m_params.l
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
@@ -363,15 +381,19 @@ class TxForWorkloadA(Transactions):
                 ''', (w_id, d_id, n - l, n, threshold))
             count = cur.fetchone()[0]
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
 
-            # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
-            print("-------------------------------")
-            print(
-                "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
-                % (w_id, d_id, threshold, l))
-            print(count)
+        # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
+        print("-------------------------------")
+        print(
+            "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
+            % (w_id, d_id, threshold, l))
+        print(count)
 
-    def popular_item_transaction(self, m_conn, m_params: PopItemTxParams):
+        return duration
+
+    def popular_item_transaction(self, m_conn, m_params: PopItemTxParams) -> float:
         """
         This transaction finds the most popular item(s) in each of the last L orders at a specified warehouse
         district. Given two items X and Y in the same order O, X is defined to be more popular than Y in O
@@ -385,7 +407,7 @@ class TxForWorkloadA(Transactions):
         print("-------------------------------")
         print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id))
         print("Number of orders to be examined: %s" % (l,))
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             # Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
@@ -454,12 +476,16 @@ class TxForWorkloadA(Transactions):
                 print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
+        return duration
 
-    def top_balance_transaction(self, m_conn):
+    def top_balance_transaction(self, m_conn) -> float:
         """
         This transaction finds the top-10 customers ranked in descending order of their outstanding balance
         payments.
         """
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
@@ -476,14 +502,16 @@ class TxForWorkloadA(Transactions):
             ''')
             rows = cur.fetchall()
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
+        print("-------------------------------")
+        print("Top 10 customers ranked in descending order of outstanding balance:")
+        print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
+        for row in rows:
+            print(row)
+        return duration
 
-            print("-------------------------------")
-            print("Top 10 customers ranked in descending order of outstanding balance:")
-            print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
-            for row in rows:
-                print(row)
-
-    def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams):
+    def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams) -> float:
         """
         order_ori (o_w_id, o_d_id, i_o_id)
         order_line (o_w_id, o_d_id, ol_i_id)
@@ -498,7 +526,7 @@ class TxForWorkloadA(Transactions):
         d_id = m_params.d_id
         c_id = m_params.c_id
         related_customers = set()
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
@@ -533,8 +561,12 @@ class TxForWorkloadA(Transactions):
                 customers = cur.fetchall()
                 related_customers.update(customers)
             m_conn.commit()
+        end = time.time()
+        duration = end - begin
 
-            print("-------------------------------")
-            print("Related customers (W_ID, D_ID, C_ID):")
-            for customer in related_customers:
-                print(customer)
+        print("-------------------------------")
+        print("Related customers (W_ID, D_ID, C_ID):")
+        for customer in related_customers:
+            print(customer)
+        return duration
+
