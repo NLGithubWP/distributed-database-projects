@@ -230,8 +230,8 @@ if __name__ == "__main__":
 
 
     TestTxConfig = False
-    DebugSingleTx = False
-    SingleTxName = txs.NewOrderTxName
+    DebugSingleTx = True
+    SingleTxName = txs.RelCustomerTxName
     # if debug single transaction, assign name here
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
@@ -279,7 +279,7 @@ if __name__ == "__main__":
                 if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
                 execute_tx(tx_ins, conn, params)
                 inputs = []
-                if total_tx_num > 20:
+                if total_tx_num > 0:
                     break
             line_content = f.readline()
 

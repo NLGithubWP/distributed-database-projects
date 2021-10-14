@@ -442,42 +442,27 @@ class TxForWorkloadB(Transactions):
         w_id = m_params.w_id
         d_id = m_params.d_id
         c_id = m_params.c_id
-        related_customers = set()
 
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
-                SELECT O_ID, O_W_ID, O_D_ID
-                FROM order_ori
-                WHERE O_W_ID = %s AND O_D_ID = %s AND O_C_ID = %s
-                ''', (w_id, d_id, c_id)
+                 WITH
+                    item_pairs AS
+                        (SELECT IP_I1_ID, IP_I2_ID
+                         FROM item_pair
+                         WHERE IP_W_ID = %s AND IP_D_ID = %s AND IP_C_ID = %s),
+                    other_item_pairs AS
+                        (SELECT IP_W_ID, IP_D_ID, IP_C_ID, IP_I1_ID, IP_I2_ID
+                         FROM item_pair
+                         WHERE OL_W_ID <> %s)
+                    SELECT DISTINCT IP_W_ID, IP_D_ID, IP_C_ID
+                    FROM item_pairs
+                    INNER JOIN other_item_pairs
+                    ON item_pairs.IP_I1_ID = other_item_pairs.IP_I1_ID AND item_pairs.IP_I2_ID = other_item_pairs.IP_I2_ID
+                ''', (w_id, d_id, c_id, w_id)
             )
-            orders = cur.fetchall()
-
-            for order in orders:
-                cur.execute(
-                    '''
-                    WITH
-                        items AS
-                            (SELECT OL_I_ID
-                            FROM order_line
-                            WHERE OL_O_ID = %s AND OL_W_ID = %s AND OL_D_ID = %s),
-                        customer_ol AS
-                            (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
-                            FROM order_ori
-                            JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-                            WHERE O_W_ID <> %s
-                            )
-                        SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID
-                        FROM items
-                        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
-                        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID
-                        HAVING COUNT(*) >= 2
-                    ''', (order[0], w_id, d_id, w_id)
-                )
-                customers = cur.fetchall()
-                related_customers.update(customers)
             m_conn.commit()
+            related_customers = cur.fetchall()
 
             print("-------------------------------")
             print("Related customers (W_ID, D_ID, C_ID):")
