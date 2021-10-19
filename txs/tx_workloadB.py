@@ -3,6 +3,7 @@
 from . import *
 from .base import Transactions
 from .params import *
+import time
 
 
 class TxForWorkloadB(Transactions):
@@ -442,29 +443,36 @@ class TxForWorkloadB(Transactions):
         w_id = m_params.w_id
         d_id = m_params.d_id
         c_id = m_params.c_id
-
+        related_customers = set()
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
-                 WITH
-                    item_pairs AS
-                        (SELECT IP_I1_ID, IP_I2_ID
-                         FROM item_pair
-                         WHERE IP_W_ID = %s AND IP_D_ID = %s AND IP_C_ID = %s),
-                    other_item_pairs AS
-                        (SELECT IP_W_ID, IP_D_ID, IP_C_ID, IP_I1_ID, IP_I2_ID
-                         FROM item_pair
-                         WHERE OL_W_ID <> %s)
-                    SELECT DISTINCT IP_W_ID, IP_D_ID, IP_C_ID
-                    FROM item_pairs
-                    INNER JOIN other_item_pairs
-                    ON item_pairs.IP_I1_ID = other_item_pairs.IP_I1_ID AND item_pairs.IP_I2_ID = other_item_pairs.IP_I2_ID
-                ''', (w_id, d_id, c_id, w_id)
+                SELECT IP_I1_ID, IP_I2_ID
+                FROM item_pair
+                WHERE IP_W_ID = %s AND IP_D_ID = %s AND IP_C_ID = %s
+                ''', (w_id, d_id, c_id)
             )
-            m_conn.commit()
-            related_customers = cur.fetchall()
+            item_pairs = cur.fetchall()
 
+            for pair in item_pairs:
+                cur.execute(
+                    '''
+                    SELECT DISTINCT IP_W_ID, IP_D_ID, IP_C_ID
+                    FROM item_pair
+                    WHERE IP_W_ID <> %s AND IP_I1_ID = %s AND IP_I2_ID = %s
+                ''', (w_id, pair[0], pair[1])
+                )
+                customers = cur.fetchall()
+                related_customers.update(customers)
+
+            m_conn.commit()
+
+            end = time.time()
+            duration = end - begin
             print("-------------------------------")
             print("Related customers (W_ID, D_ID, C_ID):")
             for customer in related_customers:
                 print(customer)
+            return duration
+

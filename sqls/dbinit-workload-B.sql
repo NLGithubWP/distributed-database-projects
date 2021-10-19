@@ -192,11 +192,11 @@ IMPORT INTO cs5424db.workloadB.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number,
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.item_pair(
     IP_W_ID INT NOT NULL,
     IP_D_ID INT NOT NULL,
-    IP_O_ID INT NOT NULL,
     IP_C_ID INT NOT NULL,
     IP_I1_ID INT NOT NULL,
     IP_I2_ID INT NOT NULL,
-    INDEX item_pair_joint_id(ip_w_id, ip_d_id, ip_o_id, ip_c_id)
+    INDEX item_pair_joint_id(ip_w_id, ip_d_id,ip_c_id),
+    INDEX item_ids(ip_i1_id, ip_i2_id)
 );
 
 IMPORT INTO cs5424db.workloadB.item_pair

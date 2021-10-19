@@ -40,7 +40,8 @@ table_list['orderline_denormalised'] = table_list['orderline_denormalised'].merg
 f = lambda x: pd.DataFrame(list(combinations(x.values, 2)), columns=['ol_i_id1', 'ol_i_id2'])
 table_list['item_pair'] = table_list['orderline_denormalised'].groupby(['ol_w_id', 'ol_d_id', 'ol_o_id', 'o_c_id'], sort=False)[
     'ol_i_id'].apply(f)
-table_list['item_pair'] = table_list['item_pair'].reset_index().drop(columns=['level_4'])
+table_list['item_pair'] = table_list['item_pair'].reset_index().drop(columns=['level_4', 'ol_o_id'])
+table_list['item_pair'] = table_list['item_pair'].drop_duplicates()
 
 
 # Export as csv
