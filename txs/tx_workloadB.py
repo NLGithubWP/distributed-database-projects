@@ -3,7 +3,9 @@
 from . import *
 from .base import Transactions
 from .params import *
-
+import time
+from psycopg2.extras import execute_values
+from itertools import combinations
 
 class TxForWorkloadB(Transactions):
 
@@ -101,12 +103,24 @@ class TxForWorkloadB(Transactions):
 
                 cur.execute(
                     "INSERT INTO order_line "
-                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) "
-                    "values (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx))
+                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME) "
+                    "values (%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)",
+                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name))
 
                 o_amount_list.append(item_amount)
                 s_quantity_list.append(quantity[i])
+
+            # insert the new item pairs to the table item_pair
+            # ensure the smaller number is in front
+            item_number.sort()
+            item_pairs = combinations(item_number, 2)
+            data = []
+            customer = (w_id, d_id, c_id)
+            for p in item_pairs:
+                data.append(customer + p)
+
+            query ='INSERT INTO item_pair (IP_W_ID, IP_D_ID, IP_C_ID, IP_I1_ID, IP_I2_ID) VALUES %s'
+            execute_values(cur, query, data)
 
             # 6. update all
             cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
@@ -443,43 +457,35 @@ class TxForWorkloadB(Transactions):
         d_id = m_params.d_id
         c_id = m_params.c_id
         related_customers = set()
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
-                SELECT O_ID, O_W_ID, O_D_ID
-                FROM order_ori
-                WHERE O_W_ID = %s AND O_D_ID = %s AND O_C_ID = %s
+                SELECT IP_I1_ID, IP_I2_ID
+                FROM item_pair
+                WHERE IP_W_ID = %s AND IP_D_ID = %s AND IP_C_ID = %s
                 ''', (w_id, d_id, c_id)
             )
-            orders = cur.fetchall()
+            item_pairs = cur.fetchall()
 
-            for order in orders:
+            for pair in item_pairs:
                 cur.execute(
                     '''
-                    WITH
-                        items AS
-                            (SELECT OL_I_ID
-                            FROM order_line
-                            WHERE OL_O_ID = %s AND OL_W_ID = %s AND OL_D_ID = %s),
-                        customer_ol AS
-                            (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
-                            FROM order_ori
-                            JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-                            WHERE O_W_ID <> %s
-                            )
-                        SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID
-                        FROM items
-                        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
-                        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID
-                        HAVING COUNT(*) >= 2
-                    ''', (order[0], w_id, d_id, w_id)
+                    SELECT DISTINCT IP_W_ID, IP_D_ID, IP_C_ID
+                    FROM item_pair
+                    WHERE IP_W_ID <> %s AND IP_I1_ID = %s AND IP_I2_ID = %s
+                ''', (w_id, pair[0], pair[1])
                 )
                 customers = cur.fetchall()
                 related_customers.update(customers)
+
             m_conn.commit()
 
+            end = time.time()
+            duration = end - begin
             print("-------------------------------")
             print("Related customers (W_ID, D_ID, C_ID):")
             for customer in related_customers:
                 print(customer)
+            return duration
+

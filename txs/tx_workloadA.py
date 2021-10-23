@@ -418,8 +418,10 @@ class TxForWorkloadA(Transactions):
             # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
                 '''
-                SELECT O_ID, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST
-                FROM order_ori 
+                SELECT O_ID, O_ENTRY_D, C_FIRST, C_MIDDLE, C_LAST
+                FROM order_ori
+                JOIN customer
+                ON order_ori.O_W_ID=customer.C_W_ID AND order_ori.O_D_ID=customer.C_D_ID AND order_ori.O_C_ID=customer.C_ID
                 WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
                 ORDER BY O_ID
                 ''', (w_id, d_id, n - l, n))
@@ -432,8 +434,10 @@ class TxForWorkloadA(Transactions):
                          FROM order_line
                          WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
                          GROUP BY OL_O_ID, OL_W_ID, OL_D_ID)
-                    SELECT order_line.OL_O_ID, order_line.OL_I_ID, order_line.OL_I_NAME, order_line.OL_QUANTITY
+                    SELECT order_line.OL_O_ID, order_line.OL_I_ID, item.I_NAME, order_line.OL_QUANTITY
                     FROM order_line
+                    JOIN item
+                    ON order_line.OL_I_ID=item.I_ID
                     INNER JOIN ol2
                     ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX
                     ORDER BY order_line.OL_O_ID
