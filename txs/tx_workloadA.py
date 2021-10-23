@@ -432,8 +432,10 @@ class TxForWorkloadA(Transactions):
                          FROM order_line
                          WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
                          GROUP BY OL_O_ID, OL_W_ID, OL_D_ID)
-                    SELECT order_line.OL_O_ID, order_line.OL_I_ID, order_line.OL_I_NAME, order_line.OL_QUANTITY
+                    SELECT order_line.OL_O_ID, order_line.OL_I_ID, item.I_NAME, order_line.OL_QUANTITY
                     FROM order_line
+                    JOIN item
+                    ON order_line.OL_I_ID=item.I_ID
                     INNER JOIN ol2
                     ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX
                     ORDER BY order_line.OL_O_ID

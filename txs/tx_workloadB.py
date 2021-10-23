@@ -103,9 +103,9 @@ class TxForWorkloadB(Transactions):
 
                 cur.execute(
                     "INSERT INTO order_line "
-                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME, OL_C_ID) "
+                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME) "
                     "values (%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)",
-                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name, c_id))
+                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name))
 
                 o_amount_list.append(item_amount)
                 s_quantity_list.append(quantity[i])

@@ -133,7 +133,7 @@ IMPORT INTO cs5424db.workloadA.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     CSV DATA ('http://localhost:3000/project_files/data_files/item.csv')
     WITH delimiter = e',', nullif = 'null';
 
-ALTER TABLE item SPLIT AT VALUES (20051), (40051), (60051), (80051);
+ALTER TABLE cs5424db.workloadA.item SPLIT AT VALUES (20051), (40051), (60051), (80051);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.stock (
     S_W_ID INT NOT NULL,
@@ -175,15 +175,13 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_SUPPLY_W_ID INT NOT NULL,
     OL_QUANTITY DECIMAL(2,0) NOT NULL,
     OL_DIST_INFO CHAR(24) NOT NULL,
-    OL_I_NAME VARCHAR(24) NOT NULL,
-    OL_C_ID INT NOT NULL,
     FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
     FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
     INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
 
-IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME, OL_C_ID)
-    CSV DATA ('http://localhost:3000/project_files/data_files/orderline_denormalised.csv')
-    WITH delimiter = e',', nullif = '';
+IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO)
+    CSV DATA ('http://localhost:3000/project_files/data_files/order-line.csv')
+    WITH delimiter = e',', nullif = 'null';
 
 
 -- grant to user
