@@ -1,23 +1,23 @@
 
 
 -- Create db
-DROP DATABASE IF EXISTS cs5424db CASCADE;
-CREATE DATABASE IF NOT EXISTS cs5424db;
+--DROP DATABASE IF EXISTS cs5424db CASCADE;
+--CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
 
 
 -- set hash index enable to true
-SET experimental_enable_hash_sharded_indexes=on;
-
--- load-splitting threshold to be 400
-SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
-SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
-
--- Create user
-CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
-
-
--- drop the schema, and reload
+--SET experimental_enable_hash_sharded_indexes=on;
+--
+---- load-splitting threshold to be 400
+--SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
+--SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
+--
+---- Create user
+--CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
+--
+--
+---- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadA CASCADE;
 CREATE SCHEMA workloadA AUTHORIZATION naili;
 
@@ -91,7 +91,8 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.customer (
     C_DATA VARCHAR(500) NOT NULL,
     FAMILY freqWrite (C_W_ID, C_D_ID, C_ID, C_BALANCE, C_YTD_PAYMENT, C_PAYMENT_CNT, C_DELIVERY_CNT),
     FAMILY freqRead (C_FIRST, C_MIDDLE, C_LAST, C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_DATA),
-    PRIMARY KEY (C_W_ID, C_D_ID, C_ID));
+    PRIMARY KEY (C_W_ID, C_D_ID, C_ID),
+    INDEX c_b(C_BALANCE));
 
 IMPORT INTO cs5424db.workloadA.customer
     CSV DATA ('http://localhost:3000/project_files/data_files/customer.csv')
@@ -177,7 +178,8 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     OL_DIST_INFO CHAR(24) NOT NULL,
     FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
     FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
-    INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number));
+    INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number),
+    INDEX order_line_i_id(ol_i_id));
 
 IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO)
     CSV DATA ('http://localhost:3000/project_files/data_files/order-line.csv')
