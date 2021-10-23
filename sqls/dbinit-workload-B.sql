@@ -23,7 +23,7 @@ CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
 DROP SCHEMA IF EXISTS workloadB CASCADE;
 CREATE SCHEMA workloadB AUTHORIZATION naili;
 
--- grant to user
+---- grant to user
 GRANT all on DATABASE cs5424db to naili;
 GRANT all ON SCHEMA workloadB TO naili;
 
@@ -93,7 +93,8 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.customer (
     C_DATA VARCHAR(500) NOT NULL,
     FAMILY freqWrite (C_W_ID, C_D_ID, C_ID, C_BALANCE, C_YTD_PAYMENT, C_PAYMENT_CNT, C_DELIVERY_CNT),
     FAMILY freqRead (C_FIRST, C_MIDDLE, C_LAST, C_STREET_1, C_STREET_2, C_CITY, C_STATE, C_ZIP, C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_DATA),
-    PRIMARY KEY (C_W_ID, C_D_ID, C_ID));
+    PRIMARY KEY (C_W_ID, C_D_ID, C_ID),
+    INDEX c_b(C_BALANCE));
 
 IMPORT INTO cs5424db.workloadB.customer
     CSV DATA ('http://localhost:3000/project_files/data_files/customer.csv')
@@ -135,7 +136,7 @@ IMPORT INTO cs5424db.workloadB.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
     CSV DATA ('http://localhost:3000/project_files/data_files/item.csv')
     WITH delimiter = e',', nullif = 'null';
 
-ALTER TABLE item SPLIT AT VALUES (20051), (40051), (60051), (80051);
+ALTER TABLE cs5424db.workloadB.item SPLIT AT VALUES (20051), (40051), (60051), (80051);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.stock (
     S_W_ID INT NOT NULL,

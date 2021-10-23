@@ -4,7 +4,8 @@ from . import *
 from .base import Transactions
 from .params import *
 import time
-
+from psycopg2.extras import execute_values
+from itertools import combinations
 
 class TxForWorkloadB(Transactions):
 
@@ -102,12 +103,24 @@ class TxForWorkloadB(Transactions):
 
                 cur.execute(
                     "INSERT INTO order_line "
-                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) "
-                    "values (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx))
+                    "(OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME, OL_C_ID) "
+                    "values (%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)",
+                    (w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name, c_id))
 
                 o_amount_list.append(item_amount)
                 s_quantity_list.append(quantity[i])
+
+            # insert the new item pairs to the table item_pair
+            # ensure the smaller number is in front
+            item_number.sort()
+            item_pairs = combinations(item_number, 2)
+            data = []
+            customer = (w_id, d_id, c_id)
+            for p in item_pairs:
+                data.append(customer + p)
+
+            query ='INSERT INTO item_pair (IP_W_ID, IP_D_ID, IP_C_ID, IP_I1_ID, IP_I2_ID) VALUES %s'
+            execute_values(cur, query, data)
 
             # 6. update all
             cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
