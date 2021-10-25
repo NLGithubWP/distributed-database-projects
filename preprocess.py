@@ -43,6 +43,7 @@ table_list['item_pair'] = table_list['orderline_denormalised'].groupby(['ol_w_id
 table_list['item_pair'] = table_list['item_pair'].reset_index().drop(columns=['level_4', 'ol_o_id'])
 table_list['item_pair'] = table_list['item_pair'].drop_duplicates()
 
+table_list['orderline_denormalised'] = table_list['orderline_denormalised'].drop(columns=['o_c_id'])
 
 # Export as csv
 for name, file in derived_config.items():
