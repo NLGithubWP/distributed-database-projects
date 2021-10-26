@@ -179,7 +179,8 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_line (
     FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
     FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
     INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number),
-    INDEX order_line_i_id(ol_i_id));
+    INDEX order_line_i_id(ol_i_id),
+    INDEX order_line_q(OL_QUANTITY));
 
 IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO)
     CSV DATA ('http://localhost:3000/project_files/data_files/order-line.csv')
