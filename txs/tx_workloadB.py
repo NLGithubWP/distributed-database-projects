@@ -123,7 +123,7 @@ class TxForWorkloadB(Transactions):
                 total_amount += item_amount
                 o_amount_list.append(item_amount)
 
-                query += "({},{},{},{},{},{},{},{},{},'{}')".format(
+                query += "({},{},{},{},{},{},{},{},'{}','{}')".format(
                     w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name_list[i])
 
                 if i < len(item_number) - 1:
@@ -442,7 +442,7 @@ class TxForWorkloadB(Transactions):
                          FROM order_line
                          WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s
                          GROUP BY OL_O_ID, OL_W_ID, OL_D_ID)
-                    SELECT OL_O_ID, OL_I_ID, OL_I_NAME, OL_QUANTITY
+                    SELECT order_line.OL_O_ID, OL_I_ID, OL_I_NAME, OL_QUANTITY
                     FROM order_line
                     INNER JOIN ol2
                     ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX
