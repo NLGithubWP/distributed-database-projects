@@ -376,7 +376,7 @@ class TxForWorkloadB(Transactions):
         d_id = m_params.d_id
         threshold = m_params.threshold
         l = m_params.l
-
+        begin = time.time()
         with m_conn.cursor() as cur:
             # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
@@ -393,6 +393,8 @@ class TxForWorkloadB(Transactions):
                 ''', (w_id, d_id, n - l, n, threshold))
             count = cur.fetchone()[0]
             m_conn.commit()
+            end = time.time()
+            duration = end - begin
 
             # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
             print("-------------------------------")
@@ -400,6 +402,8 @@ class TxForWorkloadB(Transactions):
                 "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
                 % (w_id, d_id, threshold, l))
             print(count)
+
+            return duration
 
     def popular_item_transaction(self, m_conn, m_params: PopItemTxParams):
         """

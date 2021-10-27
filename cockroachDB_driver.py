@@ -4,6 +4,8 @@ import time
 import logging
 from argparse import ArgumentParser, RawTextHelpFormatter
 import psycopg2
+import csv
+import pandas as pd
 from psycopg2.extras import LoggingConnection, LoggingCursor
 import txs
 from txs.base import Transactions
@@ -193,12 +195,21 @@ def evaluate():
     global total_tx_num
 
     time_used_list.sort()
+    time_df = pd.Series(time_used_list)
 
-    print("------------time spent list", time_used_list)
-    print("------------Total time spent in tx", total_tx_time, "s", "------", )
-    print("------------Throughout is", total_tx_num / total_tx_time, " tx/s ------", )
-    print("------------Average transaction latency (in ms) is", total_tx_time*1000 / total_tx_num, "ms------", )
-    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)]*1000, "ms------")
+    # append performance metrics to client.csv
+    output = {}
+    output['client_number'] = file_path.split('/')[-1].replace('.txt', '')
+    output['num_xacts'] = total_tx_num
+    output['total_elapsed_time'] = total_tx_time # in s
+    output['xact_throughput'] = total_tx_num / total_tx_time
+    output['avg_xact_latency'] = time_df.mean() * 1000  # in ms
+    output['median_xact_latency'] = time_df.median() * 1000  # in ms
+    output['95_pct_xact_latency'] = time_df.quantile(0.95) * 1000  # in ms
+    output['99_pct_xact_latency'] = time_df.quantile(0.99) * 1000  # in ms
+
+    df = pd.DataFrame([output])
+    df.to_csv('output/clients.csv', mode='a', header=False, index=False)
 
 
 def parse_cmdline():
@@ -235,7 +246,7 @@ if __name__ == "__main__":
 
 
     TestTxConfig = False
-    DebugSingleTx = True
+    DebugSingleTx = False
     SingleTxName = txs.TopBalanceTxName
     # if debug single transaction, assign name here
 
@@ -245,55 +256,50 @@ if __name__ == "__main__":
 
     tx_types = {}
 
-    #for i in range(40):
-    # single file
-    for i in range(1):
-        file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/{}.txt".format(i)
+    # choose workload
+    tx_ins = None
+    if workload_type == "A":
+        with conn.cursor() as cur:
+            cur.execute("set search_path to "+workloadA_schema_name)
+            conn.commit()
+        tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
+    elif workload_type == "B":
+        with conn.cursor() as cur:
+            cur.execute("set search_path to "+workloadB_schema_name)
+            conn.commit()
+        tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
+    else:
+        exit(0)
 
-        # choose workload
-        tx_ins = None
-        if workload_type == "A":
-            with conn.cursor() as cur:
-                cur.execute("set search_path to "+workloadA_schema_name)
-                conn.commit()
-            tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
-        elif workload_type == "B":
-            with conn.cursor() as cur:
-                cur.execute("set search_path to "+workloadB_schema_name)
-                conn.commit()
-            tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
-        else:
-            exit(0)
+    # read from a single xact file
+    inputs = []
+    f = open(file_path)
+    line_content = f.readline()
+    while line_content.strip():
+        inputs.append(line_content.strip())
+        triggered, params = parse_stdin(inputs)
+        if TestTxConfig == True:
+            test_tx(tx_ins, conn)
+        if triggered:
+            if params.__class__.__name__ not in tx_types:
+                tx_types[params.__class__.__name__] = 1
+            else:
+                tx_types[params.__class__.__name__] += 1
 
-        # read from file
-        inputs = []
-        f = open(file_path)
+            logger.info("the triggered tx is " + params.__class__.__name__)
+            # test only one tx
+            if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
+            execute_tx(tx_ins, conn, params)
+            inputs = []
+            if total_tx_num > 7:
+                break
         line_content = f.readline()
-        while line_content.strip():
-            inputs.append(line_content.strip())
-            triggered, params = parse_stdin(inputs)
-            if TestTxConfig == True:
-                test_tx(tx_ins, conn)
-            if triggered:
-                if params.__class__.__name__ not in tx_types:
-                    tx_types[params.__class__.__name__] = 1
-                else:
-                    tx_types[params.__class__.__name__] += 1
 
-                logger.info("the triggered tx is " + params.__class__.__name__)
-                # test only one tx
-                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
-                execute_tx(tx_ins, conn, params)
-                inputs = []
-                if total_tx_num > 7:
-                    break
-            line_content = f.readline()
-
-        f.close()
-        evaluate()
-        logger.info("============================using file " +file_path + "=====================")
-        logger.info(tx_types)
+    f.close()
+    logger.info("============================using file " +file_path + "=====================")
+    logger.info(tx_types)
     conn.close()
+    evaluate()
 
 
 

@@ -42,7 +42,7 @@ class Transactions(object):
     def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams) -> float:
         raise NotImplementedError
 
-    def test_transaction(self, m_conn)
+    def test_transaction(self, m_conn):
 
         k = 110102
 
