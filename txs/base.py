@@ -11,38 +11,38 @@ class Transactions(object):
         self.select_batch_size = select_batch_size
 
     @abstractmethod
-    def new_order_transaction(self, m_conn, m_params: NewOrderTxParams):
+    def new_order_transaction(self, m_conn, m_params: NewOrderTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def payment_transaction(self, m_conn, m_params: PaymentTxName):
+    def payment_transaction(self, m_conn, m_params: PaymentTxName) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams):
+    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams):
+    def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def stock_level_transaction(self, m_conn, m_params: StockLevelTxParams):
+    def stock_level_transaction(self, m_conn, m_params: StockLevelTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def popular_item_transaction(self, m_conn, m_params: PopItemTxParams):
+    def popular_item_transaction(self, m_conn, m_params: PopItemTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def top_balance_transaction(self, m_conn):
+    def top_balance_transaction(self, m_conn) -> float:
         raise NotImplementedError
 
     @abstractmethod
-    def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams):
+    def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams) -> float:
         raise NotImplementedError
 
-    def test_transaction(self, m_conn):
+    def test_transaction(self, m_conn)
 
         k = 110102
 

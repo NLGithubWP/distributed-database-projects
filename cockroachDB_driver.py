@@ -17,11 +17,9 @@ logger = logging.getLogger(__name__)
 total_tx_time = 0
 # total number of transactions
 total_tx_num = 0
-# time spent running each transaction
-each_tx_time = 0
 # tx time list
 time_used_list = []
-
+max_retry_time = 5
 
 class MyLoggingCursor(LoggingCursor):
     def execute(self, query, vars=None):
@@ -47,7 +45,6 @@ def test_tx(tx_ins: Transactions, m_conn):
     global total_tx_time
     global total_tx_num
     global time_used_list
-    global each_tx_time
     tx_ins.test_transaction(m_conn)
 
 
@@ -55,40 +52,47 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
     global total_tx_time
     global total_tx_num
     global time_used_list
-    global each_tx_time
+    global max_retry_time
 
     total_tx_num += 1
     is_success = True
-    try:
+    each_tx_time = 0
 
-        if params.__class__.__name__ == txs.NewOrderTxName:
-            tx_ins.new_order_transaction(m_conn, m_params)
-        elif params.__class__.__name__ == txs.PaymentTxName:
-            tx_ins.payment_transaction(m_conn, m_params)
-        elif params.__class__.__name__ == txs.DeliveryTxName:
-            tx_ins.delivery_transaction(m_conn, m_params)
-        elif params.__class__.__name__ == txs.OrderStatusTxName:
-            tx_ins.order_status_transaction(m_conn, m_params)
-        elif params.__class__.__name__ == txs.StockLevelTxName:
-            tx_ins.stock_level_transaction(m_conn, m_params)
-        elif params is None:
-            tx_ins.top_balance_transaction(m_conn)
-        elif params.__class__.__name__ == txs.PopItemTxName:
-            tx_ins.popular_item_transaction(m_conn, m_params)
-        elif params.__class__.__name__ == txs.RelCustomerTxName:
-            tx_ins.related_customer_transaction(m_conn, m_params)
+    run_time = 0
+    while True:
+        run_time += 1
+        if run_time > max_retry_time:
+            raise
+        try:
 
-        # The function below is used to test the transaction retry logic.  It
-        # can be deleted from production code.
-        # run_transaction(conn, test_retry_loop)
-    except Exception as e:
-        is_success = False
-        raise
+            if params.__class__.__name__ == txs.NewOrderTxName:
+                each_tx_time = tx_ins.new_order_transaction(m_conn, m_params)
+            elif params.__class__.__name__ == txs.PaymentTxName:
+                each_tx_time = tx_ins.payment_transaction(m_conn, m_params)
+            elif params.__class__.__name__ == txs.DeliveryTxName:
+                each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+            elif params.__class__.__name__ == txs.OrderStatusTxName:
+                each_tx_time = tx_ins.order_status_transaction(m_conn, m_params)
+            elif params.__class__.__name__ == txs.StockLevelTxName:
+                each_tx_time = tx_ins.stock_level_transaction(m_conn, m_params)
+            elif params is None:
+                each_tx_time = tx_ins.top_balance_transaction(m_conn)
+            elif params.__class__.__name__ == txs.PopItemTxName:
+                each_tx_time = tx_ins.popular_item_transaction(m_conn, m_params)
+            elif params.__class__.__name__ == txs.RelCustomerTxName:
+                each_tx_time = tx_ins.related_customer_transaction(m_conn, m_params)
+            break
+        except Exception as e:
+            is_success = False
+            m_conn.rollback()
+            if "retry" in e:
+                time.sleep(0.01)
+        except Exception as e:
+            raise e
 
     if is_success:
         # record time used
         time_used_list.append(each_tx_time)
-        each_tx_time = 0
     else:
         total_tx_num -= 1
 

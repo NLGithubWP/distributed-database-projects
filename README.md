@@ -17,19 +17,19 @@ rm -rf node*
 mkdir certs my-safe-directory
 
 cockroach cert create-ca \
---certs-dir=certs \
---ca-key=my-safe-directory/ca.key
+    --certs-dir=certs \
+    --ca-key=my-safe-directory/ca.key
 
 cockroach cert create-node \
-localhost \
-$(hostname) \
---certs-dir=certs \
---ca-key=my-safe-directory/ca.key
+    localhost \
+    $(hostname) \
+    --certs-dir=certs \
+    --ca-key=my-safe-directory/ca.key
 
 cockroach cert create-client \
-root \
---certs-dir=certs \
---ca-key=my-safe-directory/ca.key
+    root \
+    --certs-dir=certs \
+    --ca-key=my-safe-directory/ca.key
 
 
 cockroach start \
@@ -57,6 +57,8 @@ cockroach start \
         --background
 
 cockroach init --certs-dir=certs --host=localhost:26257
+
+ps aux | grep cock
 
 ```
 
