@@ -93,6 +93,7 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
     if is_success:
         # record time used
         time_used_list.append(each_tx_time)
+        total_tx_time += each_tx_time
     else:
         total_tx_num -= 1
 
@@ -194,10 +195,10 @@ def evaluate():
     time_used_list.sort()
 
     print("------------time spent list", time_used_list)
-    print("------------Total time spent in tx", total_tx_time, "ms or", total_tx_time / 1000000, "s", "------", )
-    print("------------Throughout is", total_tx_num / (total_tx_time / 1000000), " tx/s ------", )
-    print("------------Average transaction latency (in ms) is", total_tx_time/1000 / total_tx_num, "ms------", )
-    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)]/1000, "ms------")
+    print("------------Total time spent in tx", total_tx_time, "s", "------", )
+    print("------------Throughout is", total_tx_num / total_tx_time, " tx/s ------", )
+    print("------------Average transaction latency (in ms) is", total_tx_time*1000 / total_tx_num, "ms------", )
+    print("------------Median transaction latency (in ms) is", time_used_list[int(len(time_used_list)/2)]*1000, "ms------")
 
 
 def parse_cmdline():
@@ -229,13 +230,13 @@ if __name__ == "__main__":
     workload_type = opt.workload_type
 
     # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/project_files/xact_files_B/0.txt"
+    # file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/0.txt"
     # workload_type = "A"
 
 
     TestTxConfig = False
-    DebugSingleTx = False
-    SingleTxName = txs.NewOrderTxName
+    DebugSingleTx = True
+    SingleTxName = txs.TopBalanceTxName
     # if debug single transaction, assign name here
 
     conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
@@ -244,9 +245,10 @@ if __name__ == "__main__":
 
     tx_types = {}
 
-    for i in range(41):
-
-        file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/project_files/xact_files_B/{}.txt".format(i)
+    #for i in range(40):
+    # single file
+    for i in range(1):
+        file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/{}.txt".format(i)
 
         # choose workload
         tx_ins = None
