@@ -99,7 +99,7 @@ cockroach sql \
 ```
 
 
-5. run some sql
+6. run some sql
 
 ```bash
 
@@ -109,4 +109,21 @@ cockroach sql --certs-dir=certs --host=localhost:26259
 
 ```
 
+7. create empty csv files for output
+
+
+```bash
+
+python3 output/init_empty_csv.py
+
+```
+
+8.run driver
+
+
+```bash
+
+python3 cockroachDB_driver.py -u=<database url> -p=<path of workload files> -w=<workload_type>
+
+```
 

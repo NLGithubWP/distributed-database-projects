@@ -3,20 +3,20 @@
 
 
 -- Create db
-DROP DATABASE IF EXISTS cs5424db CASCADE;
-CREATE DATABASE IF NOT EXISTS cs5424db;
+--DROP DATABASE IF EXISTS cs5424db CASCADE;
+--CREATE DATABASE IF NOT EXISTS cs5424db;
 USE cs5424db;
 
 
--- set hash index enable to true
-SET experimental_enable_hash_sharded_indexes=on;
-
--- load-splitting threshold to be 400
-SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
-SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
-
--- Create user
-CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
+---- set hash index enable to true
+--SET experimental_enable_hash_sharded_indexes=on;
+--
+---- load-splitting threshold to be 400
+--SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
+--SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
+--
+---- Create user
+--CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
 
 
 -- drop the schema, and reload
