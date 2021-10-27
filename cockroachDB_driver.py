@@ -229,7 +229,7 @@ if __name__ == "__main__":
     workload_type = opt.workload_type
 
     # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    file_path = "/opt/project_files/xact_files_A/0.txt"
+    file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/project_files/xact_files_B/0.txt"
     # workload_type = "A"
 
 
@@ -246,7 +246,7 @@ if __name__ == "__main__":
 
     for i in range(41):
 
-        file_path = "/opt/project_files/xact_files_A/{}.txt".format(i)
+        file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/project_files/xact_files_B/{}.txt".format(i)
 
         # choose workload
         tx_ins = None
@@ -283,7 +283,7 @@ if __name__ == "__main__":
                 if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
                 execute_tx(tx_ins, conn, params)
                 inputs = []
-                if total_tx_num > 20:
+                if total_tx_num > 7:
                     break
             line_content = f.readline()
 
