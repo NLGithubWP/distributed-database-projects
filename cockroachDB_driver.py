@@ -89,6 +89,9 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
             time_used_list.append(each_tx_time * 1000000)
             total_tx_time += each_tx_time * 1000000
             total_tx_num += 1
+            if try_time > 1:
+                logger.info("Running Tx {} successful after retrying {} times".
+                            format(params.__class__.__name__, try_time))
 
             break
         except Exception as e:
