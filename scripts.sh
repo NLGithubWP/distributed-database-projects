@@ -10,10 +10,15 @@
 #python3 cockroachDB_driver.py -u postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require -p /opt/project_files/xact_files_A/7.txt -w A >logs/python7.log &
 #python3 cockroachDB_driver.py -u postgresql://naili:naili@localhost:26258/cs5424db?sslmode=require -p /opt/project_files/xact_files_A/8.txt -w A >logs/python8.log &
 
+
+server_num=5
+
 i=0
 while [ $i -ne 39 ]
 do
-        python3 cockroachDB_driver.py -u postgresql://naili:naili@localhost:26258/cs5424db?sslmode=require -p /opt/project_files/xact_files_A/$i.txt -w A >logs/python$i.log &
-        echo "$i"
+        server_id=`expr $i % $server_num`
+        server_ip=`expr 26257 + $server_id`
+        echo "$i" "$server_ip"
+        python3 cockroachDB_driver.py -u postgresql://naili:naili@localhost:$server_ip/cs5424db?sslmode=require -p /opt/project_files/xact_files_A/$i.txt -w A >logs/python$i.log &
         i=$(($i+1))
 done
