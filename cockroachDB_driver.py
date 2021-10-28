@@ -22,6 +22,8 @@ total_tx_num = 0
 # tx time list, in us
 time_used_list = []
 max_retry_time = 5
+RETRYERRORMSG = "restart transaction"
+
 
 class MyLoggingCursor(LoggingCursor):
     def execute(self, query, vars=None):
@@ -91,7 +93,7 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
             break
         except Exception as e:
             m_conn.rollback()
-            if "retry" in str(e):
+            if RETRYERRORMSG in str(e):
                 logger.error("Errored: retry happened in running tx: " + params.__class__.__name__ +
                              ", ErrorMsg: \n[ {} ]".format(str(e)) +
                              ", Traceback: \n[ {} ]".format(traceback.format_exc()))
