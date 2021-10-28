@@ -1,0 +1,49 @@
+ERROR:__main__:Errored: retry happened in running txNewOrderTxParams, ErrorMsg:restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635418821.992175000,0 too old; wrote at 1635418822.495087000,1: "sql txn" meta={id=08ec3d64 pri=0.00278354 epo=0 ts=1635418822.495087000,1 min=1635418821.992175000,0 seq=20} lock=true stat=PENDING rts=1635418821.992175000,0 wto=false gul=1635418822.492175000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+, traceback: Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 68, in execute_tx
+    each_tx_time = tx_ins.new_order_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 97, in new_order_transaction
+    (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635418821.992175000,0 too old; wrote at 1635418822.495087000,1: "sql txn" meta={id=08ec3d64 pri=0.00278354 epo=0 ts=1635418822.495087000,1 min=1635418821.992175000,0 seq=20} lock=true stat=PENDING rts=1635418821.992175000,0 wto=false gul=1635418822.492175000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+
+ERROR:__main__:Errored: retry happened in running txDeliveryTxParams, ErrorMsg:restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635418847.679102000,0 encountered previous write with future timestamp 1635418847.679251000,0 within uncertainty interval `t <= (local=1635418847.683016000,0, global=1635418848.179102000,0)`; observed timestamps: [{1 1635418847.679102000,0} {2 1635418847.696625000,0} {3 1635418847.683016000,0}]: "sql txn" meta={id=3f12a879 pri=0.00629523 epo=0 ts=1635418847.679102000,0 min=1635418847.679102000,0 seq=107} lock=true stat=PENDING rts=1635418847.679102000,0 wto=false gul=1635418848.179102000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+, traceback: Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 72, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635418847.679102000,0 encountered previous write with future timestamp 1635418847.679251000,0 within uncertainty interval `t <= (local=1635418847.683016000,0, global=1635418848.179102000,0)`; observed timestamps: [{1 1635418847.679102000,0} {2 1635418847.696625000,0} {3 1635418847.683016000,0}]: "sql txn" meta={id=3f12a879 pri=0.00629523 epo=0 ts=1635418847.679102000,0 min=1635418847.679102000,0 seq=107} lock=true stat=PENDING rts=1635418847.679102000,0 wto=false gul=1635418848.179102000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+
+
+ERROR:__main__:Errored: retry happened in running txNewOrderTxParams, ErrorMsg:restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635418853.860176000,0 too old; wrote at 1635418853.860857000,1: "sql txn" meta={id=a579578d pri=0.00780453 epo=0 ts=1635418853.860857000,1 min=1635418853.860176000,0 seq=8} lock=true stat=PENDING rts=1635418853.860176000,0 wto=false gul=1635418854.360176000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+, traceback: Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 68, in execute_tx
+    each_tx_time = tx_ins.new_order_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 97, in new_order_transaction
+    (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635418853.860176000,0 too old; wrote at 1635418853.860857000,1: "sql txn" meta={id=a579578d pri=0.00780453 epo=0 ts=1635418853.860857000,1 min=1635418853.860176000,0 seq=8} lock=true stat=PENDING rts=1635418853.860176000,0 wto=false gul=1635418854.360176000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+
+INFO:__main__:============================ record when total_tx_num reaches 100=====================
+ERROR:__main__:Errored: retry happened in running txPaymentTxParams, ErrorMsg:restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=9b9a2aa5 key=/Table/60/1/2 pri=0.01826184 epo=0 ts=1635418976.917026000,0 min=1635418975.915591000,0 seq=1} lock=true stat=ABORTED rts=1635418976.250488000,1 wto=false gul=1635418976.415591000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+, traceback: Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 70, in execute_tx
+    each_tx_time = tx_ins.payment_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 197, in payment_transaction
+    (payment_amount, c_w_id, c_d_id))
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=9b9a2aa5 key=/Table/60/1/2 pri=0.01826184 epo=0 ts=1635418976.917026000,0 min=1635418975.915591000,0 seq=1} lock=true stat=ABORTED rts=1635418976.250488000,1 wto=false gul=1635418976.415591000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+
+INFO:__main__:============================ record when total_tx_num reaches 200=====================
+INFO:__main__:============================ using file /opt/project_files/xact_files_A/2.txt=====================
+INFO:__main__:{'NewOrderTxParams': 74, 'TopBalanceTxParams': 1, 'PaymentTxParams': 121, 'DeliveryTxParams': 4, 'PopItemTxParams': 1}
+INFO:__main__:============================ total time used: 224.67096495628357 second =====================
