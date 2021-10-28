@@ -62,7 +62,7 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
     while True:
         try_time += 1
         if try_time > max_retry_time:
-            logger.error("Errored: Max Try time reached, sill error! ")
+            logger.error("Errored: Max Try time reached, tx {} sill error! ".format(params.__class__.__name__ ))
             break
         try:
 
@@ -94,7 +94,7 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
         except Exception as e:
             m_conn.rollback()
             if RETRYERRORMSG in str(e):
-                logger.error("Errored: retry happened in running tx: " + params.__class__.__name__ +
+                logger.error("Errored: {} retry happened in running tx: ".format(try_time) + params.__class__.__name__ +
                              ", ErrorMsg: \n[ {} ]".format(str(e)) +
                              ", Traceback: \n[ {} ]".format(traceback.format_exc()))
                 time.sleep(0.01)
