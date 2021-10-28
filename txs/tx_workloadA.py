@@ -145,23 +145,23 @@ class TxForWorkloadA(Transactions):
         end = time.time()
         duration = end-begin
 
-        print("------------ result is ---------")
-        print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
-        print(w_id, d_id, c_id, c_last, c_credit, c_discount)
-        print("Warehouse tax rate W TAX, District tax rate D TAX")
-        print(w_tax, d_tax)
-        print("Order number O_ID, entry date O_ENTRY_D")
-        print(n, entry_d)
-        print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
-        print(num_items, total_amount)
-
-        for i in range(len(item_number)):
-            print("ITEM NUMBER[i]: ", item_number[i])
-            print("I_NAME: ", i_name_list[i])
-            print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
-            print("QUANTITY[i]: ", quantity[i])
-            print("OL_AMOUNT: ", o_amount_list[i])
-            print("S_QUANTITY: ", s_quantity_list[i])
+        # print("------------ result is ---------")
+        # print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
+        # print(w_id, d_id, c_id, c_last, c_credit, c_discount)
+        # print("Warehouse tax rate W TAX, District tax rate D TAX")
+        # print(w_tax, d_tax)
+        # print("Order number O_ID, entry date O_ENTRY_D")
+        # print(n, entry_d)
+        # print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
+        # print(num_items, total_amount)
+        #
+        # for i in range(len(item_number)):
+        #     print("ITEM NUMBER[i]: ", item_number[i])
+        #     print("I_NAME: ", i_name_list[i])
+        #     print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
+        #     print("QUANTITY[i]: ", quantity[i])
+        #     print("OL_AMOUNT: ", o_amount_list[i])
+        #     print("S_QUANTITY: ", s_quantity_list[i])
         return duration
 
     def payment_transaction(self, m_conn, m_params: PaymentTxName) -> float:
@@ -219,21 +219,21 @@ class TxForWorkloadA(Transactions):
         end = time.time()
         duration = end - begin
 
-        print("payment_transaction, "
-              "w_street_1: %s,"
-              "w_street_2: %s,"
-              "w_city: %s,"
-              "w_state: %s,"
-              "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
-
-        print("payment_transaction, "
-              "d_street_1: %s,"
-              "d_street_2: %s,"
-              "d_city: %s,"
-              "d_state: %s,"
-              "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
-
-        print("customer:, ", res)
+        # print("payment_transaction, "
+        #       "w_street_1: %s,"
+        #       "w_street_2: %s,"
+        #       "w_city: %s,"
+        #       "w_state: %s,"
+        #       "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
+        #
+        # print("payment_transaction, "
+        #       "d_street_1: %s,"
+        #       "d_street_2: %s,"
+        #       "d_city: %s,"
+        #       "d_state: %s,"
+        #       "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
+        #
+        # print("customer:, ", res)
         return duration
 
     def delivery_transaction(self, m_conn, m_params: DeliveryTxParams):
@@ -344,7 +344,7 @@ class TxForWorkloadA(Transactions):
                         (c_id, w_id, d_id, w_id, d_id, c_id))
 
             res = cur.fetchall()
-            print_res(res)
+            # print_res(res)
             m_conn.commit()
         end = time.time()
         duration = end - begin
@@ -385,11 +385,11 @@ class TxForWorkloadA(Transactions):
         duration = end - begin
 
         # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
-        print("-------------------------------")
-        print(
-            "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
-            % (w_id, d_id, threshold, l))
-        print(count)
+        # print("-------------------------------")
+        # print(
+        #     "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
+        #     % (w_id, d_id, threshold, l))
+        # print(count)
 
         return duration
 
@@ -403,17 +403,17 @@ class TxForWorkloadA(Transactions):
         d_id = m_params.d_id
         l = m_params.l
         pop_item_set = set()
-
-        print("-------------------------------")
-        print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id))
-        print("Number of orders to be examined: %s" % (l,))
+        #
+        # print("-------------------------------")
+        # print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id))
+        # print("Number of orders to be examined: %s" % (l,))
         begin = time.time()
         with m_conn.cursor() as cur:
             # Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
             res = cur.fetchone()
             n = res[0]
-            print("n is %s" % (n,))
+            # print("n is %s" % (n,))
 
             # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
@@ -448,15 +448,15 @@ class TxForWorkloadA(Transactions):
             # print results
             j = 0
             for i in range(l):
-                print("order: O_ID, O_ENTRY_ID")
-                print(s[i][0], s[i][1])
-
-                print("customer name")
-                print(s[i][2], s[i][3], s[i][4])
-
-                print("popular item: I_NAME, OL_QUANTITY")
+                # print("order: O_ID, O_ENTRY_ID")
+                # print(s[i][0], s[i][1])
+                #
+                # print("customer name")
+                # print(s[i][2], s[i][3], s[i][4])
+                #
+                # print("popular item: I_NAME, OL_QUANTITY")
                 while p_x[j][0]==s[i][0]:
-                    print(p_x[j][2], p_x[j][3])
+                    # print(p_x[j][2], p_x[j][3])
                     pop_item_set.add(p_x[j][1])
                     j+=1
                     if(j==len(p_x)):
@@ -472,12 +472,12 @@ class TxForWorkloadA(Transactions):
                         GROUP BY OL_I_ID
                      """, (w_id, d_id, n - l, n, pop_item_set))
             item_count = cur.fetchall()
-            print("items and their counts")
-            print(item_count)
-
-            # for each distinct popular item, the percentage of orders in S that contain the popular item
-            for item in item_count:
-                print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
+            # print("items and their counts")
+            # print(item_count)
+            #
+            # # for each distinct popular item, the percentage of orders in S that contain the popular item
+            # for item in item_count:
+            #     print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
             m_conn.commit()
         end = time.time()
@@ -508,11 +508,11 @@ class TxForWorkloadA(Transactions):
             m_conn.commit()
         end = time.time()
         duration = end - begin
-        print("-------------------------------")
-        print("Top 10 customers ranked in descending order of outstanding balance:")
-        print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
-        for row in rows:
-            print(row)
+        # print("-------------------------------")
+        # print("Top 10 customers ranked in descending order of outstanding balance:")
+        # print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
+        # for row in rows:
+        #     print(row)
         return duration
 
     def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams) -> float:
@@ -568,9 +568,9 @@ class TxForWorkloadA(Transactions):
         end = time.time()
         duration = end - begin
 
-        print("-------------------------------")
-        print("Related customers (W_ID, D_ID, C_ID):")
-        for customer in related_customers:
-            print(customer)
+        # print("-------------------------------")
+        # print("Related customers (W_ID, D_ID, C_ID):")
+        # for customer in related_customers:
+        #     print(customer)
         return duration
 

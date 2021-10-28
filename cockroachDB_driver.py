@@ -5,6 +5,7 @@ import logging
 from argparse import ArgumentParser, RawTextHelpFormatter
 import psycopg2
 import csv
+import traceback
 import pandas as pd
 from psycopg2.extras import LoggingConnection, LoggingCursor
 import txs
@@ -12,14 +13,13 @@ from txs.base import Transactions
 from txs.params import *
 from txs.tx_workloadA import TxForWorkloadA
 from txs.tx_workloadB import TxForWorkloadB
-logging.basicConfig(filename='./txs.log', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
-# time spent running all transactions
+
+# time spent running all transactions, in us
 total_tx_time = 0
 # total number of transactions
 total_tx_num = 0
-# tx time list
+# tx time list, in us
 time_used_list = []
 max_retry_time = 5
 
@@ -56,15 +56,12 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
     global time_used_list
     global max_retry_time
 
-    total_tx_num += 1
-    is_success = True
-    each_tx_time = 0
-
-    run_time = 0
+    try_time = 0
     while True:
-        run_time += 1
-        if run_time > max_retry_time:
-            raise
+        try_time += 1
+        if try_time > max_retry_time:
+            logger.error("Errored: Max Try time reached, sill error! ")
+            break
         try:
 
             if params.__class__.__name__ == txs.NewOrderTxName:
@@ -77,27 +74,31 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
                 each_tx_time = tx_ins.order_status_transaction(m_conn, m_params)
             elif params.__class__.__name__ == txs.StockLevelTxName:
                 each_tx_time = tx_ins.stock_level_transaction(m_conn, m_params)
-            elif params is None:
+            elif params.__class__.__name__ == txs.TopBalanceTxName:
                 each_tx_time = tx_ins.top_balance_transaction(m_conn)
             elif params.__class__.__name__ == txs.PopItemTxName:
                 each_tx_time = tx_ins.popular_item_transaction(m_conn, m_params)
             elif params.__class__.__name__ == txs.RelCustomerTxName:
                 each_tx_time = tx_ins.related_customer_transaction(m_conn, m_params)
+            else:
+                logger.error("Errored: txs Method not found, " + params.__class__.__name__)
+                break
+
+            time_used_list.append(each_tx_time * 1000000)
+            total_tx_time += each_tx_time * 1000000
+            total_tx_num += 1
+
             break
         except Exception as e:
-            is_success = False
             m_conn.rollback()
-            if "retry" in e:
+            if "retry" in str(e):
+                logger.error("Errored: retry happened in running tx" + params.__class__.__name__ + ", ErrorMsg:" + str(e) +
+                             ", traceback: " + traceback.format_exc())
                 time.sleep(0.01)
-        except Exception as e:
-            raise e
-
-    if is_success:
-        # record time used
-        time_used_list.append(each_tx_time)
-        total_tx_time += each_tx_time
-    else:
-        total_tx_num -= 1
+            else:
+                logger.error("Errored: Unknown Error in running tx: " + params.__class__.__name__ + ", ErrorMsg:" + str(e) +
+                             ", traceback: " + traceback.format_exc())
+                break
 
 
 def parse_stdin(m_inputs: [str]):
@@ -167,7 +168,8 @@ def parse_stdin(m_inputs: [str]):
         return True, m_params
 
     elif tmp_list[0] == "T":
-        return True, None
+        m_params = TopBalanceTxParams()
+        return True, m_params
 
     elif tmp_list[0] == "R":
         m_params = RelCustomerTxParams()
@@ -201,12 +203,12 @@ def evaluate():
     output = {}
     output['client_number'] = file_path.split('/')[-1].replace('.txt', '')
     output['num_xacts'] = total_tx_num
-    output['total_elapsed_time'] = total_tx_time # in s
-    output['xact_throughput'] = total_tx_num / total_tx_time
-    output['avg_xact_latency'] = time_df.mean() * 1000  # in ms
-    output['median_xact_latency'] = time_df.median() * 1000  # in ms
-    output['95_pct_xact_latency'] = time_df.quantile(0.95) * 1000  # in ms
-    output['99_pct_xact_latency'] = time_df.quantile(0.99) * 1000  # in ms
+    output['total_elapsed_time'] = total_tx_time/1000000 # in s
+    output['xact_throughput'] = total_tx_num / (total_tx_time/1000000)
+    output['avg_xact_latency'] = time_df.mean() * 0.001  # in ms
+    output['median_xact_latency'] = time_df.median() * 0.001  # in ms
+    output['95_pct_xact_latency'] = time_df.quantile(0.95) * 0.001  # in ms
+    output['99_pct_xact_latency'] = time_df.quantile(0.99) * 0.001  # in ms
 
     df = pd.DataFrame([output])
     df.to_csv('output/clients.csv', mode='a', header=False, index=False)
@@ -216,7 +218,7 @@ def parse_cmdline():
     parser = ArgumentParser(description=__doc__,
                             formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument("-u","--url", help="database url")
+    parser.add_argument("-u", "--url", help="database url")
     parser.add_argument("-p", "--path", help="path of workload files")
     parser.add_argument("-w", "--workload_type", help="workload type, A or B")
 
@@ -226,6 +228,7 @@ def parse_cmdline():
 
 if __name__ == "__main__":
 
+    begin_time = time.time()
     # batch used to insert or select
     update_batch_size = 100
     select_batch_size = 100
@@ -243,16 +246,19 @@ if __name__ == "__main__":
     # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
     # file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/0.txt"
     # workload_type = "A"
-
+    log_file_name = file_path.split("/")[-1]
+    logging.basicConfig(filename='logs/tx_log_{}'.format(log_file_name), level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
 
     TestTxConfig = False
+    # if debug single transaction, set DebugSingleTx = true and assign name here
     DebugSingleTx = False
     SingleTxName = txs.TopBalanceTxName
-    # if debug single transaction, assign name here
 
-    conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
-    # conn = psycopg2.connect(dsn=addr)
-    conn.initialize(logger)
+    # conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
+    # conn.initialize(logger)
+
+    conn = psycopg2.connect(dsn=addr)
 
     tx_types = {}
 
@@ -286,18 +292,26 @@ if __name__ == "__main__":
             else:
                 tx_types[params.__class__.__name__] += 1
 
-            logger.info("the triggered tx is " + params.__class__.__name__)
+            # logger.info("the triggered tx is " + params.__class__.__name__)
             # test only one tx
             if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
             execute_tx(tx_ins, conn, params)
             inputs = []
-            if total_tx_num > 7:
+            if total_tx_num % 10 == 0:
+                print(total_tx_num)
+            if total_tx_num % 100 == 0:
+                logger.info("============================ record when total_tx_num reaches {}=====================".
+                            format(total_tx_num))
+
+            if total_tx_num > 200:
                 break
         line_content = f.readline()
 
     f.close()
-    logger.info("============================using file " +file_path + "=====================")
+    end_time = time.time()
+    logger.info("============================ using file " + file_path + "=====================")
     logger.info(tx_types)
+    logger.info("============================ total time used: {} second =====================".format(end_time-begin_time))
     conn.close()
     evaluate()
 

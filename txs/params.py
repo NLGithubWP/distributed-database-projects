@@ -47,6 +47,10 @@ class PopItemTxParams:
         self.l: int = 0
 
 
+class TopBalanceTxParams:
+    pass
+
+
 class RelCustomerTxParams:
     def __init__(self):
         self.w_id: int = 0

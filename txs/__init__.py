@@ -6,7 +6,7 @@ DeliveryTxName = "DeliveryTxParams"
 OrderStatusTxName = "OrderStatusTxParams"
 StockLevelTxName = "StockLevelTxParams"
 PopItemTxName = "PopItemTxParams"
-TopBalanceTxName = "NoneType"
+TopBalanceTxName = "TopBalanceTxParams"
 RelCustomerTxName = "RelCustomerTxParams"
 
 TestTxName = "TestTxName"
