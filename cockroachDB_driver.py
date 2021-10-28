@@ -92,12 +92,14 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
         except Exception as e:
             m_conn.rollback()
             if "retry" in str(e):
-                logger.error("Errored: retry happened in running tx" + params.__class__.__name__ + ", ErrorMsg:" + str(e) +
-                             ", traceback: " + traceback.format_exc())
+                logger.error("Errored: retry happened in running tx: " + params.__class__.__name__ +
+                             ", ErrorMsg: [ {} ]".format(str(e)) +
+                             ", Traceback: [ {} ]".format(traceback.format_exc()))
                 time.sleep(0.01)
             else:
-                logger.error("Errored: Unknown Error in running tx: " + params.__class__.__name__ + ", ErrorMsg:" + str(e) +
-                             ", traceback: " + traceback.format_exc())
+                logger.error("Errored: Unknown Error in running tx: " + params.__class__.__name__ +
+                             ", ErrorMsg: [ {} ]".format(str(e)) +
+                             ", Traceback: [ {} ]".format(traceback.format_exc()))
                 break
 
 
