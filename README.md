@@ -142,3 +142,12 @@ python3 cockroachDB_driver.py -u=<database url> -p=<path of workload files> -w=<
 
 ```
 
+9.after the drivers finish running,ensure that clients.csv has 40 entries. Then run the below script to get throughput and dbstate.
+
+
+```bash
+
+python3  output/get_throughput_dbstate.py -u=<database url> -w=<workload_type>
+
+```
+
