@@ -98,7 +98,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
 
     tx_name = m_params.__class__.__name__
     status = False
-    each_tx_time = -1
+    each_tx_time = 0
 
     if tx_name == txs.NewOrderTxName:
         status, each_tx_time = run_tx(m_conn, tx_name,
@@ -111,8 +111,14 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
     elif tx_name == txs.DeliveryTxName:
         # for each d_id, run a tx to update it. avoid tx congestion
         for d_id in range(1, 11, 1):
-            run_tx(m_conn, tx_name+"-"+str(d_id),
+            tmp_status, tmp_tx_time = run_tx(m_conn, tx_name+"-"+str(d_id),
                    lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+
+            # once one tx errored, record as error and skip the rest
+            if not tmp_status:
+                break
+            else:
+                each_tx_time += tmp_tx_time
 
     elif tx_name == txs.OrderStatusTxName:
         status, each_tx_time = run_tx(m_conn, tx_name,
@@ -138,7 +144,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         logger.error("Errored: txs Method not found, " + tx_name)
 
     # record the tx running status
-    if status and each_tx_time != 0:
+    if status:
         time_used_list.append(each_tx_time * 1000000)
         total_tx_time += each_tx_time * 1000000
         total_tx_num += 1
