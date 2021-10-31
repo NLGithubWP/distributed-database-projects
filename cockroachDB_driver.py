@@ -349,6 +349,7 @@ if __name__ == "__main__":
             # test only one tx
             if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
             execute_tx(tx_ins, conn, params)
+            # clear the inputs, and wait for next inout arrays
             inputs = []
             if total_tx_num % 10 == 0:
                 print(total_tx_num)
