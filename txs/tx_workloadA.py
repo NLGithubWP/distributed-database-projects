@@ -257,12 +257,9 @@ class TxForWorkloadA(Transactions):
                 # who placed this order
 
                 # Update the order X by setting O CARRIER ID to CARRIER ID
-                query = "update order_ori set o_carrier_id = {} " \
-                        "where (o_w_id, o_d_id, o_id) in  " \
-                        "(select o_w_id, o_d_id, o_id from order_ori where o_w_id = {} and o_d_id = {} and o_id =" \
-                        "(select MIN(o_id) from order_ori " \
-                        "where o_w_id = {} and o_d_id = {} and o_carrier_id is null) and o_carrier_id is null " \
-                        "for update) " \
+
+                query = "update order_ori set o_carrier_id={} where o_w_id={} and o_d_id={} and o_id=" \
+                        "(select MIN(o_id) from order_ori where o_w_id={} and o_d_id={} and o_carrier_id is null)  "\
                         "returning o_id, o_c_id;".format(carrier_id, w_id, d_id, w_id, d_id)
 
                 cur.execute(query)
@@ -273,7 +270,7 @@ class TxForWorkloadA(Transactions):
 
                 # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
                 query = "update order_line set OL_DELIVERY_D =now() " \
-                        "where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {}))".format(w_id, d_id, n)
+                        "where ol_w_id={} and ol_d_id={} and ol_o_id={};".format(w_id, d_id, n)
 
                 cur.execute(query)
 

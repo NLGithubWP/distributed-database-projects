@@ -57,11 +57,24 @@ update order_ori set o_carrier_id = 8 where (o_w_id, o_d_id, o_id) in
                 (select MIN(o_id) from order_ori where o_w_id = 1 and o_d_id = 1 and o_carrier_id is null) and o_carrier_id is null for update) returning o_id, o_c_id;
 
 
+select o_id from order_ori where o_w_id = 1 and o_d_id = 1 and o_carrier_id is null order by o_id limit 1 for update;
+
+update order_ori set o_carrier_id = 8 where o_w_id = 1 and o_d_id = 1 and o_id = (select MIN(o_id) from order_ori where o_w_id = 1 and o_d_id = 1 and o_carrier_id is null) returning o_id, o_c_id;
+
+
+update tb set col=col+1
+where col=(select max(col) from tb)
+
+
+
 update customer set (C_BALANCE, C_DELIVERY_CNT) = ((select sum(ol_amount) from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((1, 1, 2133)) group by ol_o_id), C_DELIVERY_CNT+1) where (c_w_id, c_d_id, c_id) in ((1, 1, 1879));
 
 
 ps -ef | grep /appserver/jboss8080 | grep -v grep | awk  '{print $2}' | xargs  kill -9 >/dev/null 2>&1
 
 
-update customer set (C_BALANCE, C_DELIVERY_CNT) = ((select sum(ol_amount) from order_line    where (ol_w_id, ol_d_id, ol_o_id) in ((1, 1, 2179)) group by ol_o_id), C_DELIVERY_CNT+1) where ( ) in ((1, 1, 604));
+update customer set (C_BALANCE, C_DELIVERY_CNT) = ((select sum(ol_amount) from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((1, 1, 2179)) group by ol_o_id), C_DELIVERY_CNT+1) where ( ) in ((1, 1, 604));
 
+
+
+select o_w_id, o_d_id, o_id, count(*) from order_ori group by (o_w_id, o_d_id, o_id) having count(*) > 1
