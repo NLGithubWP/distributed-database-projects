@@ -1,77 +1,29 @@
+ERROR:__main__:Errored: 1 retry happened in running tx: StockLevelTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635683984.724950000,0 encountered previous write with future timestamp 1635683984.870201000,0 within uncertainty interval `t <= (local=1635683985.224950000,0, global=1635683985.224950000,0)`; observed timestamps: [{1 1635683986.259802000,0} {2 1635683986.002990000,0} {3 1635683984.727241000,0} {4 1635683985.645410000,0} {5 1635683984.724950000,0}]: "sql txn" meta={id=268f5e3b pri=0.03026072 epo=0 ts=1635683984.724950000,0 min=1635683984.724950000,0 seq=0} lock=false stat=PENDING rts=1635683984.724950000,0 wto=false gul=1635683985.224950000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    each_tx_time = operation(m_conn)
+  File "cockroachDB_driver.py", line 130, in <lambda>
+    lambda l_conn: m_tx_ins.stock_level_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 377, in stock_level_transaction
+    ''', (w_id, d_id, n - l, n, threshold))
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635683984.724950000,0 encountered previous write with future timestamp 1635683984.870201000,0 within uncertainty interval `t <= (local=1635683985.224950000,0, global=1635683985.224950000,0)`; observed timestamps: [{1 1635683986.259802000,0} {2 1635683986.002990000,0} {3 1635683984.727241000,0} {4 1635683985.645410000,0} {5 1635683984.724950000,0}]: "sql txn" meta={id=268f5e3b pri=0.03026072 epo=0 ts=1635683984.724950000,0 min=1635683984.724950000,0 seq=0} lock=false stat=PENDING rts=1635683984.724950000,0 wto=false gul=1635683985.224950000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+
+ ]
+INFO:__main__:Running Tx StockLevelTxParams successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 100=====================
 INFO:__main__:============================ record when total_tx_num reaches 200=====================
-ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=1eecf621 key=/Table/55/1/8/5 pri=0.01736172 epo=0 ts=1635679161.063218000,0 min=1635679159.062041000,0 seq=98} lock=true stat=ABORTED rts=1635679159.062041000,0 wto=false gul=1635679159.562041000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 105, in <lambda>
-    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
-    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=1eecf621 key=/Table/55/1/8/5 pri=0.01736172 epo=0 ts=1635679161.063218000,0 min=1635679159.062041000,0 seq=98} lock=true stat=ABORTED rts=1635679159.062041000,0 wto=false gul=1635679159.562041000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
-
- ]
-INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 300=====================
-ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c6b2ffc8 key=/Table/55/1/8/4 pri=0.03801985 epo=0 ts=1635679248.394762000,0 min=1635679247.390583000,0 seq=44} lock=true stat=ABORTED rts=1635679247.390583000,0 wto=false gul=1635679247.890583000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 105, in <lambda>
-    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
-    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c6b2ffc8 key=/Table/55/1/8/4 pri=0.03801985 epo=0 ts=1635679248.394762000,0 min=1635679247.390583000,0 seq=44} lock=true stat=ABORTED rts=1635679247.390583000,0 wto=false gul=1635679247.890583000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
-
- ]
-INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
-ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=87b780ee key=/Table/55/1/8/3 pri=0.03093504 epo=0 ts=1635679320.559983000,0 min=1635679319.557627000,0 seq=74} lock=true stat=ABORTED rts=1635679319.557627000,0 wto=false gul=1635679320.057627000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 105, in <lambda>
-    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
-    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=87b780ee key=/Table/55/1/8/3 pri=0.03093504 epo=0 ts=1635679320.559983000,0 min=1635679319.557627000,0 seq=74} lock=true stat=ABORTED rts=1635679319.557627000,0 wto=false gul=1635679320.057627000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
-
- ]
-INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 400=====================
 INFO:__main__:============================ record when total_tx_num reaches 500=====================
 INFO:__main__:============================ record when total_tx_num reaches 600=====================
 INFO:__main__:============================ record when total_tx_num reaches 700=====================
-ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7a00dc1f key=/Table/55/1/8/5 pri=0.01466600 epo=0 ts=1635679840.189419000,0 min=1635679839.188118000,0 seq=116} lock=true stat=ABORTED rts=1635679839.188118000,0 wto=false gul=1635679839.688118000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 105, in <lambda>
-    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
-    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7a00dc1f key=/Table/55/1/8/5 pri=0.01466600 epo=0 ts=1635679840.189419000,0 min=1635679839.188118000,0 seq=116} lock=true stat=ABORTED rts=1635679839.188118000,0 wto=false gul=1635679839.688118000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
-
- ]
-INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 800=====================
 INFO:__main__:============================ record when total_tx_num reaches 900=====================
 INFO:__main__:============================ using file /opt/project_files/xact_files_A/29.txt=====================
 INFO:__main__:{'NewOrderTxParams': 855, 'DeliveryTxParams': 10, 'PaymentTxParams': 31, 'PopItemTxParams': 3, 'StockLevelTxParams': 1, 'OrderStatusTxParams': 1}
 INFO:__main__:{'NewOrderTxParams': 855, 'DeliveryTxParams': 10, 'PaymentTxParams': 31, 'PopItemTxParams': 3, 'StockLevelTxParams': 1, 'OrderStatusTxParams': 1}
-INFO:__main__:============================ total time used: 1197.8190262317657 second =====================
+INFO:__main__:============================ total time used: 1218.2386119365692 second =====================

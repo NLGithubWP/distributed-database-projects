@@ -1,7 +1,6 @@
 INFO:__main__:============================ record when total_tx_num reaches 100=====================
-INFO:__main__:============================ record when total_tx_num reaches 200=====================
 ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=8fee1fee key=/Table/55/1/4/5 pri=0.01806873 epo=0 ts=1635679790.138092000,0 min=1635679788.136893000,0 seq=128} lock=true stat=ABORTED rts=1635679788.136893000,0 wto=false gul=1635679788.636893000,0
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e2a84cc0 key=/Table/55/1/4/5 pri=0.03385008 epo=0 ts=1635684217.815175000,0 min=1635684215.813988000,0 seq=62} lock=true stat=ABORTED rts=1635684215.813988000,0 wto=false gul=1635684216.313988000,0
 HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
  ], Traceback: 
 [ Traceback (most recent call last):
@@ -9,9 +8,42 @@ HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-ref
     each_tx_time = operation(m_conn)
   File "cockroachDB_driver.py", line 105, in <lambda>
     lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
     cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=8fee1fee key=/Table/55/1/4/5 pri=0.01806873 epo=0 ts=1635679790.138092000,0 min=1635679788.136893000,0 seq=128} lock=true stat=ABORTED rts=1635679788.136893000,0 wto=false gul=1635679788.636893000,0
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e2a84cc0 key=/Table/55/1/4/5 pri=0.03385008 epo=0 ts=1635684217.815175000,0 min=1635684215.813988000,0 seq=62} lock=true stat=ABORTED rts=1635684215.813988000,0 wto=false gul=1635684216.313988000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+INFO:__main__:============================ record when total_tx_num reaches 200=====================
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=3d9d1f1b key=/Table/55/1/4/5 pri=0.02152747 epo=0 ts=1635684819.533973000,0 min=1635684817.528286000,0 seq=56} lock=true stat=ABORTED rts=1635684817.528286000,0 wto=false gul=1635684818.028286000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    each_tx_time = operation(m_conn)
+  File "cockroachDB_driver.py", line 105, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
+    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=3d9d1f1b key=/Table/55/1/4/5 pri=0.02152747 epo=0 ts=1635684819.533973000,0 min=1635684817.528286000,0 seq=56} lock=true stat=ABORTED rts=1635684817.528286000,0 wto=false gul=1635684818.028286000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ab0f67be key=/Table/55/1/4/3 pri=0.04223278 epo=0 ts=1635684852.563292000,0 min=1635684846.561289000,0 seq=74} lock=true stat=ABORTED rts=1635684846.561289000,0 wto=false gul=1635684847.061289000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    each_tx_time = operation(m_conn)
+  File "cockroachDB_driver.py", line 105, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
+    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ab0f67be key=/Table/55/1/4/3 pri=0.04223278 epo=0 ts=1635684852.563292000,0 min=1635684846.561289000,0 seq=74} lock=true stat=ABORTED rts=1635684846.561289000,0 wto=false gul=1635684847.061289000,0
 HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
 
  ]
@@ -19,7 +51,7 @@ INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 300=====================
 INFO:__main__:============================ record when total_tx_num reaches 400=====================
 ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ad0ecf9d key=/Table/55/1/4/3 pri=0.03322717 epo=0 ts=1635680395.590569000,0 min=1635680394.589408000,0 seq=68} lock=true stat=ABORTED rts=1635680394.589408000,0 wto=false gul=1635680395.089408000,0 int=67
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e0079f3f key=/Table/55/1/4/3 pri=0.04798803 epo=0 ts=1635685229.640683000,0 min=1635685227.639540000,0 seq=68} lock=true stat=ABORTED rts=1635685227.639540000,0 wto=false gul=1635685228.139540000,0
 HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
  ], Traceback: 
 [ Traceback (most recent call last):
@@ -27,9 +59,41 @@ HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-ref
     each_tx_time = operation(m_conn)
   File "cockroachDB_driver.py", line 105, in <lambda>
     lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 132, in new_order_transaction
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
     cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ad0ecf9d key=/Table/55/1/4/3 pri=0.03322717 epo=0 ts=1635680395.590569000,0 min=1635680394.589408000,0 seq=68} lock=true stat=ABORTED rts=1635680394.589408000,0 wto=false gul=1635680395.089408000,0 int=67
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e0079f3f key=/Table/55/1/4/3 pri=0.04798803 epo=0 ts=1635685229.640683000,0 min=1635685227.639540000,0 seq=68} lock=true stat=ABORTED rts=1635685227.639540000,0 wto=false gul=1635685228.139540000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=aa48886e key=/Table/55/1/4/3 pri=0.04691649 epo=0 ts=1635685309.284471000,0 min=1635685308.282846000,0 seq=104} lock=true stat=ABORTED rts=1635685308.282846000,0 wto=false gul=1635685308.782846000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    each_tx_time = operation(m_conn)
+  File "cockroachDB_driver.py", line 105, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
+    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=aa48886e key=/Table/55/1/4/3 pri=0.04691649 epo=0 ts=1635685309.284471000,0 min=1635685308.282846000,0 seq=104} lock=true stat=ABORTED rts=1635685308.282846000,0 wto=false gul=1635685308.782846000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c507671f key=/Table/55/1/4/3 pri=0.05829097 epo=0 ts=1635685399.263727000,0 min=1635685398.262604000,0 seq=80} lock=true stat=ABORTED rts=1635685398.262604000,0 wto=false gul=1635685398.762604000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    each_tx_time = operation(m_conn)
+  File "cockroachDB_driver.py", line 105, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 133, in new_order_transaction
+    cur.execute("SELECT W_TAX FROM warehouse WHERE W_ID = %s", [w_id])
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c507671f key=/Table/55/1/4/3 pri=0.05829097 epo=0 ts=1635685399.263727000,0 min=1635685398.262604000,0 seq=80} lock=true stat=ABORTED rts=1635685398.262604000,0 wto=false gul=1635685398.762604000,0
 HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
 
  ]
@@ -42,4 +106,4 @@ INFO:__main__:============================ record when total_tx_num reaches 900=
 INFO:__main__:============================ using file /opt/project_files/xact_files_A/13.txt=====================
 INFO:__main__:{'PaymentTxParams': 68, 'DeliveryTxParams': 27, 'StockLevelTxParams': 4, 'NewOrderTxParams': 783, 'OrderStatusTxParams': 8, 'PopItemTxParams': 4, 'TopBalanceTxParams': 6, 'RelCustomerTxParams': 1}
 INFO:__main__:{'PaymentTxParams': 68, 'DeliveryTxParams': 27, 'StockLevelTxParams': 4, 'NewOrderTxParams': 783, 'OrderStatusTxParams': 8, 'PopItemTxParams': 4, 'TopBalanceTxParams': 6, 'RelCustomerTxParams': 1}
-INFO:__main__:============================ total time used: 2299.4760551452637 second =====================
+INFO:__main__:============================ total time used: 2356.157691001892 second =====================

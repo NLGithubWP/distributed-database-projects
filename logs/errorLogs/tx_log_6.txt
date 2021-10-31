@@ -1,36 +1,4 @@
 INFO:__main__:============================ record when total_tx_num reaches 100=====================
-ERROR:__main__:Errored: 1 retry happened in running tx: PaymentTxParams, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=97b69542 key=/Table/54/1/5 pri=0.02340274 epo=0 ts=1635679054.132722000,0 min=1635679046.131626000,0 seq=1} lock=true stat=ABORTED rts=1635679049.306679000,2 wto=false gul=1635679046.631626000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 109, in <lambda>
-    lambda l_conn: m_tx_ins.payment_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 197, in payment_transaction
-    (payment_amount, c_w_id, c_d_id))
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=97b69542 key=/Table/54/1/5 pri=0.02340274 epo=0 ts=1635679054.132722000,0 min=1635679046.131626000,0 seq=1} lock=true stat=ABORTED rts=1635679049.306679000,2 wto=false gul=1635679046.631626000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
-
- ]
-INFO:__main__:Running Tx PaymentTxParams successful at the 2 time retry
-ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-5, ErrorMsg: 
-[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionRetryError: retry txn (RETRY_SERIALIZABLE - failed preemptive refresh): "sql txn" meta={id=ee80a7bf key=/Table/57/1/"\xb1!~\xa9\b\x95H\x00\x98\x90\xbfT\x84J\x937"/0 pri=0.06787255 epo=0 ts=1635679392.881684000,1 min=1635679390.755662000,0 seq=20} lock=true stat=PENDING rts=1635679390.755662000,0 wto=false gul=1635679391.255662000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#retry_serializable
- ], Traceback: 
-[ Traceback (most recent call last):
-  File "cockroachDB_driver.py", line 64, in run_tx
-    each_tx_time = operation(m_conn)
-  File "cockroachDB_driver.py", line 115, in <lambda>
-    lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 285, in delivery_transaction
-    m_conn.commit()
-psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionRetryError: retry txn (RETRY_SERIALIZABLE - failed preemptive refresh): "sql txn" meta={id=ee80a7bf key=/Table/57/1/"\xb1!~\xa9\b\x95H\x00\x98\x90\xbfT\x84J\x937"/0 pri=0.06787255 epo=0 ts=1635679392.881684000,1 min=1635679390.755662000,0 seq=20} lock=true stat=PENDING rts=1635679390.755662000,0 wto=false gul=1635679391.255662000,0
-HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#retry_serializable
-
- ]
-INFO:__main__:Running Tx DeliveryTxParams-5 successful at the 2 time retry
 INFO:__main__:============================ record when total_tx_num reaches 200=====================
 INFO:__main__:============================ record when total_tx_num reaches 300=====================
 INFO:__main__:============================ record when total_tx_num reaches 400=====================
@@ -42,4 +10,4 @@ INFO:__main__:============================ record when total_tx_num reaches 900=
 INFO:__main__:============================ using file /opt/project_files/xact_files_A/6.txt=====================
 INFO:__main__:{'NewOrderTxParams': 808, 'StockLevelTxParams': 1, 'TopBalanceTxParams': 4, 'PaymentTxParams': 77, 'DeliveryTxParams': 9, 'OrderStatusTxParams': 1, 'RelCustomerTxParams': 1}
 INFO:__main__:{'NewOrderTxParams': 808, 'StockLevelTxParams': 1, 'TopBalanceTxParams': 4, 'PaymentTxParams': 77, 'DeliveryTxParams': 9, 'OrderStatusTxParams': 1, 'RelCustomerTxParams': 1}
-INFO:__main__:============================ total time used: 1659.720913887024 second =====================
+INFO:__main__:============================ total time used: 1626.0141868591309 second =====================
