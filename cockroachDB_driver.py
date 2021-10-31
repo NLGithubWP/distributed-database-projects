@@ -112,7 +112,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         # for each d_id, run a tx to update it. avoid tx congestion
         for d_id in range(1, 11, 1):
             tmp_status, tmp_tx_time = run_tx(m_conn, tx_name+"-"+str(d_id),
-                   lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+                                             lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
 
             # once one tx errored, record as error and skip the rest
             if not tmp_status:
