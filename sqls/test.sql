@@ -77,4 +77,9 @@ update customer set (C_BALANCE, C_DELIVERY_CNT) = ((select sum(ol_amount) from o
 
 
 
-select o_w_id, o_d_id, o_id, count(*) from order_ori group by (o_w_id, o_d_id, o_id) having count(*) > 1
+select o_w_id, o_d_id, o_c_id, count(*) from order_ori group by (o_w_id, o_d_id, o_c_id) having count(*) > 1
+
+SELECT O_ID, O_W_ID, O_D_ID FROM order_ori AS OF SYSTEM TIME '-10m' WHERE O_W_ID = 1 AND O_D_ID = 4 AND O_C_ID = 2239 ;
+AS OF SYSTEM TIME '-4h'
+
+SELECT O_ID, O_W_ID, O_D_ID FROM order_ori AS OF SYSTEM TIME '-4m' WHERE O_W_ID = 1 AND O_D_ID = 4 AND O_C_ID = 2239 ;
