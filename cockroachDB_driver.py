@@ -115,6 +115,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
                                              lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
 
             # once one tx errored, record as error and skip the rest
+            status = tmp_status
             if not tmp_status:
                 break
             else:
