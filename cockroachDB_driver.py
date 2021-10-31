@@ -269,7 +269,7 @@ if __name__ == "__main__":
     TestTxConfig = False
     # if debug single transaction, set DebugSingleTx = true and assign name here
     DebugSingleTx = False
-    SingleTxName = txs.NewOrderTxName
+    SingleTxName = txs.DeliveryTxName
 
     # Create a new database connection.
 

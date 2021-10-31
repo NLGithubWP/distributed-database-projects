@@ -284,7 +284,7 @@ class TxForWorkloadA(Transactions):
                 query = "update customer set (C_BALANCE, C_DELIVERY_CNT) = " \
                         "((select sum(ol_amount) from order_line " \
                         "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id), C_DELIVERY_CNT+1) "\
-                        "   where ( ) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
+                        "   where (c_w_id, c_d_id, c_id) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
                 cur.execute(query)
         m_conn.commit()
         end = time.time()
