@@ -493,16 +493,9 @@ class TxForWorkloadA(Transactions):
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
-                WITH 
-                    top_customers AS
-                        (SELECT c_first, c_middle, c_last, c_balance, c_d_id, c_w_id 
-                        FROM customer
-                        ORDER BY customer.c_balance DESC LIMIT 10)
-                    SELECT c_first, c_middle, c_last, c_balance, w_name, d_name
-                    FROM top_customers 
-                    JOIN district ON d_id = top_customers.c_d_id AND d_w_id = top_customers.c_w_id
-                    JOIN warehouse ON w_id = top_customers.c_w_id
-                    ORDER BY top_customers.c_balance DESC;
+                    SELECT c_first, c_middle, c_last, c_balance, c_w_name, c_d_name
+                    FROM customer
+                    ORDER BY c_balance DESC LIMIT 10;
             ''')
             rows = cur.fetchall()
             m_conn.commit()

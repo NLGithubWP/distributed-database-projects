@@ -214,10 +214,10 @@ set search_path to workloadB;
 
 
 -- run some test sql
-select * from item limit 100;
-SHOW INDEX FROM item;
-SHOW COLUMNS FROM item;
-show ranges from table item;
+--select * from item limit 100;
+--SHOW INDEX FROM item;
+--SHOW COLUMNS FROM item;
+--show ranges from table item;
 
 
 -- de-normalization to make read faster, used in workload B

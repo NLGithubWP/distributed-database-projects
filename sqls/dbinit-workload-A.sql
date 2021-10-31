@@ -195,9 +195,18 @@ set search_path to workloadA;
 
 
 -- run some test sql
-select * from item limit 100;
-SHOW INDEX FROM item;
-SHOW COLUMNS FROM item;
-show ranges from table item;
+--select * from item limit 100;
+--SHOW INDEX FROM item;
+--SHOW COLUMNS FROM item;
+--show ranges from table item;
 
--- no de-normalization
+--de-normalization on custoemr
+ALTER TABLE cs5424db.workloadA.customer
+    ADD COLUMN C_W_NAME VARCHAR(10) FAMILY freqRead,
+    ADD COLUMN C_D_NAME VARCHAR(10) FAMILY freqRead;
+
+
+WITH dw AS
+    (select D_W_ID, D_ID, W_NAME, D_NAME from district left join warehouse on district.D_W_ID = warehouse.W_ID)
+UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
+    FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;

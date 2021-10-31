@@ -64,8 +64,17 @@ class TxForWorkloadB(Transactions):
                     all_local = 0
                     break
 
-            cur.execute("INSERT INTO order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D) "
-                        "VALUES (%s,%s,%s,%s,%s,%s, now()) RETURNING O_ENTRY_D",
+            # retrive customer name details, and update to order table
+            cur.execute('''SELECT C_FIRST, C_MIDDLE, C_LAST
+                         FROM customer
+                         JOIN order_ori
+                         ON C_W_ID=O_W_ID AND C_D_ID=O_D_ID AND C_ID=O_C_ID 
+                         WHERE O_W_ID=%s AND O_D_ID=%s AND O_ID=%s''',
+                        (w_id, d_id, n))
+            customer = cur.fetchone()
+
+            cur.execute("INSERT INTO order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST) "
+                        "VALUES (%s,%s,%s,%s,%s,%s, now(), customer[0], customer[1], customer[2]) RETURNING O_ENTRY_D",
                         (w_id, d_id, n, c_id, num_items, all_local))
             entry_d = cur.fetchone()[0]
 
@@ -430,10 +439,8 @@ class TxForWorkloadB(Transactions):
             # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
                 '''
-                SELECT O_ID, O_ENTRY_D, C_FIRST, C_MIDDLE, C_LAST
+                SELECT O_ID, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST
                 FROM order_ori
-                JOIN customer
-                ON order_ori.O_W_ID=customer.C_W_ID AND order_ori.O_D_ID=customer.C_D_ID AND order_ori.O_C_ID=customer.C_ID
                 WHERE O_W_ID = %s AND O_D_ID = %s AND O_ID >= %s AND O_ID < %s
                 ORDER BY O_ID
                 ''', (w_id, d_id, n - l, n))
@@ -503,16 +510,9 @@ class TxForWorkloadB(Transactions):
         with m_conn.cursor() as cur:
             cur.execute(
                 '''
-                WITH 
-                    top_customers AS
-                        (SELECT c_first, c_middle, c_last, c_balance, c_d_id, c_w_id 
-                        FROM customer
-                        ORDER BY customer.c_balance DESC LIMIT 10)
-                    SELECT c_first, c_middle, c_last, c_balance, w_name, d_name
-                    FROM top_customers 
-                    JOIN district ON d_id = top_customers.c_d_id AND d_w_id = top_customers.c_w_id
-                    JOIN warehouse ON w_id = top_customers.c_w_id
-                    ORDER BY top_customers.c_balance DESC;
+                    SELECT c_first, c_middle, c_last, c_balance, c_w_name, c_d_name
+                    FROM customer
+                    ORDER BY c_balance DESC LIMIT 10;
             ''')
             rows = cur.fetchall()
             m_conn.commit()
