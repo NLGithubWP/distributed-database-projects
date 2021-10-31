@@ -109,7 +109,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
     elif tx_name == txs.DeliveryTxName:
         # for each d_id, run a tx to update it. avoid tx congestion
         for d_id in range(1, 11, 1):
-            run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+            run_tx(m_conn, tx_name+"-"+str(d_id), lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
     elif tx_name == txs.OrderStatusTxName:
         run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.order_status_transaction(l_conn, m_params))
     elif tx_name == txs.StockLevelTxName:
