@@ -1,0 +1,556 @@
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671875.493844000,0 too old; wrote at 1635671875.914071000,1: "sql txn" meta={id=0c19dcf9 pri=0.00894563 epo=0 ts=1635671875.914071000,1 min=1635671875.493844000,0 seq=51} lock=true stat=PENDING rts=1635671875.493844000,0 wto=false gul=1635671875.993844000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671875.493844000,0 too old; wrote at 1635671875.914071000,1: "sql txn" meta={id=0c19dcf9 pri=0.00894563 epo=0 ts=1635671875.914071000,1 min=1635671875.493844000,0 seq=51} lock=true stat=PENDING rts=1635671875.493844000,0 wto=false gul=1635671875.993844000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671879.710945000,0 too old; wrote at 1635671887.777077000,1: "sql txn" meta={id=dee6c76b pri=0.01333384 epo=0 ts=1635671887.777077000,1 min=1635671879.710945000,0 seq=123} lock=true stat=PENDING rts=1635671879.710945000,0 wto=false gul=1635671880.210945000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671879.710945000,0 too old; wrote at 1635671887.777077000,1: "sql txn" meta={id=dee6c76b pri=0.01333384 epo=0 ts=1635671887.777077000,1 min=1635671879.710945000,0 seq=123} lock=true stat=PENDING rts=1635671879.710945000,0 wto=false gul=1635671880.210945000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams successful at the 3 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671969.524280000,3 too old; wrote at 1635671975.839180000,1: "sql txn" meta={id=b70d8dfa pri=0.07853271 epo=1 ts=1635671979.909310000,2 min=1635671962.964898000,0 seq=126} lock=true stat=PENDING rts=1635671969.524280000,3 wto=false gul=1635671963.464898000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671969.524280000,3 too old; wrote at 1635671975.839180000,1: "sql txn" meta={id=b70d8dfa pri=0.07853271 epo=1 ts=1635671979.909310000,2 min=1635671962.964898000,0 seq=126} lock=true stat=PENDING rts=1635671969.524280000,3 wto=false gul=1635671963.464898000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671984.490114000,2 too old; wrote at 1635671987.996298000,1: "sql txn" meta={id=a1c33821 pri=0.03115358 epo=1 ts=1635671987.996298000,1 min=1635671984.490114000,0 seq=163} lock=true stat=PENDING rts=1635671984.490114000,2 wto=false gul=1635671984.990114000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671984.490114000,2 too old; wrote at 1635671987.996298000,1: "sql txn" meta={id=a1c33821 pri=0.03115358 epo=1 ts=1635671987.996298000,1 min=1635671984.490114000,0 seq=163} lock=true stat=PENDING rts=1635671984.490114000,2 wto=false gul=1635671984.990114000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671990.757653000,0 too old; wrote at 1635671991.807404000,1: "sql txn" meta={id=a6f74b85 pri=0.03090980 epo=0 ts=1635671992.821314000,2 min=1635671990.757653000,0 seq=130} lock=true stat=PENDING rts=1635671990.757653000,0 wto=false gul=1635671991.257653000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671990.757653000,0 too old; wrote at 1635671991.807404000,1: "sql txn" meta={id=a6f74b85 pri=0.03090980 epo=0 ts=1635671992.821314000,2 min=1635671990.757653000,0 seq=130} lock=true stat=PENDING rts=1635671990.757653000,0 wto=false gul=1635671991.257653000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671998.474930000,0 too old; wrote at 1635671998.476473000,1: "sql txn" meta={id=39d1d1ec pri=0.02026823 epo=0 ts=1635672001.623959000,2 min=1635671998.474930000,0 seq=130} lock=true stat=PENDING rts=1635671998.474930000,0 wto=false gul=1635671998.974930000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635671998.474930000,0 too old; wrote at 1635671998.476473000,1: "sql txn" meta={id=39d1d1ec pri=0.02026823 epo=0 ts=1635672001.623959000,2 min=1635671998.474930000,0 seq=130} lock=true stat=PENDING rts=1635671998.474930000,0 wto=false gul=1635671998.974930000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=755fed5a key=/Table/57/2/8/1 pri=0.02751914 epo=0 ts=1635672009.517103000,2 min=1635672007.741583000,0 seq=34} lock=true stat=PENDING rts=1635672007.741583000,0 wto=false gul=1635672008.241583000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=755fed5a key=/Table/57/2/8/1 pri=0.02751914 epo=0 ts=1635672009.517103000,2 min=1635672007.741583000,0 seq=34} lock=true stat=PENDING rts=1635672007.741583000,0 wto=false gul=1635672008.241583000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672016.863955000,0 too old; wrote at 1635672019.204963000,1: "sql txn" meta={id=5f24ff76 pri=0.00440232 epo=0 ts=1635672019.204963000,1 min=1635672016.863955000,0 seq=144} lock=true stat=PENDING rts=1635672016.863955000,0 wto=false gul=1635672017.363955000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672016.863955000,0 too old; wrote at 1635672019.204963000,1: "sql txn" meta={id=5f24ff76 pri=0.00440232 epo=0 ts=1635672019.204963000,1 min=1635672016.863955000,0 seq=144} lock=true stat=PENDING rts=1635672016.863955000,0 wto=false gul=1635672017.363955000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672023.435931000,0 too old; wrote at 1635672031.965234000,1: "sql txn" meta={id=c214ef57 pri=0.01032855 epo=0 ts=1635672040.735737000,2 min=1635672023.435931000,0 seq=130} lock=true stat=PENDING rts=1635672023.435931000,0 wto=false gul=1635672023.935931000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672023.435931000,0 too old; wrote at 1635672031.965234000,1: "sql txn" meta={id=c214ef57 pri=0.01032855 epo=0 ts=1635672040.735737000,2 min=1635672023.435931000,0 seq=130} lock=true stat=PENDING rts=1635672023.435931000,0 wto=false gul=1635672023.935931000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=799bec1f key=/Table/57/2/8/1 pri=0.00295322 epo=0 ts=1635672051.510789000,1 min=1635672046.623192000,0 seq=34} lock=true stat=PENDING rts=1635672046.623192000,0 wto=false gul=1635672047.123192000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=799bec1f key=/Table/57/2/8/1 pri=0.00295322 epo=0 ts=1635672051.510789000,1 min=1635672046.623192000,0 seq=34} lock=true stat=PENDING rts=1635672046.623192000,0 wto=false gul=1635672047.123192000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=add9ed7a key=/Table/57/2/8/1 pri=0.01731487 epo=0 ts=1635672058.677783000,1 min=1635672054.023709000,0 seq=11} lock=true stat=ABORTED rts=1635672054.023709000,0 wto=false gul=1635672054.523709000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=add9ed7a key=/Table/57/2/8/1 pri=0.01731487 epo=0 ts=1635672058.677783000,1 min=1635672054.023709000,0 seq=11} lock=true stat=ABORTED rts=1635672054.023709000,0 wto=false gul=1635672054.523709000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672061.370931000,0 too old; wrote at 1635672062.820743000,1: "sql txn" meta={id=258f5bdc pri=0.00753929 epo=0 ts=1635672062.820743000,1 min=1635672061.370931000,0 seq=144} lock=true stat=PENDING rts=1635672061.370931000,0 wto=false gul=1635672061.870931000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672061.370931000,0 too old; wrote at 1635672062.820743000,1: "sql txn" meta={id=258f5bdc pri=0.00753929 epo=0 ts=1635672062.820743000,1 min=1635672061.370931000,0 seq=144} lock=true stat=PENDING rts=1635672061.370931000,0 wto=false gul=1635672061.870931000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=2aeb49c5 key=/Table/57/2/8/1 pri=0.01333435 epo=0 ts=1635672074.544608000,2 min=1635672070.449394000,0 seq=34} lock=true stat=ABORTED rts=1635672070.449394000,0 wto=false gul=1635672070.949394000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=2aeb49c5 key=/Table/57/2/8/1 pri=0.01333435 epo=0 ts=1635672074.544608000,2 min=1635672070.449394000,0 seq=34} lock=true stat=ABORTED rts=1635672070.449394000,0 wto=false gul=1635672070.949394000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672078.065634000,0 too old; wrote at 1635672083.988106000,1: "sql txn" meta={id=71d15443 pri=0.00606435 epo=0 ts=1635672083.988106000,1 min=1635672078.065634000,0 seq=130} lock=true stat=PENDING rts=1635672078.065634000,0 wto=false gul=1635672078.565634000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672078.065634000,0 too old; wrote at 1635672083.988106000,1: "sql txn" meta={id=71d15443 pri=0.00606435 epo=0 ts=1635672083.988106000,1 min=1635672078.065634000,0 seq=130} lock=true stat=PENDING rts=1635672078.065634000,0 wto=false gul=1635672078.565634000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672087.723836000,0 too old; wrote at 1635672088.206079000,1: "sql txn" meta={id=50b24f94 pri=0.03068410 epo=0 ts=1635672090.007666000,1 min=1635672087.723836000,0 seq=54} lock=true stat=PENDING rts=1635672087.723836000,0 wto=false gul=1635672088.223836000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672087.723836000,0 too old; wrote at 1635672088.206079000,1: "sql txn" meta={id=50b24f94 pri=0.03068410 epo=0 ts=1635672090.007666000,1 min=1635672087.723836000,0 seq=54} lock=true stat=PENDING rts=1635672087.723836000,0 wto=false gul=1635672088.223836000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=3c4b5864 key=/Table/57/2/8/1 pri=0.00304966 epo=0 ts=1635672096.843345000,2 min=1635672092.556373000,0 seq=54} lock=true stat=PENDING rts=1635672092.556373000,0 wto=false gul=1635672093.056373000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_CLIENT_REJECT): "sql txn" meta={id=3c4b5864 key=/Table/57/2/8/1 pri=0.00304966 epo=0 ts=1635672096.843345000,2 min=1635672092.556373000,0 seq=54} lock=true stat=PENDING rts=1635672092.556373000,0 wto=false gul=1635672093.056373000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_client_reject
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672101.440577000,0 too old; wrote at 1635672104.257661000,1: "sql txn" meta={id=f824be21 pri=0.01921724 epo=0 ts=1635672104.843329000,1 min=1635672101.440577000,0 seq=130} lock=true stat=PENDING rts=1635672101.440577000,0 wto=false gul=1635672101.940577000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672101.440577000,0 too old; wrote at 1635672104.257661000,1: "sql txn" meta={id=f824be21 pri=0.01921724 epo=0 ts=1635672104.843329000,1 min=1635672101.440577000,0 seq=130} lock=true stat=PENDING rts=1635672101.440577000,0 wto=false gul=1635672101.940577000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672113.147181000,0 too old; wrote at 1635672113.282590000,1: "sql txn" meta={id=71915276 pri=0.02499502 epo=0 ts=1635672114.302121000,1 min=1635672113.147181000,0 seq=130} lock=true stat=PENDING rts=1635672113.147181000,0 wto=false gul=1635672113.647181000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672113.147181000,0 too old; wrote at 1635672113.282590000,1: "sql txn" meta={id=71915276 pri=0.02499502 epo=0 ts=1635672114.302121000,1 min=1635672113.147181000,0 seq=130} lock=true stat=PENDING rts=1635672113.147181000,0 wto=false gul=1635672113.647181000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=5a36d016 key=/Table/57/2/8/1 pri=0.03247927 epo=0 ts=1635672138.937423000,1 min=1635672117.655756000,0 seq=11} lock=true stat=ABORTED rts=1635672117.655756000,0 wto=false gul=1635672118.155756000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=5a36d016 key=/Table/57/2/8/1 pri=0.03247927 epo=0 ts=1635672138.937423000,1 min=1635672117.655756000,0 seq=11} lock=true stat=ABORTED rts=1635672117.655756000,0 wto=false gul=1635672118.155756000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672142.021606000,0 too old; wrote at 1635672148.304197000,1: "sql txn" meta={id=fcd7cf61 pri=0.00037816 epo=0 ts=1635672148.304197000,1 min=1635672142.021606000,0 seq=130} lock=true stat=PENDING rts=1635672142.021606000,0 wto=false gul=1635672142.521606000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672142.021606000,0 too old; wrote at 1635672148.304197000,1: "sql txn" meta={id=fcd7cf61 pri=0.00037816 epo=0 ts=1635672148.304197000,1 min=1635672142.021606000,0 seq=130} lock=true stat=PENDING rts=1635672142.021606000,0 wto=false gul=1635672142.521606000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672153.865435000,0 too old; wrote at 1635672159.140168000,1: "sql txn" meta={id=ca9db7ae pri=0.00491864 epo=0 ts=1635672159.140168000,1 min=1635672153.865435000,0 seq=130} lock=true stat=PENDING rts=1635672153.865435000,0 wto=false gul=1635672154.365435000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672153.865435000,0 too old; wrote at 1635672159.140168000,1: "sql txn" meta={id=ca9db7ae pri=0.00491864 epo=0 ts=1635672159.140168000,1 min=1635672153.865435000,0 seq=130} lock=true stat=PENDING rts=1635672153.865435000,0 wto=false gul=1635672154.365435000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672165.656323000,0 too old; wrote at 1635672171.460852000,1: "sql txn" meta={id=68b93812 pri=0.00314503 epo=0 ts=1635672171.460852000,1 min=1635672165.656323000,0 seq=130} lock=true stat=PENDING rts=1635672165.656323000,0 wto=false gul=1635672166.156323000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672165.656323000,0 too old; wrote at 1635672171.460852000,1: "sql txn" meta={id=68b93812 pri=0.00314503 epo=0 ts=1635672171.460852000,1 min=1635672165.656323000,0 seq=130} lock=true stat=PENDING rts=1635672165.656323000,0 wto=false gul=1635672166.156323000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672181.658367000,0 too old; wrote at 1635672182.721562000,1: "sql txn" meta={id=5344d5f1 pri=0.01393687 epo=0 ts=1635672182.721562000,1 min=1635672181.658367000,0 seq=130} lock=true stat=PENDING rts=1635672181.658367000,0 wto=false gul=1635672182.158367000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672181.658367000,0 too old; wrote at 1635672182.721562000,1: "sql txn" meta={id=5344d5f1 pri=0.01393687 epo=0 ts=1635672182.721562000,1 min=1635672181.658367000,0 seq=130} lock=true stat=PENDING rts=1635672181.658367000,0 wto=false gul=1635672182.158367000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672186.642344000,0 too old; wrote at 1635672189.332242000,1: "sql txn" meta={id=c34abd75 pri=0.03469503 epo=0 ts=1635672189.332242000,1 min=1635672186.642344000,0 seq=130} lock=true stat=PENDING rts=1635672186.642344000,0 wto=false gul=1635672187.142344000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672186.642344000,0 too old; wrote at 1635672189.332242000,1: "sql txn" meta={id=c34abd75 pri=0.03469503 epo=0 ts=1635672189.332242000,1 min=1635672186.642344000,0 seq=130} lock=true stat=PENDING rts=1635672186.642344000,0 wto=false gul=1635672187.142344000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672191.993610000,0 too old; wrote at 1635672193.328621000,1: "sql txn" meta={id=ed868f2c pri=0.01337207 epo=0 ts=1635672193.328621000,1 min=1635672191.993610000,0 seq=80} lock=true stat=PENDING rts=1635672191.993610000,0 wto=false gul=1635672192.493610000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672191.993610000,0 too old; wrote at 1635672193.328621000,1: "sql txn" meta={id=ed868f2c pri=0.01337207 epo=0 ts=1635672193.328621000,1 min=1635672191.993610000,0 seq=80} lock=true stat=PENDING rts=1635672191.993610000,0 wto=false gul=1635672192.493610000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672197.366937000,0 too old; wrote at 1635672197.931235000,1: "sql txn" meta={id=ae8d02f5 pri=0.05721492 epo=0 ts=1635672197.931235000,1 min=1635672197.366937000,0 seq=80} lock=true stat=PENDING rts=1635672197.366937000,0 wto=false gul=1635672197.866937000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672197.366937000,0 too old; wrote at 1635672197.931235000,1: "sql txn" meta={id=ae8d02f5 pri=0.05721492 epo=0 ts=1635672197.931235000,1 min=1635672197.366937000,0 seq=80} lock=true stat=PENDING rts=1635672197.366937000,0 wto=false gul=1635672197.866937000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672202.838824000,0 too old; wrote at 1635672203.270905000,1: "sql txn" meta={id=c8d73e3c pri=0.01999312 epo=0 ts=1635672203.270905000,1 min=1635672202.838824000,0 seq=80} lock=true stat=PENDING rts=1635672202.838824000,0 wto=false gul=1635672203.338824000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672202.838824000,0 too old; wrote at 1635672203.270905000,1: "sql txn" meta={id=c8d73e3c pri=0.01999312 epo=0 ts=1635672203.270905000,1 min=1635672202.838824000,0 seq=80} lock=true stat=PENDING rts=1635672202.838824000,0 wto=false gul=1635672203.338824000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672213.545858000,0 too old; wrote at 1635672214.804662000,1: "sql txn" meta={id=ddec3cbf pri=0.00452246 epo=0 ts=1635672214.804662000,1 min=1635672213.545858000,0 seq=80} lock=true stat=PENDING rts=1635672213.545858000,0 wto=false gul=1635672214.045858000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672213.545858000,0 too old; wrote at 1635672214.804662000,1: "sql txn" meta={id=ddec3cbf pri=0.00452246 epo=0 ts=1635672214.804662000,1 min=1635672213.545858000,0 seq=80} lock=true stat=PENDING rts=1635672213.545858000,0 wto=false gul=1635672214.045858000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672232.200359000,0 too old; wrote at 1635672234.247531000,1: "sql txn" meta={id=61902980 pri=0.04022615 epo=0 ts=1635672234.247531000,1 min=1635672232.200359000,0 seq=66} lock=true stat=PENDING rts=1635672232.200359000,0 wto=false gul=1635672232.700359000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672232.200359000,0 too old; wrote at 1635672234.247531000,1: "sql txn" meta={id=61902980 pri=0.04022615 epo=0 ts=1635672234.247531000,1 min=1635672232.200359000,0 seq=66} lock=true stat=PENDING rts=1635672232.200359000,0 wto=false gul=1635672232.700359000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672248.637106000,0 too old; wrote at 1635672260.058154000,1: "sql txn" meta={id=2b7990bc pri=0.01209350 epo=0 ts=1635672260.058154000,1 min=1635672248.637106000,0 seq=34} lock=true stat=PENDING rts=1635672248.637106000,0 wto=false gul=1635672249.137106000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672248.637106000,0 too old; wrote at 1635672260.058154000,1: "sql txn" meta={id=2b7990bc pri=0.01209350 epo=0 ts=1635672260.058154000,1 min=1635672248.637106000,0 seq=34} lock=true stat=PENDING rts=1635672248.637106000,0 wto=false gul=1635672249.137106000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672263.908425000,0 too old; wrote at 1635672264.572089000,1: "sql txn" meta={id=3889eeab pri=0.00197231 epo=0 ts=1635672264.572089000,1 min=1635672263.908425000,0 seq=34} lock=true stat=PENDING rts=1635672263.908425000,0 wto=false gul=1635672264.408425000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672263.908425000,0 too old; wrote at 1635672264.572089000,1: "sql txn" meta={id=3889eeab pri=0.00197231 epo=0 ts=1635672264.572089000,1 min=1635672263.908425000,0 seq=34} lock=true stat=PENDING rts=1635672263.908425000,0 wto=false gul=1635672264.408425000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672267.758133000,0 too old; wrote at 1635672268.280122000,1: "sql txn" meta={id=7d8091d4 pri=0.00050263 epo=0 ts=1635672268.280122000,1 min=1635672267.758133000,0 seq=54} lock=true stat=PENDING rts=1635672267.758133000,0 wto=false gul=1635672268.258133000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672267.758133000,0 too old; wrote at 1635672268.280122000,1: "sql txn" meta={id=7d8091d4 pri=0.00050263 epo=0 ts=1635672268.280122000,1 min=1635672267.758133000,0 seq=54} lock=true stat=PENDING rts=1635672267.758133000,0 wto=false gul=1635672268.258133000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672295.090292000,0 too old; wrote at 1635672296.914896000,1: "sql txn" meta={id=2c938874 pri=0.01244792 epo=0 ts=1635672296.914896000,1 min=1635672295.090292000,0 seq=130} lock=true stat=PENDING rts=1635672295.090292000,0 wto=false gul=1635672295.590292000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672295.090292000,0 too old; wrote at 1635672296.914896000,1: "sql txn" meta={id=2c938874 pri=0.01244792 epo=0 ts=1635672296.914896000,1 min=1635672295.090292000,0 seq=130} lock=true stat=PENDING rts=1635672295.090292000,0 wto=false gul=1635672295.590292000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672300.815933000,0 too old; wrote at 1635672306.141364000,1: "sql txn" meta={id=535199ae pri=0.05198908 epo=0 ts=1635672306.141364000,1 min=1635672300.815933000,0 seq=130} lock=true stat=PENDING rts=1635672300.815933000,0 wto=false gul=1635672301.315933000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672300.815933000,0 too old; wrote at 1635672306.141364000,1: "sql txn" meta={id=535199ae pri=0.05198908 epo=0 ts=1635672306.141364000,1 min=1635672300.815933000,0 seq=130} lock=true stat=PENDING rts=1635672300.815933000,0 wto=false gul=1635672301.315933000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=a8a8c384 key=/Table/57/2/8/1 pri=0.04681144 epo=0 ts=1635672313.672311000,1 min=1635672310.251010000,0 seq=11} lock=true stat=ABORTED rts=1635672310.251010000,0 wto=false gul=1635672310.751010000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=a8a8c384 key=/Table/57/2/8/1 pri=0.04681144 epo=0 ts=1635672313.672311000,1 min=1635672310.251010000,0 seq=11} lock=true stat=ABORTED rts=1635672310.251010000,0 wto=false gul=1635672310.751010000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672317.457644000,0 too old; wrote at 1635672318.470902000,1: "sql txn" meta={id=61e78d67 pri=0.01421096 epo=0 ts=1635672320.322092000,2 min=1635672317.457644000,0 seq=130} lock=true stat=PENDING rts=1635672317.457644000,0 wto=false gul=1635672317.957644000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672317.457644000,0 too old; wrote at 1635672318.470902000,1: "sql txn" meta={id=61e78d67 pri=0.01421096 epo=0 ts=1635672320.322092000,2 min=1635672317.457644000,0 seq=130} lock=true stat=PENDING rts=1635672317.457644000,0 wto=false gul=1635672317.957644000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672339.607346000,0 too old; wrote at 1635672345.454060000,1: "sql txn" meta={id=2631469c pri=0.00906005 epo=0 ts=1635672348.700487000,2 min=1635672339.607346000,0 seq=130} lock=true stat=PENDING rts=1635672339.607346000,0 wto=false gul=1635672340.107346000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672339.607346000,0 too old; wrote at 1635672345.454060000,1: "sql txn" meta={id=2631469c pri=0.00906005 epo=0 ts=1635672348.700487000,2 min=1635672339.607346000,0 seq=130} lock=true stat=PENDING rts=1635672339.607346000,0 wto=false gul=1635672340.107346000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams sill error! 
+ERROR:__main__:Errored: 1 retry happened in running tx: RelCustomerTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635672374.985046000,0 encountered previous write with future timestamp 1635672374.985046000,1 within uncertainty interval `t <= (local=1635672374.989928000,0, global=1635672375.485046000,0)`; observed timestamps: [{1 1635672374.985940000,1} {4 1635672374.985046000,0} {5 1635672374.989928000,0}]: "sql txn" meta={id=559e3cef pri=0.00566361 epo=0 ts=1635672374.985046000,0 min=1635672374.985046000,0 seq=0} lock=false stat=PENDING rts=1635672374.985046000,0 wto=false gul=1635672375.485046000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 84, in execute_tx
+    each_tx_time = tx_ins.related_customer_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 555, in related_customer_transaction
+    ''', (order[0], w_id, d_id, w_id)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: ReadWithinUncertaintyIntervalError: read at time 1635672374.985046000,0 encountered previous write with future timestamp 1635672374.985046000,1 within uncertainty interval `t <= (local=1635672374.989928000,0, global=1635672375.485046000,0)`; observed timestamps: [{1 1635672374.985940000,1} {4 1635672374.985046000,0} {5 1635672374.989928000,0}]: "sql txn" meta={id=559e3cef pri=0.00566361 epo=0 ts=1635672374.985046000,0 min=1635672374.985046000,0 seq=0} lock=false stat=PENDING rts=1635672374.985046000,0 wto=false gul=1635672375.485046000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#readwithinuncertaintyinterval
+
+ ]
+INFO:__main__:Running Tx RelCustomerTxParams successful at the 2 time retry
+INFO:__main__:============================ record when total_tx_num reaches 100=====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672399.209969000,0 too old; wrote at 1635672401.097540000,1: "sql txn" meta={id=017de7b9 pri=0.04036454 epo=0 ts=1635672401.097540000,1 min=1635672399.209969000,0 seq=80} lock=true stat=PENDING rts=1635672399.209969000,0 wto=false gul=1635672399.709969000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672399.209969000,0 too old; wrote at 1635672401.097540000,1: "sql txn" meta={id=017de7b9 pri=0.04036454 epo=0 ts=1635672401.097540000,1 min=1635672399.209969000,0 seq=80} lock=true stat=PENDING rts=1635672399.209969000,0 wto=false gul=1635672399.709969000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672405.614689000,0 too old; wrote at 1635672406.086357000,1: "sql txn" meta={id=aa47b95d pri=0.01493832 epo=0 ts=1635672406.086357000,1 min=1635672405.614689000,0 seq=106} lock=true stat=PENDING rts=1635672405.614689000,0 wto=false gul=1635672406.114689000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672405.614689000,0 too old; wrote at 1635672406.086357000,1: "sql txn" meta={id=aa47b95d pri=0.01493832 epo=0 ts=1635672406.086357000,1 min=1635672405.614689000,0 seq=106} lock=true stat=PENDING rts=1635672405.614689000,0 wto=false gul=1635672406.114689000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672410.342165000,0 too old; wrote at 1635672411.056473000,1: "sql txn" meta={id=ea4865b9 pri=0.00128117 epo=0 ts=1635672411.056473000,1 min=1635672410.342165000,0 seq=80} lock=true stat=PENDING rts=1635672410.342165000,0 wto=false gul=1635672410.842165000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672410.342165000,0 too old; wrote at 1635672411.056473000,1: "sql txn" meta={id=ea4865b9 pri=0.00128117 epo=0 ts=1635672411.056473000,1 min=1635672410.342165000,0 seq=80} lock=true stat=PENDING rts=1635672410.342165000,0 wto=false gul=1635672410.842165000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672417.443830000,0 too old; wrote at 1635672417.597349000,1: "sql txn" meta={id=9dd2ffb2 pri=0.03923560 epo=0 ts=1635672417.597349000,1 min=1635672417.443830000,0 seq=80} lock=true stat=PENDING rts=1635672417.443830000,0 wto=false gul=1635672417.943830000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 74, in execute_tx
+    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 268, in delivery_transaction
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: WriteTooOldError: write at timestamp 1635672417.443830000,0 too old; wrote at 1635672417.597349000,1: "sql txn" meta={id=9dd2ffb2 pri=0.03923560 epo=0 ts=1635672417.597349000,1 min=1635672417.443830000,0 seq=80} lock=true stat=PENDING rts=1635672417.443830000,0 wto=false gul=1635672417.943830000,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html
+
+ ]
