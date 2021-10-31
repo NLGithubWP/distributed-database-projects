@@ -57,29 +57,17 @@ def test_tx(tx_ins: Transactions, m_conn):
 
 
 def run_tx(m_conn, tx_name, operation):
-    global total_tx_time
-    global total_tx_num
-    global time_used_list
-    global max_retry_time
-    global succeed_tx_types
 
     with m_conn:
         for try_time in range(1, max_retry_time + 1):
             try:
                 each_tx_time = operation(m_conn)
-                time_used_list.append(each_tx_time * 1000000)
-                total_tx_time += each_tx_time * 1000000
-                total_tx_num += 1
-                if tx_name not in succeed_tx_types:
-                    succeed_tx_types[tx_name] = 1
-                else:
-                    succeed_tx_types[tx_name] += 1
                 if try_time > 1:
                     logger.info("Running Tx {} successful at the {} time retry".
                                 format(tx_name, try_time))
 
                 # if successful, return
-                return
+                return True, each_tx_time
             except Exception as e:
                 m_conn.rollback()
                 # if it's retry error, retry it
@@ -95,33 +83,69 @@ def run_tx(m_conn, tx_name, operation):
                     logger.error("Errored: Unknown Error in running tx: " + tx_name +
                                  ", ErrorMsg: \n[ {} ]".format(str(e)) +
                                  ", Traceback: \n[ {} ]".format(traceback.format_exc()))
-                    return
+                    return False, -1
         logger.error("Errored: Max Try time reached, tx {} sill error! ".format(tx_name))
+        return False, -1
 
 
 def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
+
+    global total_tx_time
+    global total_tx_num
+    global time_used_list
+    global max_retry_time
+    global succeed_tx_types
+
     tx_name = m_params.__class__.__name__
+    status = False
+    each_tx_time = -1
 
     if tx_name == txs.NewOrderTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+
     elif tx_name == txs.PaymentTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.payment_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.payment_transaction(l_conn, m_params))
+
     elif tx_name == txs.DeliveryTxName:
         # for each d_id, run a tx to update it. avoid tx congestion
         for d_id in range(1, 11, 1):
-            run_tx(m_conn, tx_name+"-"+str(d_id), lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+            run_tx(m_conn, tx_name+"-"+str(d_id),
+                   lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+
     elif tx_name == txs.OrderStatusTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.order_status_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.order_status_transaction(l_conn, m_params))
+
     elif tx_name == txs.StockLevelTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.stock_level_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.stock_level_transaction(l_conn, m_params))
+
     elif tx_name == txs.TopBalanceTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.top_balance_transaction(l_conn))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.top_balance_transaction(l_conn))
+
     elif tx_name == txs.PopItemTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.popular_item_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.popular_item_transaction(l_conn, m_params))
+
     elif tx_name == txs.RelCustomerTxName:
-        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.related_customer_transaction(l_conn, m_params))
+        status, each_tx_time = run_tx(m_conn, tx_name,
+                                      lambda l_conn: m_tx_ins.related_customer_transaction(l_conn, m_params))
+
     else:
         logger.error("Errored: txs Method not found, " + tx_name)
+
+    # record the tx running status
+    if status and each_tx_time != 0:
+        time_used_list.append(each_tx_time * 1000000)
+        total_tx_time += each_tx_time * 1000000
+        total_tx_num += 1
+        if tx_name not in succeed_tx_types:
+            succeed_tx_types[tx_name] = 1
+        else:
+            succeed_tx_types[tx_name] += 1
 
 
 def parse_stdin(m_inputs: [str]):
