@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+"""
+Test psycopg with CockroachDB.
+"""
 
 import time
 import random
 import logging
 from argparse import ArgumentParser, RawTextHelpFormatter
+
 import psycopg2
 from psycopg2.errors import SerializationFailure
 
@@ -20,7 +24,7 @@ def create_accounts(conn):
 
 def delete_accounts(conn):
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM cs5424.accounts")
+        cur.execute("DELETE FROM bank.accounts")
         logging.debug("delete_accounts(): status message: %s", cur.statusmessage)
     conn.commit()
 
@@ -38,6 +42,7 @@ def print_balances(conn):
 
 def transfer_funds(conn, frm, to, amount):
     with conn.cursor() as cur:
+
         # Check the current balance.
         cur.execute("SELECT balance FROM accounts WHERE id = %s", (frm,))
         from_balance = cur.fetchone()[0]
@@ -45,6 +50,7 @@ def transfer_funds(conn, frm, to, amount):
             raise RuntimeError(
                 f"Insufficient funds in {frm}: have {from_balance}, need {amount}"
             )
+
         # Perform the transfer.
         cur.execute(
             "UPDATE accounts SET balance = balance - %s WHERE id = %s", (amount, frm)
@@ -148,23 +154,23 @@ def parse_cmdline():
     parser.add_argument(
         "dsn",
         help="""\
-            database connection string
+database connection string
 
-            For cockroach demo, use
-            'postgresql://<username>:<password>@<hostname>:<port>/cs5424?sslmode=require',
-            with the username and password created in the demo cluster, and the hostname
-            and port listed in the (sql/tcp) connection parameters of the demo cluster
-            welcome message.
+For cockroach demo, use
+'postgresql://<username>:<password>@<hostname>:<port>/bank?sslmode=require',
+with the username and password created in the demo cluster, and the hostname
+and port listed in the (sql/tcp) connection parameters of the demo cluster
+welcome message.
 
-            For CockroachCloud Free, use
-            'postgres://<username>:<password>@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/<cluster-name>.cs5424?sslmode=verify-full&sslrootcert=<your_certs_directory>/cc-ca.crt'.
+For CockroachCloud Free, use
+'postgres://<username>:<password>@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/<cluster-name>.bank?sslmode=verify-full&sslrootcert=<your_certs_directory>/cc-ca.crt'.
 
-            If you are using the connection string copied from the Console, your username,
-            password, and cluster name will be pre-populated. Replace
-            <your_certs_directory> with the path to the 'cc-ca.crt' downloaded from the
-            Console.
+If you are using the connection string copied from the Console, your username,
+password, and cluster name will be pre-populated. Replace
+<your_certs_directory> with the path to the 'cc-ca.crt' downloaded from the
+Console.
 
-            """
+"""
     )
 
     parser.add_argument("-v", "--verbose",
@@ -173,37 +179,6 @@ def parse_cmdline():
     opt = parser.parse_args()
     return opt
 
-def main2():
-    conn = psycopg2.connect(os.environ.get('DB_URI'))
-    lastid = None
 
-    while True:
-        with conn:
-            with conn.cursor() as cur:
-                cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
-                if lastid:
-                    cur.execute("SELECT id FROM rides WHERE id > %s AND discounted != true AND extract('month', start_time) = 12 AND extract('day', start_time) > 23 ORDER BY id LIMIT 10000", (lastid,))
-                else:
-                    cur.execute("SELECT id FROM rides WHERE discounted != true AND extract('month', start_time) = 12 AND extract('day', start_time) > 23 ORDER BY id LIMIT 10000")
-                pkvals = list(cur)
-        if not pkvals:
-            return
-        while pkvals:
-            batch = pkvals[:2000]
-            pkvals = pkvals[2000:]
-            with conn:
-                with conn.cursor() as cur:
-                    cur.execute("UPDATE rides SET discounted = true, revenue = revenue*.9 WHERE id = ANY %s RETURNING id", (batch,))
-                    print(cur.statusmessage)
-                    if not pkvals:
-                        lastid = cur.fetchone()[0]
-        del batch
-        del pkvals
-        time.sleep(5)
-
-    conn.close()
-
-
-# python3 cockroachDB_driver.py "postgresql://naili:naili@localhost:26257/cs5424?sslmode=require"
 if __name__ == "__main__":
     main()

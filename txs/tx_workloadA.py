@@ -77,7 +77,7 @@ class TxForWorkloadA(Transactions):
 
             for i in range(len(item_number)):
                 # query s_quantity
-                query = "SELECT S_QUANTITY FROM stock WHERE (S_W_ID, S_I_ID ) = ({}, {})".format(supplier_warehouse[i], item_number[i])
+                query = "SELECT S_QUANTITY FROM stock WHERE (S_W_ID, S_I_ID ) = ({}, {}) for update".format(supplier_warehouse[i], item_number[i])
                 cur.execute(query)
                 s_quantity = cur.fetchone()
                 s_quantity_list.append(s_quantity[0])
@@ -214,8 +214,7 @@ class TxForWorkloadA(Transactions):
                             (payment_amount, payment_amount, c_w_id, c_d_id, c_id))
 
             res = cur.fetchone()
-
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
 
@@ -251,7 +250,7 @@ class TxForWorkloadA(Transactions):
         carrier_id = m_params.carrier_id
         begin = time.time()
         with m_conn.cursor() as cur:
-            for d_id in range(1, 10, 1):
+            for d_id in range(1, 11, 1):
                 # 1. Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
                 # with O CARRIER ID = null;
                 # Let X denote the order corresponding to order number N, and let C denote the customer
@@ -261,8 +260,9 @@ class TxForWorkloadA(Transactions):
                 query = "update order_ori set o_carrier_id = {} " \
                         "where (o_w_id, o_d_id, o_id) in  " \
                         "(select o_w_id, o_d_id, o_id from order_ori where o_w_id = {} and o_d_id = {} and o_id =" \
-                        "   (select MIN(o_id) from order_ori " \
-                        "       where o_w_id = {} and o_d_id = {} and o_carrier_id is null) and o_carrier_id is null) " \
+                        "(select MIN(o_id) from order_ori " \
+                        "where o_w_id = {} and o_d_id = {} and o_carrier_id is null) and o_carrier_id is null " \
+                        "for update) " \
                         "returning o_id, o_c_id;".format(carrier_id, w_id, d_id, w_id, d_id)
 
                 cur.execute(query)
@@ -283,11 +283,10 @@ class TxForWorkloadA(Transactions):
 
                 query = "update customer set (C_BALANCE, C_DELIVERY_CNT) = " \
                         "((select sum(ol_amount) from order_line " \
-                        "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id ), C_DELIVERY_CNT+1) "\
-                        "   where (c_w_id, c_d_id, c_id) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
+                        "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id), C_DELIVERY_CNT+1) "\
+                        "   where ( ) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
                 cur.execute(query)
-
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
         return duration
@@ -345,7 +344,7 @@ class TxForWorkloadA(Transactions):
 
             res = cur.fetchall()
             # print_res(res)
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
         return duration
@@ -380,7 +379,7 @@ class TxForWorkloadA(Transactions):
                 WHERE OL_W_ID = %s AND OL_D_ID = %s AND OL_O_ID >= %s AND OL_O_ID < %s AND S_QUANTITY < %s
                 ''', (w_id, d_id, n - l, n, threshold))
             count = cur.fetchone()[0]
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
 
@@ -479,7 +478,7 @@ class TxForWorkloadA(Transactions):
             # for item in item_count:
             #     print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
         return duration
@@ -498,7 +497,7 @@ class TxForWorkloadA(Transactions):
                     ORDER BY c_balance DESC LIMIT 10;
             ''')
             rows = cur.fetchall()
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
         # print("-------------------------------")
@@ -557,7 +556,7 @@ class TxForWorkloadA(Transactions):
                 )
                 customers = cur.fetchall()
                 related_customers.update(customers)
-            m_conn.commit()
+        m_conn.commit()
         end = time.time()
         duration = end - begin
 

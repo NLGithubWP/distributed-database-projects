@@ -151,3 +151,14 @@ python3  output/get_throughput_dbstate.py -u=<database url> -w=<workload_type>
 
 ```
 
+
+10. kill all process
+```shell script
+
+ps -ef | grep cockroachDB_driver.py | grep -v grep | awk  '{print $2}' | xargs  kill -9
+
+```
+
+
+
+

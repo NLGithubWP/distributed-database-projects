@@ -11,7 +11,7 @@ SET experimental_enable_hash_sharded_indexes=on;
 
 -- load-splitting threshold to be 400
 SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
-SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
+SET CLUSTER SETTING kv.range_split.load_qps_threshold = 1000;
 
 -- Create user
 CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
@@ -98,6 +98,8 @@ IMPORT INTO cs5424db.workloadA.customer
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/customer.csv')
     WITH delimiter = e',', nullif = 'null';
 
+ALTER TABLE customer SPLIT AT VALUES (1,1),(1,10),(2,1),(2,10),(3,1),(3,10),(4,1),(4,10),(5,1),(5,10),(6,1),(6,10),(7,1),(7,10),(8,1),(8,10),(9,1),(9,10),(10,1),(10,10);
+
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.order_ori (
     pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     O_W_ID INT NOT NULL,
@@ -120,6 +122,7 @@ IMPORT INTO cs5424db.workloadA.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIE
     CSV DATA ('http://localhost:3000/opt/project_files/data_files_A/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
+ALTER INDEX order_ori@order_ori_joint_c_id SPLIT AT VALUES (1,1),(1,10),(2,1),(2,10),(3,1),(3,10),(4,1),(4,10),(5,1),(5,10),(6,1),(6,10),(7,1),(7,10),(8,1),(8,10),(9,1),(9,10),(10,1),(10,10);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.item (
     I_ID INT NOT NULL,
