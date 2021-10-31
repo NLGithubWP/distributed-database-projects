@@ -235,7 +235,7 @@ class TxForWorkloadA(Transactions):
         # print("customer:, ", res)
         return duration
 
-    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams):
+    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams, d_id):
         """
 
         used index: order_ori (o_w_id, o_d_id, o_id) (o_w_id, o_d_id, o_carrier_id )
@@ -250,39 +250,38 @@ class TxForWorkloadA(Transactions):
         carrier_id = m_params.carrier_id
         begin = time.time()
         with m_conn.cursor() as cur:
-            for d_id in range(1, 11, 1):
-                # 1. Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
-                # with O CARRIER ID = null;
-                # Let X denote the order corresponding to order number N, and let C denote the customer
-                # who placed this order
+            # 1. Let N denote the value of the smallest order number O ID for district (W ID,DISTRICT NO)
+            # with O CARRIER ID = null;
+            # Let X denote the order corresponding to order number N, and let C denote the customer
+            # who placed this order
 
-                # Update the order X by setting O CARRIER ID to CARRIER ID
+            # Update the order X by setting O CARRIER ID to CARRIER ID
 
-                query = "update order_ori set o_carrier_id={} where o_w_id={} and o_d_id={} and o_id=" \
-                        "(select MIN(o_id) from order_ori where o_w_id={} and o_d_id={} and o_carrier_id is null)  "\
-                        "returning o_id, o_c_id;".format(carrier_id, w_id, d_id, w_id, d_id)
+            query = "update order_ori set o_carrier_id={} where o_w_id={} and o_d_id={} and o_id=" \
+                    "(select MIN(o_id) from order_ori where o_w_id={} and o_d_id={} and o_carrier_id is null)  "\
+                    "returning o_id, o_c_id;".format(carrier_id, w_id, d_id, w_id, d_id)
 
-                cur.execute(query)
+            cur.execute(query)
 
-                res = cur.fetchone()
-                n = res[0]
-                c_id = res[1]
+            res = cur.fetchone()
+            n = res[0]
+            c_id = res[1]
 
-                # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
-                query = "update order_line set OL_DELIVERY_D =now() " \
-                        "where ol_w_id={} and ol_d_id={} and ol_o_id={};".format(w_id, d_id, n)
+            # Update all the order-lines in X by setting OL DELIVERY D to the current date and time
+            query = "update order_line set OL_DELIVERY_D =now() " \
+                    "where ol_w_id={} and ol_d_id={} and ol_o_id={};".format(w_id, d_id, n)
 
-                cur.execute(query)
+            cur.execute(query)
 
-                # Update customer C as follows:
-                # 1. Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
-                # 2. Increment C DELIVERY CNT by 1
+            # Update customer C as follows:
+            # 1. Increment C BALANCE by B, where B denote the sum of OL AMOUNT for all the items placed in order X
+            # 2. Increment C DELIVERY CNT by 1
 
-                query = "update customer set (C_BALANCE, C_DELIVERY_CNT) = " \
-                        "((select sum(ol_amount) from order_line " \
-                        "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id), C_DELIVERY_CNT+1) "\
-                        "   where (c_w_id, c_d_id, c_id) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
-                cur.execute(query)
+            query = "update customer set (C_BALANCE, C_DELIVERY_CNT) = " \
+                    "((select sum(ol_amount) from order_line " \
+                    "   where (ol_w_id, ol_d_id, ol_o_id) in (({}, {}, {})) group by ol_o_id), C_DELIVERY_CNT+1) "\
+                    "   where (c_w_id, c_d_id, c_id) in (({}, {}, {}));".format(w_id, d_id, n, w_id, d_id, c_id)
+            cur.execute(query)
         m_conn.commit()
         end = time.time()
         duration = end - begin

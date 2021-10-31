@@ -19,7 +19,7 @@ class Transactions(object):
         raise NotImplementedError
 
     @abstractmethod
-    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams) -> float:
+    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams, d_id:int) -> float:
         raise NotImplementedError
 
     @abstractmethod

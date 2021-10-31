@@ -56,7 +56,7 @@ def test_tx(tx_ins: Transactions, m_conn):
     tx_ins.test_transaction(m_conn)
 
 
-def execute_tx(tx_ins: Transactions, m_conn, m_params):
+def run_tx(m_conn, tx_name, operation):
     global total_tx_time
     global total_tx_num
     global time_used_list
@@ -66,36 +66,17 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
     with m_conn:
         for try_time in range(1, max_retry_time + 1):
             try:
-                if params.__class__.__name__ == txs.NewOrderTxName:
-                    each_tx_time = tx_ins.new_order_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.PaymentTxName:
-                    each_tx_time = tx_ins.payment_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.DeliveryTxName:
-                    each_tx_time = tx_ins.delivery_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.OrderStatusTxName:
-                    each_tx_time = tx_ins.order_status_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.StockLevelTxName:
-                    each_tx_time = tx_ins.stock_level_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.TopBalanceTxName:
-                    each_tx_time = tx_ins.top_balance_transaction(m_conn)
-                elif params.__class__.__name__ == txs.PopItemTxName:
-                    each_tx_time = tx_ins.popular_item_transaction(m_conn, m_params)
-                elif params.__class__.__name__ == txs.RelCustomerTxName:
-                    each_tx_time = tx_ins.related_customer_transaction(m_conn, m_params)
-                else:
-                    logger.error("Errored: txs Method not found, " + params.__class__.__name__)
-                    break
-
+                each_tx_time = operation(m_conn)
                 time_used_list.append(each_tx_time * 1000000)
                 total_tx_time += each_tx_time * 1000000
                 total_tx_num += 1
-                if params.__class__.__name__ not in succeed_tx_types:
-                    succeed_tx_types[params.__class__.__name__] = 1
+                if tx_name not in succeed_tx_types:
+                    succeed_tx_types[tx_name] = 1
                 else:
-                    succeed_tx_types[params.__class__.__name__] += 1
+                    succeed_tx_types[tx_name] += 1
                 if try_time > 1:
                     logger.info("Running Tx {} successful at the {} time retry".
-                                format(params.__class__.__name__, try_time))
+                                format(tx_name, try_time))
 
                 # if successful, return
                 return
@@ -103,18 +84,44 @@ def execute_tx(tx_ins: Transactions, m_conn, m_params):
                 m_conn.rollback()
                 # if it's retry error, retry it
                 if RETRYERRORMSG in str(e):
-                    logger.error("Errored: {} retry happened in running tx: ".format(try_time) + params.__class__.__name__ +
+                    logger.error("Errored: {} retry happened in running tx: ".format(
+                        try_time) + tx_name +
                                  ", ErrorMsg: \n[ {} ]".format(str(e)) +
                                  ", Traceback: \n[ {} ]".format(traceback.format_exc()))
                     sleep_ms = (2 ** try_time) * 0.1 * (random.random() + 0.5)
                     time.sleep(sleep_ms)
                 # otherwise, log the error and return
                 else:
-                    logger.error("Errored: Unknown Error in running tx: " + params.__class__.__name__ +
+                    logger.error("Errored: Unknown Error in running tx: " + tx_name +
                                  ", ErrorMsg: \n[ {} ]".format(str(e)) +
                                  ", Traceback: \n[ {} ]".format(traceback.format_exc()))
                     return
-        logger.error("Errored: Max Try time reached, tx {} sill error! ".format(params.__class__.__name__))
+        logger.error("Errored: Max Try time reached, tx {} sill error! ".format(tx_name))
+
+
+def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
+    tx_name = m_params.__class__.__name__
+
+    if tx_name == txs.NewOrderTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+    elif tx_name == txs.PaymentTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.payment_transaction(l_conn, m_params))
+    elif tx_name == txs.DeliveryTxName:
+        # for each d_id, run a tx to update it. avoid tx congestion
+        for d_id in range(1, 11, 1):
+            run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params, d_id))
+    elif tx_name == txs.OrderStatusTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.order_status_transaction(l_conn, m_params))
+    elif tx_name == txs.StockLevelTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.stock_level_transaction(l_conn, m_params))
+    elif tx_name == txs.TopBalanceTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.top_balance_transaction(l_conn))
+    elif tx_name == txs.PopItemTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.popular_item_transaction(l_conn, m_params))
+    elif tx_name == txs.RelCustomerTxName:
+        run_tx(m_conn, tx_name, lambda l_conn: m_tx_ins.related_customer_transaction(l_conn, m_params))
+    else:
+        logger.error("Errored: txs Method not found, " + tx_name)
 
 
 def parse_stdin(m_inputs: [str]):
@@ -269,7 +276,7 @@ if __name__ == "__main__":
     TestTxConfig = False
     # if debug single transaction, set DebugSingleTx = true and assign name here
     DebugSingleTx = False
-    SingleTxName = txs.DeliveryTxName
+    SingleTxName = txs.NewOrderTxName
 
     # Create a new database connection.
 
