@@ -3,6 +3,7 @@ from . import *
 from .base import Transactions
 from .params import *
 import time
+import datetime
 
 class TxForWorkloadA(Transactions):
 
@@ -520,6 +521,16 @@ class TxForWorkloadA(Transactions):
         related_customers = set()
         begin = time.time()
         with m_conn.cursor() as cur:
+            # get current time
+            cur.execute("SELECT CURRENT_TIMESTAMP;")
+            cur_times = cur.fetchall()
+            modified_time = cur_times[0][0] - datetime.timedelta(minutes=3)
+            # update time to read historical data
+            cur.execute("SET TRANSACTION AS OF SYSTEM TIME '{}';".format(str(modified_time)))
+            # check current time
+            cur.execute("SELECT CURRENT_TIMESTAMP;")
+            cur_times = cur.fetchall()
+
             cur.execute(
                 '''
                 SELECT O_ID, O_W_ID, O_D_ID
