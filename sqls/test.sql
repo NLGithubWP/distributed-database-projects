@@ -220,4 +220,95 @@ update customer set (C_BALANCE, C_DELIVERY_CNT) = (
 
 
 
+SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 4 AND O_D_ID = 6 AND O_C_ID = 10;
 
+
+  o_id | o_w_id | o_d_id
+-------+--------+---------
+  3982 |      4 |      6
+  3542 |      4 |      6
+   381 |      4 |      6
+
+SELECT count(*) FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID = 381;
+
+-- for each o_id above, run the following:
+WITH
+    items AS
+        (SELECT OL_I_ID FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID in (381)),
+    customer_ol AS
+        (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
+          FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+          WHERE O_W_ID <> 4 )
+    SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID FROM items
+        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2;
+
+
+  o_w_id | o_d_id | o_c_id
+---------+--------+---------
+       9 |      1 |    119
+(1 row)
+
+Time: 6.424s total (execution 6.423s / network 0.002s)
+
+
+
+
+-- optimization
+-- find all order of a customer
+SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 4 AND O_D_ID = 6 AND O_C_ID = 10;
+
+select ol_i_id from order_line where OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID = 381;
+
+  ol_i_id
+-----------
+    12267
+    86700
+    ...
+
+SELECT O_W_ID, O_D_ID, o_c_id, o_id
+    FROM order_ori inner JOIN order_line
+    ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+    Where O_W_ID <> 4 and order_line.OL_W_ID <> ;
+
+SELECT count(*)
+    FROM order_ori inner JOIN order_line
+    ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+    Where O_W_ID <> 4 and order_line.OL_W_ID <> 4;
+
+
+  o_w_id | o_d_id | o_c_id | o_id | ol_i_id
+---------+--------+--------+------+----------
+       1 |      2 |   2414 | 1023 |   18165
+       1 |      2 |   2946 | 1255 |   72183
+       1 |      2 |   2113 | 2879 |   92504
+       1 |      1 |   1139 | 6065 |   64398
+       1 |      2 |   1279 | 3191 |   73424
+       1 |      2 |    182 | 1885 |   78884
+       1 |      2 |   1806 |  777 |   42480
+       1 |      1 |    311 | 6291 |   81602
+       1 |      1 |    303 | 5257 |    4551
+       1 |      1 |   2275 | 6594 |   89781
+
+
+
+
+CREATE INDEX order_ori_merge_join ON order_ori (o_w_id, o_d_id, o_id);
+CREATE INDEX order_line_merge_join ON order_line (ol_w_id, ol_d_id, ol_o_id);
+
+
+
+WITH
+    items AS
+        (SELECT OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID in (381, 3982, 3542)),
+    customer_ol AS
+        (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
+          FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+          WHERE O_W_ID <> 4 )
+    SELECT * FROM items
+        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY OL_O_ID, O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2;
+
+
+
+DISTINCT O_W_ID, O_D_ID, O_C_ID
