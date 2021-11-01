@@ -19,7 +19,7 @@ class Transactions(object):
         raise NotImplementedError
 
     @abstractmethod
-    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams, d_id:int) -> float:
+    def delivery_transaction(self, m_conn, m_params: DeliveryTxParams) -> float:
         raise NotImplementedError
 
     @abstractmethod
@@ -55,3 +55,22 @@ class Transactions(object):
                 # print(cur.fetchone())
                 m_conn.commit()
                 k += 1
+
+    def delivery_read_transaction(self, l_conn, m_params):
+        pass
+
+    def delivery_update_transaction1(self, l_conn, w_id, carrier_id, id_tuples):
+        pass
+
+    def delivery_update_transaction2(self, l_conn, c_id, ele, sum_value):
+        pass
+
+    def delivery_transaction_one_did(self, l_conn, m_params, d_id):
+        pass
+
+    def delivery_update_transaction3(self, l_conn, w_id, carrier_id, id_tuples, sum_map):
+        pass
+
+    def delivery_update_transaction4(self, l_conn, cid_map, sum_map):
+        pass
+
