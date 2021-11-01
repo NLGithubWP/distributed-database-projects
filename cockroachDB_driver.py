@@ -125,34 +125,34 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         #                               lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params))
 
         #  =====> read-update-(many_update)
-        # tmp_status, res = run_tx(m_conn, tx_name + "-read",
-        #                          lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
-        #
-        # if not tmp_status:
-        #     return
-        #
-        # tmp_tx_time, w_id, carrier_id, id_tuples, sum_map = res
-        # each_tx_time += tmp_tx_time
-        #
-        # tmp_status, res = run_tx(m_conn, tx_name + "-update1",
-        #                          lambda l_conn: m_tx_ins.delivery_update_transaction1(
-        #                              l_conn, w_id, carrier_id, id_tuples))
-        # if not tmp_status:
-        #     return
-        #
-        # tmp_tx_time, cid_map = res
-        # each_tx_time += tmp_tx_time
-        #
-        # for ele, sum_value in sum_map.items():
-        #     c_id = cid_map[ele]
-        #     tmp_status, tmp_tx_time = run_tx(m_conn, tx_name + "-update2",
-        #                                      lambda l_conn: m_tx_ins.delivery_update_transaction2(
-        #                                          l_conn, c_id, ele, sum_value))
-        #     if not tmp_status:
-        #         return
-        #     each_tx_time += tmp_tx_time
-        #
-        # status = True
+        tmp_status, res = run_tx(m_conn, tx_name + "-read",
+                                 lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
+
+        if not tmp_status:
+            return
+
+        tmp_tx_time, w_id, carrier_id, id_tuples, sum_map = res
+        each_tx_time += tmp_tx_time
+
+        tmp_status, res = run_tx(m_conn, tx_name + "-update1",
+                                 lambda l_conn: m_tx_ins.delivery_update_transaction1(
+                                     l_conn, w_id, carrier_id, id_tuples))
+        if not tmp_status:
+            return
+
+        tmp_tx_time, cid_map = res
+        each_tx_time += tmp_tx_time
+
+        for ele, sum_value in sum_map.items():
+            c_id = cid_map[ele]
+            tmp_status, tmp_tx_time = run_tx(m_conn, tx_name + "-update2",
+                                             lambda l_conn: m_tx_ins.delivery_update_transaction2(
+                                                 l_conn, c_id, ele, sum_value))
+            if not tmp_status:
+                return
+            each_tx_time += tmp_tx_time
+
+        status = True
 
         #  =====> read-update
         # tmp_status, res = run_tx(m_conn, tx_name + "-read",
@@ -175,33 +175,33 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         # status = True
 
         #  =====> read-update-(one_update)
-        tmp_status, res = run_tx(m_conn, tx_name + "-read",
-                                 lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
-
-        if not tmp_status:
-            return
-
-        tmp_tx_time, w_id, carrier_id, id_tuples, sum_map = res
-        each_tx_time += tmp_tx_time
-
-        tmp_status, res = run_tx(m_conn, tx_name + "-update1",
-                                 lambda l_conn: m_tx_ins.delivery_update_transaction1(
-                                     l_conn, w_id, carrier_id, id_tuples))
-        if not tmp_status:
-            return
-
-        tmp_tx_time, cid_map = res
-        each_tx_time += tmp_tx_time
-
-        tmp_status, tmp_tx_time = run_tx(m_conn, tx_name + "-update4",
-                                         lambda l_conn: m_tx_ins.delivery_update_transaction4(
-                                             l_conn, cid_map, sum_map))
-        if not tmp_status:
-            return
-
-        each_tx_time += tmp_tx_time
-
-        status = True
+        # tmp_status, res = run_tx(m_conn, tx_name + "-read",
+        #                          lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
+        #
+        # if not tmp_status:
+        #     return
+        #
+        # tmp_tx_time, w_id, carrier_id, id_tuples, sum_map = res
+        # each_tx_time += tmp_tx_time
+        #
+        # tmp_status, res = run_tx(m_conn, tx_name + "-update1",
+        #                          lambda l_conn: m_tx_ins.delivery_update_transaction1(
+        #                              l_conn, w_id, carrier_id, id_tuples))
+        # if not tmp_status:
+        #     return
+        #
+        # tmp_tx_time, cid_map = res
+        # each_tx_time += tmp_tx_time
+        #
+        # tmp_status, tmp_tx_time = run_tx(m_conn, tx_name + "-update4",
+        #                                  lambda l_conn: m_tx_ins.delivery_update_transaction4(
+        #                                      l_conn, cid_map, sum_map))
+        # if not tmp_status:
+        #     return
+        #
+        # each_tx_time += tmp_tx_time
+        #
+        # status = True
 
     elif tx_name == txs.OrderStatusTxName:
         status, each_tx_time = run_tx(m_conn, tx_name,
@@ -409,7 +409,7 @@ if __name__ == "__main__":
     TestTxConfig = False
     # if debug single transaction, set DebugSingleTx = true and assign name here
     DebugSingleTx = False
-    SingleTxName = txs.DeliveryTxName
+    SingleTxName = txs.RelCustomerTxName
 
     # Create a new database connection.
 
