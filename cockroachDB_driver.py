@@ -457,7 +457,7 @@ if __name__ == "__main__":
                             "total_tx_num reaches {}, write log to {} =====================".
                             format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-            if total_tx_num > 510:
+            if total_tx_num > 19999:
                 break
         line_content = f.readline()
 
