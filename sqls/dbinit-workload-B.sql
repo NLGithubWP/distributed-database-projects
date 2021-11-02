@@ -100,6 +100,8 @@ IMPORT INTO cs5424db.workloadB.customer
     CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/customer.csv')
     WITH delimiter = e',', nullif = 'null';
 
+ALTER TABLE cs5424db.workloadB.customer SPLIT AT VALUES (1,1),(1,10),(2,1),(2,10),(3,1),(3,10),(4,1),(4,10),(5,1),(5,10),(6,1),(6,10),(7,1),(7,10),(8,1),(8,10),(9,1),(9,10),(10,1),(10,10);
+
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_ori (
     pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     O_W_ID INT NOT NULL,
@@ -122,6 +124,7 @@ IMPORT INTO cs5424db.workloadB.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIE
     CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
+ALTER INDEX cs5424db.workloadB.order_ori@order_ori_joint_c_id SPLIT AT VALUES (1,1),(1,10),(2,1),(2,10),(3,1),(3,10),(4,1),(4,10),(5,1),(5,10),(6,1),(6,10),(7,1),(7,10),(8,1),(8,10),(9,1),(9,10),(10,1),(10,10);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.item (
     I_ID INT NOT NULL,
@@ -165,7 +168,7 @@ IMPORT INTO cs5424db.workloadB.stock
     CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/stock.csv')
     WITH delimiter = e',', nullif = 'null';
 
-
+--  the table below is different from workload A
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_line (
     pid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     OL_W_ID INT NOT NULL,
@@ -182,8 +185,9 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_line (
     FAMILY freqRead (OL_I_ID, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO),
     FAMILY freqWrite (pid, ol_w_id, ol_d_id, ol_o_id, ol_number, OL_DELIVERY_D),
     INDEX order_line_joint_id (ol_w_id, ol_d_id, ol_o_id, ol_number),
-    INDEX order_line_i_id(ol_i_id),
-    INDEX order_line_q(OL_QUANTITY));
+    INDEX order_line_i_id (ol_i_id),
+    INDEX order_line_w_id (ol_w_id),
+    INDEX order_line_q (OL_QUANTITY));
 
 IMPORT INTO cs5424db.workloadB.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME)
     CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/orderline_denormalised.csv')
