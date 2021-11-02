@@ -45,8 +45,7 @@ def run(num):
         print(clients[i].close())
 
 def kill():
-    for i in range(40):
-        ip = ip_list[i]
+    for ip in ip_list:
         print("Open session in: " + ip + "...")
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -63,7 +62,24 @@ def kill():
         print(stdouts[i].read())
         print(clients[i].close())
 
+
+def check():
+    for ip in ip_list:
+        print("checking server: {} =======================>".format(ip))
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname=ip, username=user, password=password)
+        command = "ps aux | grep cock"
+        stdin, stdout, stderr = client.exec_command(command)
+        clients.append(client)
+        stdouts.append(stdout)
+        if stderr.read():
+            print(stderr.read())
+        print(stdout.read().decode("utf-8"))
+
+
 if __name__ == "__main__":
-    run(40)
+    # run(40)
     # kill()
+    check()
 
