@@ -83,13 +83,11 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    # run(40, "B")
-    # time.sleep(1)
-    # check()
+    run(40, "B")
 
     """kill"""
-    kill()
-    check()
+    # kill()
 
     """check"""
+    time.sleep(1)
     check()
