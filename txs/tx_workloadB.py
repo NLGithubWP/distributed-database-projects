@@ -99,7 +99,7 @@ class TxForWorkloadB(Transactions):
                 quantity_value = values[1]
                 s_quantity = quantity_mapper[item_id]
 
-                s_quantity_list.append(s_quantity[0])
+                s_quantity_list.append(s_quantity)
 
                 # update stock
                 adjusted_qty = s_quantity[0]-quantity[i]
@@ -113,7 +113,7 @@ class TxForWorkloadB(Transactions):
                         "S_YTD = S_YTD + %s,"
                         "S_ORDER_CNT = S_ORDER_CNT + 1 "
                         "WHERE S_W_ID = %s and S_I_ID = %s",
-                        (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
+                        (adjusted_qty, quantity_value, supplier_warehouse_value, item_id))
                 else:
                     cur.execute(
                         "UPDATE stock SET S_QUANTITY = %s, "
@@ -121,8 +121,7 @@ class TxForWorkloadB(Transactions):
                         "S_ORDER_CNT=S_ORDER_CNT+1,"
                         "S_REMOTE_CNT=S_REMOTE_CNT+1 "
                         "WHERE S_W_ID = %s and S_I_ID = %s",
-                        (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
-
+                        (adjusted_qty, quantity_value, supplier_warehouse_value, item_id))
 
             query = "SELECT I_ID, I_PRICE, I_NAME FROM item WHERE I_ID in {};". \
                 format(list(quantity_mapper.keys())).replace("[", "(").replace("]", ")")
