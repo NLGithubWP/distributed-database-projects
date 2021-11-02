@@ -653,6 +653,10 @@ class TxForWorkloadA(Transactions):
         c_id = m_params.c_id
         related_customers = set()
         begin = time.time()
+
+        # for checking manually
+        related_pair = {}
+
         with m_conn.cursor() as cur:
             # history read
             cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
@@ -679,9 +683,12 @@ class TxForWorkloadA(Transactions):
                 cur.execute(query)
                 res = cur.fetchall()
                 wdo_combines.extend(res)
+                if len(res) and (w_id, d_id, c_id, o_id) not in related_pair:
+                    # target customer's (w_id, d_id, c_id, o_id): matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)
+                    related_pair[(w_id, d_id, c_id, o_id)] = res
 
             if wdo_combines:
-                query = "select distinct O_W_ID, O_D_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
+                query = "select distinct O_W_ID, O_D_ID, O_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
                     format(wdo_combines).replace("[", "(").replace("]", ")")
                 cur.execute(query)
                 customers = cur.fetchall()
@@ -691,10 +698,19 @@ class TxForWorkloadA(Transactions):
         end = time.time()
         duration = end - begin
 
-        # print("-------------------------------")
-        # print("Related customers (W_ID, D_ID, C_ID):")
-        # for customer in related_customers:
-        #     print(customer)
+        print("-------------------------------")
+        print("check correctness")
+        print("input value, [w_id, d_id, c_id] are")
+        print(w_id, d_id, c_id)
+        print("target customer's (w_id, d_id, c_id, o_id): matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
+        print(related_pair)
+        print("And then, check c_id from order_ori table according to matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
+        for customer in related_customers:
+            print(customer)
+
+        print("Related customers (W_ID, D_ID, C_ID):")
+        for customer in related_customers:
+            print(customer[0], customer[1], customer[3])
         return duration
 
 
