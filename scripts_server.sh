@@ -10,7 +10,7 @@ do
         server_index=`expr 55 + $server_id`
         echo "$i" "xcnd$server_index:$server_port"
         ssh xcnd$server_index "
-            python3 cockroachDB_driver.py -u postgresql://naili:@xcnd$server_index:$server_port/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/$i.txt -w A >logs/python$i.log &;
+            python3 cockroachDB_driver.py -u postgresql://naili:@xcnd$server_index:$server_port/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/$i.txt -w A >logs/python$i.log &
             ps aux | grep cock
             "
         i=$(($i+1))
