@@ -1,0 +1,227 @@
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 1900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 2900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 3900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 4900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 5900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 6900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 7900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 8900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 9900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10600, write log to logs/tx_log_18.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=76318517 key=/Table/57/1/4/2/1792/0 pri=0.02548182 epo=0 ts=1635862001.382817909,0 min=1635862001.382817909,0 seq=2} lock=true stat=ABORTED rts=1635862001.382817909,0 wto=false gul=1635862001.882817909,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/tx_workloadA.py", line 424, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=76318517 key=/Table/57/1/4/2/1792/0 pri=0.02548182 epo=0 ts=1635862001.382817909,0 min=1635862001.382817909,0 seq=2} lock=true stat=ABORTED rts=1635862001.382817909,0 wto=false gul=1635862001.882817909,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=76ab0633 key=/Table/57/1/4/2/1792/0 pri=0.00608130 epo=0 ts=1635862001.602952461,0 min=1635862001.602952461,0 seq=2} lock=true stat=ABORTED rts=1635862001.602952461,0 wto=false gul=1635862002.102952461,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/tx_workloadA.py", line 424, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=76ab0633 key=/Table/57/1/4/2/1792/0 pri=0.00608130 epo=0 ts=1635862001.602952461,0 min=1635862001.602952461,0 seq=2} lock=true stat=ABORTED rts=1635862001.602952461,0 wto=false gul=1635862002.102952461,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 3 time retry
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 10900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 11900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 12900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 13900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 14900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 15900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 16900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 17900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18600, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18700, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18800, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 18900, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19000, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19100, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19200, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19300, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19400, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19500, write log to logs/tx_log_18.txt =====================
+INFO:__main__:============================ read file 18.txt, now total_tx_num reaches 19600, write log to logs/tx_log_18.txt =====================
