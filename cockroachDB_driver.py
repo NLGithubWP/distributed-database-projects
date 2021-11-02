@@ -108,10 +108,10 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
                                       lambda l_conn: m_tx_ins.payment_transaction(l_conn, m_params))
 
     elif tx_name == txs.DeliveryTxName:
-        # =====> for each d_id, run a tx to update it. avoid tx congestion
+        # =============================================> for each d_id, run a tx to update it. avoid tx congestion
         # for d_id in range(1, 11, 1):
         #     tmp_status, tmp_tx_time = run_tx(m_conn, tx_name+"-"+str(d_id),
-        #                                      lambda l_conn: m_tx_ins.delivery_transaction_one_did(l_conn, m_params, d_id))
+        #                          lambda l_conn: m_tx_ins.delivery_transaction_one_did(l_conn, m_params, d_id))
         #
         #     # once one tx errored, record as error and skip the rest
         #     status = tmp_status
@@ -120,11 +120,11 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         #     else:
         #         each_tx_time += tmp_tx_time
 
-        #  =====> once update all
+        # =============================================> once update all
         # status, each_tx_time = run_tx(m_conn, tx_name,
         #                               lambda l_conn: m_tx_ins.delivery_transaction(l_conn, m_params))
 
-        #  =====> read-update-(many_update)
+        # =============================================> read-update-(many_update)
         # tmp_status, res = run_tx(m_conn, tx_name + "-read",
         #                          lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
         #
@@ -154,7 +154,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         #
         # status = True
 
-        #  =====> read-update
+        # =============================================> read-update
         # tmp_status, res = run_tx(m_conn, tx_name + "-read",
         #                          lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
         #
@@ -174,7 +174,7 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         #
         # status = True
 
-        #  =====> read-update-(one_update)
+        # =============================================> read-update-(one_update)
         tmp_status, res = run_tx(m_conn, tx_name + "-read",
                                  lambda l_conn: m_tx_ins.delivery_read_transaction(l_conn, m_params))
 
