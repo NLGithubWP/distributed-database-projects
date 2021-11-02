@@ -177,3 +177,4 @@ INFO:__main__:============================ read file 17.txt, now total_tx_num re
 INFO:__main__:============================ read file 17.txt, now total_tx_num reaches 16100, write log to logs/tx_log_17.txt =====================
 INFO:__main__:============================ read file 17.txt, now total_tx_num reaches 16200, write log to logs/tx_log_17.txt =====================
 INFO:__main__:============================ read file 17.txt, now total_tx_num reaches 16300, write log to logs/tx_log_17.txt =====================
+INFO:__main__:============================ read file 17.txt, now total_tx_num reaches 16400, write log to logs/tx_log_17.txt =====================

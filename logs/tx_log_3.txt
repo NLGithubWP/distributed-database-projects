@@ -191,3 +191,5 @@ INFO:__main__:============================ read file 3.txt, now total_tx_num rea
 INFO:__main__:============================ read file 3.txt, now total_tx_num reaches 19100, write log to logs/tx_log_3.txt =====================
 INFO:__main__:============================ read file 3.txt, now total_tx_num reaches 19200, write log to logs/tx_log_3.txt =====================
 INFO:__main__:============================ read file 3.txt, now total_tx_num reaches 19300, write log to logs/tx_log_3.txt =====================
+INFO:__main__:============================ read file 3.txt, now total_tx_num reaches 19400, write log to logs/tx_log_3.txt =====================
+INFO:__main__:============================ read file 3.txt, now total_tx_num reaches 19500, write log to logs/tx_log_3.txt =====================

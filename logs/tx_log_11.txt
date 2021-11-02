@@ -234,3 +234,7 @@ INFO:__main__:============================ read file 11.txt, now total_tx_num re
 INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 18600, write log to logs/tx_log_11.txt =====================
 INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 18700, write log to logs/tx_log_11.txt =====================
 INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 18800, write log to logs/tx_log_11.txt =====================
+INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 18900, write log to logs/tx_log_11.txt =====================
+INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 19000, write log to logs/tx_log_11.txt =====================
+INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 19100, write log to logs/tx_log_11.txt =====================
+INFO:__main__:============================ read file 11.txt, now total_tx_num reaches 19200, write log to logs/tx_log_11.txt =====================
