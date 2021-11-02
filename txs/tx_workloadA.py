@@ -428,7 +428,6 @@ class TxForWorkloadA(Transactions):
         duration = end - begin
         return duration
 
-
     def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams):
         """
 
@@ -648,6 +647,64 @@ class TxForWorkloadA(Transactions):
         return duration
 
     def related_customer_transaction(self, m_conn, m_params: RelCustomerTxParams) -> float:
+
+        w_id = m_params.w_id
+        d_id = m_params.d_id
+        c_id = m_params.c_id
+        related_customers = set()
+        begin = time.time()
+        with m_conn.cursor() as cur:
+            # history read
+            cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
+
+            cur.execute(
+                '''
+                SELECT O_ID, O_W_ID, O_D_ID
+                FROM order_ori
+                WHERE O_W_ID = %s AND O_D_ID = %s AND O_C_ID = %s
+                ''', (w_id, d_id, c_id)
+            )
+            orders = cur.fetchall()
+            wdo_combines = []
+            for order in orders:
+                cur.execute(
+                    '''
+                    WITH
+                        items AS
+                            (SELECT OL_I_ID FROM order_line WHERE OL_O_ID =  %s  AND OL_W_ID =  %s  AND OL_D_ID =  %s ),
+                        customer_ol AS
+                            (SELECT OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID <>  %s )
+                        SELECT DISTINCT OL_W_ID, OL_D_ID, OL_O_ID
+                            FROM items LEFT JOIN customer_ol
+                            ON items.OL_I_ID = customer_ol.OL_I_ID
+                            GROUP BY OL_W_ID, OL_D_ID, OL_O_ID
+                            HAVING COUNT(*) >= 2;
+                    ''', (order[0], w_id, d_id, w_id)
+                )
+                res = cur.fetchall()
+                wdo_combines = [(ele[0], ele[1], ele[2]) for ele in res]
+
+            if wdo_combines:
+                query = "select distinct o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
+                    format(wdo_combines).replace("[", "(").replace("]", ")")
+                cur.execute(query)
+                customers = cur.fetchall()
+                related_customers.update(customers)
+
+        m_conn.commit()
+        end = time.time()
+        duration = end - begin
+
+        # print("-------------------------------")
+        # print("Related customers (W_ID, D_ID, C_ID):")
+        # for customer in related_customers:
+        #     print(customer)
+        return duration
+
+
+
+
+    def related_customer_transaction_backup(self, m_conn, m_params: RelCustomerTxParams) -> float:
         """
         order_ori (o_w_id, o_d_id, i_o_id)
         order_line (o_w_id, o_d_id, ol_i_id)
@@ -658,6 +715,13 @@ class TxForWorkloadA(Transactions):
         another customer C is defined to be related to C if C and C are associated with different warehouses,
         and C and C each has placed some order, O and O′respectively,where both O and O′contain at least two items in common.
         """
+        '''
+        examples:
+        [ SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_C_ID = 2289 ]:   1201 us
+        [ WITH items AS (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 3011 AND OL_W_ID = 5 AND OL_D_ID = 3), customer_ol AS (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID WHERE O_W_ID <> 5 ) SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID FROM items LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2 ]:   9123286 us
+        [ WITH items AS (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 1815 AND OL_W_ID = 5 AND OL_D_ID = 3), customer_ol AS (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID WHERE O_W_ID <> 5 ) SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID FROM items LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2 ]:   8458964 us
+        '''
+
         w_id = m_params.w_id
         d_id = m_params.d_id
         c_id = m_params.c_id
@@ -708,11 +772,6 @@ class TxForWorkloadA(Transactions):
         # for customer in related_customers:
         #     print(customer)
         return duration
-
-
-
-
-
 
 
 
