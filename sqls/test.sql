@@ -398,3 +398,134 @@ with
     select OL_W_ID, OL_D_ID, OL_O_ID from match_order_item group by OL_W_ID, OL_D_ID, OL_O_ID having count(*) >= 2;
 
 
+
+select ol_i_id from order_line where ol_w_id = 9 and ol_d_id = 10 and ol_o_id = 1490 order by ol_i_id;
+  ol_i_id
+-----------
+     2118
+     9135
+    10074
+    23360
+        25808
+        47340
+    50167
+    51764
+        52354
+        52957
+    53284
+        53642
+    58409
+        69990
+    83763
+    86009
+    88077
+        91206
+    94727
+
+input value, [w_id, d_id, c_id] are
+9 10 2213
+target customer's (w_id, d_id, c_id, o_id): matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)
+{(9, 10, 2213, 1490): [(4, 6, 369), (4, 5, 473), (5, 3, 2739), (2, 6, 758)]}
+-- And then, check c_id from order_ori table according to matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)
+-- (4, 6, 369, 1492)
+-- (5, 3, 2739, 1184)
+-- (4, 5, 473, 2109)
+-- (2, 6, 758, 371)
+-- Related customers (W_ID, D_ID, C_ID):
+-- 4 6 1492
+-- 5 3 1184
+-- 4 5 2109
+-- 2 6 371
+
+select o_c_id from order_ori where (o_w_id, o_d_id, o_id) in ((4, 6, 369));
+select o_c_id from order_ori where (o_w_id, o_d_id, o_id) in ((4, 5, 473));
+select o_c_id from order_ori where (o_w_id, o_d_id, o_id) in ((5, 3, 2739));
+select o_c_id from order_ori where (o_w_id, o_d_id, o_id) in ((2, 6, 758));
+
+check (4, 6, 369):
+
+select ol_i_id from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((4, 6, 369)) order by ol_i_id;
+     6391
+     9752
+    11202
+    13963
+    32106
+    40796
+    44993
+        47340
+    48738
+        52354
+    53503
+    53646
+    54877
+    57178
+    70966
+    74705
+    97784
+    99167
+
+select ol_i_id from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((4, 5, 473)) order by ol_i_id;
+     1863
+     5019
+    12677
+    22594
+    22784
+    24827
+    37923
+        52957
+    59210
+    70034
+    72649
+    75314
+    79034
+    83886
+    89983
+    90890
+        91206
+    97633
+    98706
+
+
+select ol_i_id from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((5, 3, 2739)) order by ol_i_id;
+    10657
+    14795
+    18179
+    24915
+        25808
+    36981
+    40270
+    52441
+        53642
+    56733
+    67607
+    73247
+    74049
+    76522
+    77020
+    81012
+    84565
+    86766
+
+
+select ol_i_id from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((2, 6, 758)) order by ol_i_id;
+
+     6605
+     9647
+    15172
+    23800
+    34036
+    40572
+    41727
+    44554
+        52354
+    53932
+    55372
+        69990
+    79085
+    90912
+
+SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = 7 AND D_ID = 4
+
+SELECT COUNT(DISTINCT OL_I_ID)
+    FROM order_line JOIN stock ON OL_I_ID = stock.S_I_ID AND OL_W_ID = stock.S_W_ID
+    WHERE OL_W_ID = 7 AND OL_D_ID = 4 AND OL_O_ID >= 2990 AND OL_O_ID < 3001 AND S_QUANTITY < '14'

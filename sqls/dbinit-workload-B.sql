@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.warehouse (
     PRIMARY KEY (W_ID));
 
 IMPORT INTO cs5424db.workloadB.warehouse
-    CSV DATA ('http://localhost:3000/project_files/data_files/warehouse.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/warehouse.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.district (
 
 
 IMPORT INTO cs5424db.workloadB.district
-    CSV DATA ('http://localhost:3000/project_files/data_files/district.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/district.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.customer (
     INDEX c_b(C_BALANCE));
 
 IMPORT INTO cs5424db.workloadB.customer
-    CSV DATA ('http://localhost:3000/project_files/data_files/customer.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/customer.csv')
     WITH delimiter = e',', nullif = 'null';
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_ori (
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_ori (
     INDEX order_ori_entry_d (o_entry_d));
 
 IMPORT INTO cs5424db.workloadB.order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)
-    CSV DATA ('http://localhost:3000/project_files/data_files/order.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/order.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.item (
 
 
 IMPORT INTO cs5424db.workloadB.item (I_ID,I_NAME,I_PRICE,I_IM_ID,I_DATA)
-    CSV DATA ('http://localhost:3000/project_files/data_files/item.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/item.csv')
     WITH delimiter = e',', nullif = 'null';
 
 ALTER TABLE cs5424db.workloadB.item SPLIT AT VALUES (20051), (40051), (60051), (80051);
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.stock (
     PRIMARY KEY (S_W_ID, S_I_ID));
 
 IMPORT INTO cs5424db.workloadB.stock
-    CSV DATA ('http://localhost:3000/project_files/data_files/stock.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/stock.csv')
     WITH delimiter = e',', nullif = 'null';
 
 
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.order_line (
     INDEX order_line_q(OL_QUANTITY));
 
 IMPORT INTO cs5424db.workloadB.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT, OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME)
-    CSV DATA ('http://localhost:3000/project_files/data_files/orderline_denormalised.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/orderline_denormalised.csv')
     WITH delimiter = e',', nullif = '';
 
 
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS cs5424db.workloadB.item_pair(
 );
 
 IMPORT INTO cs5424db.workloadB.item_pair
-    CSV DATA ('http://localhost:3000/project_files/data_files/item_pair.csv')
+    CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/item_pair.csv')
     WITH delimiter = e',', nullif = 'null';
 
 

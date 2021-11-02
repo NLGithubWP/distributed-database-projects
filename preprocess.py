@@ -11,7 +11,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument( '-f', '--file_path', help="Input file path, point to where project_files is, default is .", type=pathlib.Path, default=pathlib.Path('.'))
 args = ap.parse_args()
 
-data_path = args.file_path / 'project_files/data_files'
+data_path = args.file_path / 'project_files_4/data_files'
 
 config = {
     'orders': ['order.csv', ['o_w_id', 'o_d_id', 'o_id', 'o_c_id', 'o_carrier_id', 'o_ol_cnt', 'o_all_local', 'o_entry_d']],
