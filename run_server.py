@@ -82,18 +82,14 @@ def check():
 
 if __name__ == "__main__":
 
-    _run = False
-    _kill = False
-    _check = True
+    """run"""
+    # run(40, "B")
+    # time.sleep(1)
+    # check()
 
-    if _check:
-        check()
+    """kill"""
+    kill()
+    check()
 
-    if _run:
-        run(40, "B")
-        time.sleep(1)
-        check()
-
-    if _kill:
-        kill()
-
+    """check"""
+    check()
