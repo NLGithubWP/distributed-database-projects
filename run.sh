@@ -4,38 +4,35 @@
 
 %Dwa2SL7
 
-for
-    ssh cs4224p@xcnd55.comp.nus.edu.sg
-    for file in range files:
-      derver.read(file) (10) >> .log
+ssh cs4224p@xcnd55.comp.nus.edu.sg
 
 
 
 cockroach start \
---insecure \
---store=node1 \
---listen-addr=xcnd55:27257 \
---http-addr=xcnd55:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node1 \
+  --listen-addr=xcnd55:27257 \
+  --http-addr=xcnd55:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 
 
 cockroach start \
---insecure \
---store=node1 \
---listen-addr=xcnd55:27257 \
---http-addr=xcnd55:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node1 \
+  --listen-addr=xcnd55:27257 \
+  --http-addr=xcnd55:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 cockroach start \
---insecure \
---store=node2 \
---listen-addr=xcnd56:27257 \
---http-addr=xcnd56:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node2 \
+  --listen-addr=xcnd56:27257 \
+  --http-addr=xcnd56:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 cockroach start \
 --insecure \
@@ -83,9 +80,7 @@ cockroach sql \
 
 
 python3 cockroachDB_driver.py -u postgresql://naili:@xcnd55:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/1.txt -w A >logs/python100.log &
-python3 -m --user cockroachDB_driver.py -u postgresql://naili:@xcnd55:27257/cs5424db?sslmode=require -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/1.txt -w A >logs/python100.log &
 
 export PYTHONPATH=$(python3 -c "import site, os; print(os.path.join(site.USER_BASE, 'lib', 'python3.6', 'site-packages'))"):$PYTHONPATH
-
 
 addr = "postgresql://naili:@xcnd55:27257/cs5424db?sslmode=require"
