@@ -678,7 +678,7 @@ class TxForWorkloadA(Transactions):
 
                 cur.execute(query)
                 res = cur.fetchall()
-                wdo_combines = [(ele[0], ele[1], ele[2]) for ele in res]
+                wdo_combines.extend(res)
 
             if wdo_combines:
                 query = "select distinct O_W_ID, O_D_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
