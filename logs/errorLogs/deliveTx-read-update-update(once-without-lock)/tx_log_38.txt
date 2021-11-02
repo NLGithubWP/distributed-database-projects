@@ -1,0 +1,21 @@
+============================ read file 38.txt, now total_tx_num reaches 100, write log to logs/tx_log_38.txt =====================
+============================ read file 38.txt, now total_tx_num reaches 200, write log to logs/tx_log_38.txt =====================
+============================ read file 38.txt, now total_tx_num reaches 300, write log to logs/tx_log_38.txt =====================
+============================ read file 38.txt, now total_tx_num reaches 400, write log to logs/tx_log_38.txt =====================
+============================ read file 38.txt, now total_tx_num reaches 500, write log to logs/tx_log_38.txt =====================
+============================ using file /opt/project_files_4/xact_files_A/38.txt=====================
+required_tx_types is:
+{'PaymentTxParams': 108, 'TopBalanceTxParams': 34, 'RelCustomerTxParams': 5, 'StockLevelTxParams': 23, 'NewOrderTxParams': 205, 'OrderStatusTxParams': 14, 'DeliveryTxParams': 103, 'PopItemTxParams': 19}
+succeed_tx_types is:
+{'PaymentTxParams': 108, 'TopBalanceTxParams': 34, 'RelCustomerTxParams': 5, 'StockLevelTxParams': 23, 'NewOrderTxParams': 205, 'OrderStatusTxParams': 14, 'DeliveryTxParams': 103, 'PopItemTxParams': 19}
+tx num percentages is:
+{'PaymentTxParams': '21.13%', 'TopBalanceTxParams': '6.653%', 'RelCustomerTxParams': '0.978%', 'StockLevelTxParams': '4.500%', 'NewOrderTxParams': '40.11%', 'OrderStatusTxParams': '2.739%', 'DeliveryTxParams': '20.15%', 'PopItemTxParams': '3.718%'}
+tx_time_range [min-max] is :
+{'PaymentTxParams': [0.29213619232177734, 15.85537838935852], 'TopBalanceTxParams': [0.003929853439331055, 0.17207694053649902], 'RelCustomerTxParams': [22.21111297607422, 47.07701516151428], 'StockLevelTxParams': [0.09447598457336426, 0.5418219566345215], 'NewOrderTxParams': [0.33774304389953613, 4.764082908630371], 'OrderStatusTxParams': [0.015622854232788086, 0.10833883285522461], 'DeliveryTxParams': [0.04577994346618652, 3.471543073654175], 'PopItemTxParams': [0.09161496162414551, 1.0478219985961914]}
+tx_time middle time is :
+{'PaymentTxParams': 0.6085801124572754, 'TopBalanceTxParams': 0.012543916702270508, 'RelCustomerTxParams': 31.134135961532593, 'StockLevelTxParams': 0.17986512184143066, 'NewOrderTxParams': 0.9095878601074219, 'OrderStatusTxParams': 0.031976938247680664, 'DeliveryTxParams': 0.21289348602294922, 'PopItemTxParams': 0.4970381259918213}
+tx_time average time is :
+{'PaymentTxParams': 1.1911020014021132, 'TopBalanceTxParams': 0.02088434555951287, 'RelCustomerTxParams': 34.39734263420105, 'StockLevelTxParams': 0.22077977139016855, 'NewOrderTxParams': 1.219485803929771, 'OrderStatusTxParams': 0.03438648155757359, 'DeliveryTxParams': 0.6637284778854222, 'PopItemTxParams': 0.48234487834729645}
+tx time percentage is :
+{'PaymentTxParams': '20.24%', 'TopBalanceTxParams': '0.111%', 'RelCustomerTxParams': '27.06%', 'StockLevelTxParams': '0.799%', 'NewOrderTxParams': '39.34%', 'OrderStatusTxParams': '0.075%', 'DeliveryTxParams': '10.76%', 'PopItemTxParams': '1.442%'}
+============================ total time used: 635.3489217758179 second =====================
