@@ -81,8 +81,12 @@ def check():
 
 if __name__ == "__main__":
 
-    _run = True
+    _run = False
     _kill = False
+    _check = True
+
+    if _check:
+        check()
 
     if _run:
         run(40)
