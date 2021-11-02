@@ -456,7 +456,7 @@ if __name__ == "__main__":
                             "total_tx_num reaches {}, write log to {} =====================".
                             format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-            if total_tx_num > 19999:
+            if total_tx_num > 510:
                 break
         line_content = f.readline()
 
@@ -468,6 +468,8 @@ if __name__ == "__main__":
     for key in tx_times:
         tx_times[key].sort()
 
+    infor = "connect to {}, Read file {} and run workload {}".format(addr, file_path, workload_type)
+    logger.info(infor)
     logger.info("=======> required_tx_types is: ")
     logger.info(required_tx_types)
     logger.info("=======> succeed_tx_types is: ", succeed_tx_types)
