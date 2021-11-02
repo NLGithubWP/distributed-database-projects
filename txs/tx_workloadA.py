@@ -667,6 +667,58 @@ class TxForWorkloadA(Transactions):
             orders = cur.fetchall()
             wdo_combines = []
             for order in orders:
+                o_id = order[0]
+                query = "with match_order_item AS " \
+                            "(select OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID from order_line " \
+                             "where ol_i_id in (SELECT OL_I_ID FROM order_line " \
+                                                "WHERE OL_O_ID = {} AND OL_W_ID = {} AND OL_D_ID = {})" \
+                             "AND OL_W_ID <> {}) " \
+                        "select OL_W_ID, OL_D_ID, OL_O_ID from match_order_item group by OL_W_ID, OL_D_ID, OL_O_ID " \
+                        "having count(*) >= 2;".format(o_id, w_id, d_id, w_id)
+
+                cur.execute(query)
+                res = cur.fetchall()
+                wdo_combines = [(ele[0], ele[1], ele[2]) for ele in res]
+
+            if wdo_combines:
+                query = "select distinct O_W_ID, O_D_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
+                    format(wdo_combines).replace("[", "(").replace("]", ")")
+                cur.execute(query)
+                customers = cur.fetchall()
+                related_customers.update(customers)
+
+        m_conn.commit()
+        end = time.time()
+        duration = end - begin
+
+        # print("-------------------------------")
+        # print("Related customers (W_ID, D_ID, C_ID):")
+        # for customer in related_customers:
+        #     print(customer)
+        return duration
+
+
+    def related_customer_transaction_backup2(self, m_conn, m_params: RelCustomerTxParams) -> float:
+
+        w_id = m_params.w_id
+        d_id = m_params.d_id
+        c_id = m_params.c_id
+        related_customers = set()
+        begin = time.time()
+        with m_conn.cursor() as cur:
+            # history read
+            cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
+
+            cur.execute(
+                '''
+                SELECT O_ID, O_W_ID, O_D_ID
+                FROM order_ori
+                WHERE O_W_ID = %s AND O_D_ID = %s AND O_C_ID = %s
+                ''', (w_id, d_id, c_id)
+            )
+            orders = cur.fetchall()
+            wdo_combines = []
+            for order in orders:
                 cur.execute(
                     '''
                     WITH
