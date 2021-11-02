@@ -456,14 +456,15 @@ if __name__ == "__main__":
                             "total_tx_num reaches {}, write log to {} =====================".
                             format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-            if total_tx_num > 510:
+            if total_tx_num > 30000:
                 break
         line_content = f.readline()
 
     f.close()
     end_time = time.time()
     total_time_used = end_time - begin_time
-    logger.info("============================ using file " + file_path + "=====================")
+    logger.info("============================ using file " + file_path + " where total txs {}=====================".
+                format(total_tx_num))
 
     for key in tx_times:
         tx_times[key].sort()
