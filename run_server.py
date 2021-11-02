@@ -1,3 +1,4 @@
+import time
 
 import paramiko
 
@@ -79,7 +80,15 @@ def check():
 
 
 if __name__ == "__main__":
-    # run(40)
-    # kill()
-    check()
+
+    _run = True
+    _kill = False
+
+    if _run:
+        run(40)
+        time.sleep(1)
+        check()
+
+    if _kill:
+        kill()
 

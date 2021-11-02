@@ -71,6 +71,10 @@ cockroach sql \
 
 cockroach sql --insecure --host=xcnd55:27257
 
+USE cs5424db;
+set search_path to workloadA;
+show tables;
+
 
 cockroach sql \
     --host=xcnd55:27257 \
