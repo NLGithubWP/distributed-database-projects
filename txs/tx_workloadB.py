@@ -102,7 +102,7 @@ class TxForWorkloadB(Transactions):
                 s_quantity_list.append(s_quantity)
 
                 # update stock
-                adjusted_qty = s_quantity[0]-quantity[i]
+                adjusted_qty = s_quantity-quantity[i]
 
                 if adjusted_qty < 10:
                     adjusted_qty = adjusted_qty + 100
