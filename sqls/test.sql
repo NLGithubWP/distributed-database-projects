@@ -220,95 +220,181 @@ update customer set (C_BALANCE, C_DELIVERY_CNT) = (
 
 
 
-SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 4 AND O_D_ID = 6 AND O_C_ID = 10;
+-- test now
+
+SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_C_ID = 2289;
 
 
   o_id | o_w_id | o_d_id
 -------+--------+---------
-  3982 |      4 |      6
-  3542 |      4 |      6
-   381 |      4 |      6
+  3011 |      5 |      3
+  1815 |      5 |      3
+(2 rows)
 
-SELECT count(*) FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID = 381;
+Time: 4ms total (execution 4ms / network 0ms)
 
--- for each o_id above, run the following:
+
 WITH
     items AS
-        (SELECT OL_I_ID FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID in (381)),
+        (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 3011 AND OL_W_ID = 5 AND OL_D_ID = 3),
     customer_ol AS
         (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
-          FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-          WHERE O_W_ID <> 4 )
-    SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID FROM items
-        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
-        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2;
+            FROM order_ori JOIN order_line
+            ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+            WHERE O_W_ID <> 5 )
+    SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID
+        FROM items LEFT JOIN customer_ol
+        ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID
+        HAVING COUNT(*) >= 2;
 
 
-  o_w_id | o_d_id | o_c_id
----------+--------+---------
-       9 |      1 |    119
-(1 row)
+WITH items AS (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 1815 AND OL_W_ID = 5 AND OL_D_ID = 3), customer_ol AS (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID WHERE O_W_ID <> 5 ) SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID FROM items LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2 ;
 
-Time: 6.424s total (execution 6.423s / network 0.002s)
 
 
 
 
 -- optimization
 -- find all order of a customer
-SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 4 AND O_D_ID = 6 AND O_C_ID = 10;
 
-select ol_i_id from order_line where OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID = 381;
-
-  ol_i_id
------------
-    12267
-    86700
-    ...
-
-SELECT O_W_ID, O_D_ID, o_c_id, o_id
-    FROM order_ori inner JOIN order_line
-    ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-    Where O_W_ID <> 4 and order_line.OL_W_ID <> ;
-
-SELECT count(*)
-    FROM order_ori inner JOIN order_line
-    ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-    Where O_W_ID <> 4 and order_line.OL_W_ID <> 4;
+ALTER TABLE cs5424db.workloadA.order_line
+    ADD COLUMN ol_c_id INT FAMILY freqRead;
 
 
-  o_w_id | o_d_id | o_c_id | o_id | ol_i_id
----------+--------+--------+------+----------
-       1 |      2 |   2414 | 1023 |   18165
-       1 |      2 |   2946 | 1255 |   72183
-       1 |      2 |   2113 | 2879 |   92504
-       1 |      1 |   1139 | 6065 |   64398
-       1 |      2 |   1279 | 3191 |   73424
-       1 |      2 |    182 | 1885 |   78884
-       1 |      2 |   1806 |  777 |   42480
-       1 |      1 |    311 | 6291 |   81602
-       1 |      1 |    303 | 5257 |    4551
-       1 |      1 |   2275 | 6594 |   89781
+WITH dw AS
+    (select o_c_id FROM order_ori JOIN order_line
+            ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID)
 
+UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
+    FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
 
-
-
-CREATE INDEX order_ori_merge_join ON order_ori (o_w_id, o_d_id, o_id);
-CREATE INDEX order_line_merge_join ON order_line (ol_w_id, ol_d_id, ol_o_id);
 
 
 
 WITH
     items AS
-        (SELECT OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID = 4 AND OL_D_ID = 6 AND OL_O_ID in (381, 3982, 3542)),
+        (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 3011 AND OL_W_ID = 5 AND OL_D_ID = 3),
     customer_ol AS
         (SELECT O_C_ID, O_W_ID, O_D_ID, O_ID, order_line.OL_I_ID
-          FROM order_ori JOIN order_line ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
-          WHERE O_W_ID <> 4 )
-    SELECT * FROM items
-        LEFT JOIN customer_ol ON items.OL_I_ID = customer_ol.OL_I_ID
-        GROUP BY OL_O_ID, O_C_ID, O_W_ID, O_D_ID, O_ID HAVING COUNT(*) >= 2;
+            FROM order_ori JOIN order_line
+            ON O_W_ID = order_line.OL_W_ID AND O_D_ID = order_line.OL_D_ID AND O_ID = order_line.OL_O_ID
+            WHERE O_W_ID <> 5 )
+    SELECT DISTINCT O_W_ID, O_D_ID, O_C_ID
+        FROM items LEFT JOIN customer_ol
+        ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY O_C_ID, O_W_ID, O_D_ID, O_ID
+        HAVING COUNT(*) >= 2;
+
+633
+
+
+WITH
+    items AS
+        (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 3011 AND OL_W_ID = 5 AND OL_D_ID = 3),
+    customer_ol AS
+        (SELECT OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID <> 5)
+    SELECT DISTINCT OL_W_ID, OL_D_ID, OL_O_ID
+        FROM items LEFT JOIN customer_ol
+        ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY OL_W_ID, OL_D_ID, OL_O_ID
+        HAVING COUNT(*) >= 2;
 
 
 
-DISTINCT O_W_ID, O_D_ID, O_C_ID
+-- asdf
+
+DEBUG:__main__:[ SELECT O_ID, O_W_ID, O_D_ID FROM order_ori WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_C_ID = 2289 ]:   1585 us
+
+3011, 1815
+
+
+WITH
+    items AS
+        (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 1815 AND OL_W_ID = 5 AND OL_D_ID = 3),
+    customer_ol AS
+        (SELECT OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID <> 5)
+    SELECT DISTINCT OL_W_ID, OL_D_ID, OL_O_ID
+        FROM items LEFT JOIN customer_ol
+        ON items.OL_I_ID = customer_ol.OL_I_ID
+        GROUP BY OL_W_ID, OL_D_ID, OL_O_ID
+        HAVING COUNT(*) >= 2;
+
+items: [19540, 74588, 84982,7340,56144,4278,48684,21205, 95623, 22291, 49304, 39650, 15673, 5330]
+
+
+
+  ol_w_id | ol_d_id | ol_o_id
+----------+---------+----------
+       10 |       7 |     373
+(1 row)
+
+
+
+select distinct O_W_ID, O_D_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in ((10, 7, 373)))
+
+  o_w_id | o_d_id | o_c_id
+---------+--------+---------
+      10 |      7 |    211
+
+
+give ordered items :
+
+
+combe_list = [(),(),(),()]
+
+SELECT OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID FROM order_line WHERE OL_W_ID <> 5 and
+
+
+
+with
+    match_order_item AS
+    (select OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID from order_line where ol_i_id in (19540, 74588, 84982,7340,56144,4278,48684,21205, 95623, 22291, 49304, 39650, 15673, 5330) and OL_W_ID <> 5)
+    select OL_W_ID, OL_D_ID, OL_O_ID from match_order_item group by OL_W_ID, OL_D_ID, OL_O_ID having count(*) >= 2;
+
+
+
+
+
+with
+    match_order_item AS
+    (select OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID from order_line where ol_i_id in (SELECT OL_I_ID FROM order_line WHERE OL_O_ID = 1815 AND OL_W_ID = 5 AND OL_D_ID = 3) and OL_W_ID <> 5)
+    select OL_W_ID, OL_D_ID, OL_O_ID from match_order_item group by OL_W_ID, OL_D_ID, OL_O_ID having count(*) >= 2;
+
+
+
+
+select ol_w_id, ol_d_id, ol_o_id, ol_i_id from order_line where (ol_w_id, ol_d_id, ol_o_id) in ((10, 7, 373));
+
+
+       10 |       7 |     373 |   14856
+       10 |       7 |     373 |   37413
+       10 |       7 |     373 |    6353
+       10 |       7 |     373 |   20365
+       10 |       7 |     373 |   84596
+       10 |       7 |     373 |   53749
+       10 |       7 |     373 |   82241
+       10 |       7 |     373 |   19540
+       10 |       7 |     373 |    5668
+       10 |       7 |     373 |   64667
+       10 |       7 |     373 |    6529
+       10 |       7 |     373 |   48405
+       10 |       7 |     373 |   86295
+       10 |       7 |     373 |   96822
+       10 |       7 |     373 |   63302
+       10 |       7 |     373 |   39650
+       10 |       7 |     373 |   15024
+       10 |       7 |     373 |   76179
+       10 |       7 |     373 |   88886
+
+
+with
+    match_order_item AS
+        (select OL_W_ID, OL_D_ID, OL_O_ID, OL_I_ID
+            from order_line
+            where ol_i_id in (SELECT OL_I_ID FROM order_line
+                               WHERE OL_O_ID = 66 AND OL_W_ID = 9 AND OL_D_ID = 8)
+             AND OL_W_ID <> 9)
+    select OL_W_ID, OL_D_ID, OL_O_ID from match_order_item group by OL_W_ID, OL_D_ID, OL_O_ID having count(*) >= 2;
+
+
