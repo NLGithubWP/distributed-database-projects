@@ -21,7 +21,8 @@ clients = []
 
 # Start the commands
 
-def run(num):
+
+def run(num, workload):
     for client_index in range(num):
         index = client_index % len(ip_list)
         ip = ip_list[index]
@@ -30,10 +31,10 @@ def run(num):
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=ip, username=user, password=password)
         p1 = "postgresql://naili:@{}:{}/cs5424db".format(ip.split(".")[0], server_port)
-        p2 = "/home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/{}.txt".format(client_index)
+        p2 = "/home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_{}/{}.txt".format(workload, client_index)
         # command = f"pwd; cd temp/tasks; pwd"
         command = \
-            f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w A " + \
+            f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w {workload} " + \
             f">logs/python{client_index}.log &"
         stdin, stdout, stderr = client.exec_command(command)
         clients.append(client)
@@ -89,7 +90,7 @@ if __name__ == "__main__":
         check()
 
     if _run:
-        run(40)
+        run(40, "B")
         time.sleep(1)
         check()
 

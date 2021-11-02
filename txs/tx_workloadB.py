@@ -47,6 +47,8 @@ class TxForWorkloadB(Transactions):
         begin = time.time()
         with m_conn.cursor() as cur:
 
+            item_mapper = {item_number[i]: [supplier_warehouse[i], quantity[i]] for i in range(len(item_number))}
+
             # 1. Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             # 2. Update the district (W ID, D ID) by incrementing D NEXT O ID by one
             cur.execute("UPDATE district SET D_NEXT_O_ID = D_NEXT_O_ID + 1 "
@@ -72,8 +74,8 @@ class TxForWorkloadB(Transactions):
             customer = cur.fetchone()
 
             cur.execute("INSERT INTO order_ori (O_W_ID, O_D_ID, O_ID, O_C_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D, O_C_FIRST, O_C_MIDDLE, O_C_LAST) "
-                        "VALUES (%s,%s,%s,%s,%s,%s, now(), customer[0], customer[1], customer[2]) RETURNING O_ENTRY_D",
-                        (w_id, d_id, n, c_id, num_items, all_local))
+                        "VALUES (%s,%s,%s,%s,%s,%s, now(),%s,%s,%s) RETURNING O_ENTRY_D",
+                        (w_id, d_id, n, c_id, num_items, all_local, customer[0], customer[1], customer[2]))
             entry_d = cur.fetchone()[0]
 
             # 4. Initialize TOTAL AMOUNT = 0
@@ -85,11 +87,18 @@ class TxForWorkloadB(Transactions):
             s_dist_xx = "S_DIST_" + str(d_id)
             s_quantity_list = []
 
-            for i in range(len(item_number)):
-                # query s_quantity
-                query = "SELECT S_QUANTITY FROM stock WHERE (S_W_ID, S_I_ID ) = ({}, {})".format(supplier_warehouse[i], item_number[i])
-                cur.execute(query)
-                s_quantity = cur.fetchone()
+            query = "SELECT S_I_ID, S_QUANTITY FROM stock WHERE (S_W_ID, S_I_ID ) in {} for update".format(
+                [(supplier_warehouse[i], item_number[i]) for i in range(len(item_number))]). \
+                replace("[", "(").replace("]", ")")
+            cur.execute(query)
+            res = cur.fetchall()
+            quantity_mapper = {ele[0]: ele[1] for ele in res}
+
+            for item_id, values in item_mapper.items():
+                supplier_warehouse_value = values[0]
+                quantity_value = values[1]
+                s_quantity = quantity_mapper[item_id]
+
                 s_quantity_list.append(s_quantity[0])
 
                 # update stock
@@ -114,24 +123,34 @@ class TxForWorkloadB(Transactions):
                         "WHERE S_W_ID = %s and S_I_ID = %s",
                         (adjusted_qty, quantity[i], supplier_warehouse[i], item_number[i]))
 
+
+            query = "SELECT I_ID, I_PRICE, I_NAME FROM item WHERE I_ID in {};". \
+                format(list(quantity_mapper.keys())).replace("[", "(").replace("]", ")")
+
+            cur.execute(query)
+            res = cur.fetchall()
+            item_info_mapper = {ele[0]: [ele[1], ele[2]] for ele in res}
+
             # batch inserting into order_line
             query = "INSERT INTO order_line (OL_W_ID, OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_AMOUNT, " \
                     "OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO, OL_I_NAME) values "
 
             for i in range(len(item_number)):
-                # query item
-                _query = "SELECT I_PRICE, I_NAME FROM item WHERE I_ID = {} ".format(item_number[i])
-                cur.execute(_query)
-                item_price_name = cur.fetchone()
-                i_name_list.append(item_price_name[1])
+                item_id = item_number[i]
+                values = item_mapper[item_id]
+                supplier_warehouse_value = values[0]
+                quantity_value = values[1]
+                item_price = item_info_mapper[item_id][0]
+                item_name = item_info_mapper[item_id][1]
 
-                i_price = item_price_name[0]
-                item_amount = quantity[i] * i_price
+                i_name_list.append(item_name)
+
+                item_amount = quantity_value * item_price
                 total_amount += item_amount
                 o_amount_list.append(item_amount)
 
                 query += "({},{},{},{},{},{},{},{},'{}','{}')".format(
-                    w_id, d_id, n, i, item_number[i], item_amount, supplier_warehouse[i], quantity[i], s_dist_xx, i_name_list[i])
+                    w_id, d_id, n, i, item_id, item_amount, supplier_warehouse_value, quantity_value, s_dist_xx, item_name)
 
                 if i < len(item_number) - 1:
                     query += ","
@@ -168,23 +187,23 @@ class TxForWorkloadB(Transactions):
         end = time.time()
         duration = end-begin
 
-        print("------------ result is ---------")
-        print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
-        print(w_id, d_id, c_id, c_last, c_credit, c_discount)
-        print("Warehouse tax rate W TAX, District tax rate D TAX")
-        print(w_tax, d_tax)
-        print("Order number O_ID, entry date O_ENTRY_D")
-        print(n, entry_d)
-        print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
-        print(num_items, total_amount)
-
-        for i in range(len(item_number)):
-            print("ITEM NUMBER[i]: ", item_number[i])
-            print("I_NAME: ", i_name_list[i])
-            print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
-            print("QUANTITY[i]: ", quantity[i])
-            print("OL_AMOUNT: ", o_amount_list[i])
-            print("S_QUANTITY: ", s_quantity_list[i])
+        # print("------------ result is ---------")
+        # print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
+        # print(w_id, d_id, c_id, c_last, c_credit, c_discount)
+        # print("Warehouse tax rate W TAX, District tax rate D TAX")
+        # print(w_tax, d_tax)
+        # print("Order number O_ID, entry date O_ENTRY_D")
+        # print(n, entry_d)
+        # print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
+        # print(num_items, total_amount)
+        #
+        # for i in range(len(item_number)):
+        #     print("ITEM NUMBER[i]: ", item_number[i])
+        #     print("I_NAME: ", i_name_list[i])
+        #     print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
+        #     print("QUANTITY[i]: ", quantity[i])
+        #     print("OL_AMOUNT: ", o_amount_list[i])
+        #     print("S_QUANTITY: ", s_quantity_list[i])
         return duration
 
     def popular_item_transaction(self, m_conn, m_params: PopItemTxParams):

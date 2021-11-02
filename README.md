@@ -2,7 +2,7 @@
 1. run python file http sever.
 
 ```bash
-  python -m http.server 3000
+  python3 -m http.server 3000
 
 ```
 
