@@ -383,9 +383,14 @@ def parse_cmdline():
 if __name__ == "__main__":
 
     # set debug_log_enable to true, log each tx's time and each query time
-    debug_log_enable = True
+    debug_log_enable = False
     # many transactions run in this driver
-    Max_txs = 1200
+    Max_txs = 21000
+
+    TestTxConfig = False
+    # if debug single transaction, set DebugSingleTx = true and assign name here
+    DebugSingleTx = False
+    SingleTxName = txs.NewOrderTxName
 
     begin_time = time.time()
     # batch used to insert or select
@@ -409,11 +414,6 @@ if __name__ == "__main__":
     print("logging to file " + log_file_name)
     logging.basicConfig(filename=log_file_name, level=logging.DEBUG)
     logger = logging.getLogger(__name__)
-
-    TestTxConfig = False
-    # if debug single transaction, set DebugSingleTx = true and assign name here
-    DebugSingleTx = False
-    SingleTxName = txs.RelCustomerTxName
 
     # Create a new database connection.
     if debug_log_enable:
@@ -496,10 +496,12 @@ if __name__ == "__main__":
     logger.info({key: sum(value) / len(value) for key, value in tx_times.items()})
     logger.info("=======> tx time percentage is : ")
     logger.info({key: str(100 * sum(value) / total_time_used)[:5] + "%" for key, value in tx_times.items()})
-    logger.info("============> full tx time used ")
-    logger.info({key: value for key, value in tx_times.items()})
 
     logger.info(
         "============================ total time used: {} second =====================".format(total_time_used))
+
+    logger.info("============> full tx time used ")
+    logger.info({key: value for key, value in tx_times.items()})
+
     conn.close()
     evaluate()
