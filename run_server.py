@@ -35,8 +35,7 @@ def run(num, workload_files, workload_tables):
         p2 = "/home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_{}/{}.txt".format(workload_files, client_index)
         # command = f"pwd; cd temp/tasks; pwd"
         command = \
-            f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w {workload_tables} " + \
-            f">logs/python{client_index}.log &"
+            f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w {workload_tables} >logs/python{client_index}.log &"
         stdin, stdout, stderr = client.exec_command(command)
         clients.append(client)
         stdouts.append(stdout)
@@ -84,10 +83,10 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    run(40, "B", "A")
+    # run(40, "B", "A")
 
     """kill"""
-    # kill()
+    kill()
 
     """check"""
     time.sleep(1)

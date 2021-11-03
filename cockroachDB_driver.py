@@ -451,12 +451,12 @@ if __name__ == "__main__":
             execute_tx(tx_ins, conn, params)
             # clear the inputs, and wait for next inout arrays
             inputs = []
-            if total_tx_num > 1 and total_tx_num % 100 == 0:
+            if total_tx_num > 1 and total_tx_num % 10 == 0:
                 logger.info("============================ read file {}, now "
                             "total_tx_num reaches {}, write log to {} =====================".
                             format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-            if total_tx_num > 30000:
+            if total_tx_num > 110:
                 break
         line_content = f.readline()
 
