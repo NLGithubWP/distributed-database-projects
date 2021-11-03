@@ -46,14 +46,14 @@ def run(num, workload_files, workload_tables):
         print(stdouts[i].read())
         print(clients[i].close())
 
-def kill():
+def kill(term):
     for ip in ip_list:
         print("Open session in: " + ip + "...")
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=ip, username=user, password=password)
         command = \
-            "ps -ef | grep  cockroachDB_driver.py | grep -v grep | awk  '{print $2}' | xargs  kill -9"
+            "ps -ef | grep " + term + " | grep -v grep | awk  '{print $2}' | xargs  kill -9"
         stdin, stdout, stderr = client.exec_command(command)
         clients.append(client)
         stdouts.append(stdout)
@@ -86,7 +86,8 @@ if __name__ == "__main__":
     # run(40, "B", "A")
 
     """kill"""
-    kill()
+    # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")
+    # kill("cockroachDB_driver.py")
 
     """check"""
     time.sleep(1)
