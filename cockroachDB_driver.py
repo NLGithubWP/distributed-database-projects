@@ -412,9 +412,10 @@ if __name__ == "__main__":
 
     # Create a new database connection.
 
-    # conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
-    # conn.initialize(logger)
-    conn = psycopg2.connect(dsn=addr)
+    conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
+    conn.initialize(logger)
+    # conn = psycopg2.connect(dsn=addr)
+    logger.info("============================ connected to db! ============================")
 
     # choose workload
     tx_ins = None
@@ -429,11 +430,13 @@ if __name__ == "__main__":
             conn.commit()
         tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
     else:
+        logger.error("============================ workload_type {} is not support ============================".format(workload_type))
         exit(0)
 
     # read from a single xact file
     inputs = []
     f = open(file_path)
+    logger.error("============================ reading file {} ============================".format(file_path))
     line_content = f.readline()
     while line_content.strip():
         inputs.append(line_content.strip())
