@@ -8,8 +8,8 @@ res = []
 mapper = {}
 
 
-for id in range(0, 39):
-    file_name = "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/logs/errorLogs/server_40-driver-read-update-one-update-20kfiles-newRelCus/tx_log_"+str(id)
+for id in range(20, 30):
+    file_name = "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/logs/tx_log_"+str(id)
     print(file_name)
     with open(file_name+".txt", "r") as f:
         line_contents = f.readlines()

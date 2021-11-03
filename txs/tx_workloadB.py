@@ -221,6 +221,7 @@ class TxForWorkloadB(Transactions):
         print("Number of orders to be examined: %s" % (l,))
         begin = time.time()
         with m_conn.cursor() as cur:
+            cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
             # Let N denote value of the next available order number D NEXT O ID for district (W ID,D ID)
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
             res = cur.fetchone()
@@ -304,6 +305,7 @@ class TxForWorkloadB(Transactions):
         related_customers = set()
         begin = time.time()
         with m_conn.cursor() as cur:
+            cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
             cur.execute(
                 '''
                 SELECT IP_I1_ID, IP_I2_ID

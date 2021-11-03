@@ -9,6 +9,12 @@ ssh cs4224p@xcnd55.comp.nus.edu.sg
 
 
 
+./cockroach quit --insecure --host=xcnd55:27257
+./cockroach quit --insecure --host=xcnd56:27257
+./cockroach quit --insecure --host=xcnd57:27257
+./cockroach quit --insecure --host=xcnd58:27257
+./cockroach quit --insecure --host=xcnd59:27257
+
 cockroach start \
   --insecure \
   --store=node1 \
@@ -42,12 +48,12 @@ cockroach start \
 --background
 
 cockroach start \
---insecure \
---store=node5 \
---listen-addr=xcnd59:27257 \
---http-addr=xcnd59:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node5 \
+  --listen-addr=xcnd59:27257 \
+  --http-addr=xcnd59:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 
 cockroach init --insecure --host=xcnd55:27257
