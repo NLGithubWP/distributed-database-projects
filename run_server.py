@@ -83,7 +83,7 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    # run(40, "B", "A")
+    run(40, "B", "B")
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")
