@@ -316,7 +316,7 @@ class TxForWorkloadA(Transactions):
 
             if wdo_combines:
                 query = "select distinct O_W_ID, O_D_ID, O_ID, o_c_id from order_ori where (O_W_ID, O_D_ID, O_ID) in {}".\
-                    format(wdo_combines).replace("[", "(").replace("]", ")")
+                    format(set(wdo_combines)).replace("{", "(").replace("}", ")")
                 cur.execute(query)
                 customers = cur.fetchall()
                 related_customers.update(customers)
