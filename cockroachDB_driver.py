@@ -227,9 +227,9 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
 
     # record the tx running status
     if status:
-        # logger.info("======================================= running tx {} takes {} second"
-        #             " ================================".
-        #             format(tx_name, each_tx_time))
+        if debug_log_enable:
+            logger.info("======================================= running tx {} takes {} second"
+                        " ================================".format(tx_name, each_tx_time))
 
         time_used_list.append(each_tx_time * 1000000)
         total_tx_time += each_tx_time * 1000000
@@ -382,6 +382,11 @@ def parse_cmdline():
 
 if __name__ == "__main__":
 
+    # set debug_log_enable to true, log each tx's time and each query time
+    debug_log_enable = True
+    # many transactions run in this driver
+    Max_txs = 1200
+
     begin_time = time.time()
     # batch used to insert or select
     update_batch_size = 100
@@ -411,10 +416,11 @@ if __name__ == "__main__":
     SingleTxName = txs.RelCustomerTxName
 
     # Create a new database connection.
-
-    conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
-    conn.initialize(logger)
-    # conn = psycopg2.connect(dsn=addr)
+    if debug_log_enable:
+        conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
+        conn.initialize(logger)
+    else:
+        conn = psycopg2.connect(dsn=addr)
     logger.info("============================ connected to db! ============================")
 
     # choose workload
@@ -454,13 +460,15 @@ if __name__ == "__main__":
             execute_tx(tx_ins, conn, params)
             # clear the inputs, and wait for next inout arrays
             inputs = []
-            if total_tx_num > 1 and total_tx_num % 10 == 0:
+            # record the logs every 100 txs
+            if total_tx_num > 1 and total_tx_num % 100 == 0:
                 logger.info("============================ read file {}, now "
                             "total_tx_num reaches {}, write log to {} =====================".
                             format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-            if total_tx_num > 110:
+            if total_tx_num > Max_txs:
                 break
+
         line_content = f.readline()
 
     f.close()

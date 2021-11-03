@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")
-    # kill("cockroachDB_driver.py")
+    kill("cockroachDB_driver.py")
 
     """check"""
-    time.sleep(1)
+    # time.sleep(1)
     check()
