@@ -31,7 +31,7 @@ def run(num, workload_files, workload_tables):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=ip, username=user, password=password)
-        p1 = "postgresql://naili:@{}:{}/cs5424db".format(ip.split(".")[0], server_port)
+        p1 = "postgresql://rootuser:@{}:{}/cs5424db".format(ip.split(".")[0], server_port)
         p2 = "/home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_{}/{}.txt".format(workload_files, client_index)
         # command = f"pwd; cd temp/tasks; pwd"
         command = \
@@ -84,7 +84,7 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    run(40, "B", "A")
+    # run(40, "B", "B")
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")

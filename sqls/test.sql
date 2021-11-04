@@ -559,7 +559,7 @@ ERROR:__main__:Errored: Unknown Error in running tx: PopItemTxParams, ErrorMsg:
     res = operation(m_conn)
   File "cockroachDB_driver.py", line 219, in <lambda>
     lambda l_conn: m_tx_ins.popular_item_transaction(l_conn, m_params))
-  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 248, in popular_item_transaction
+  File "/Users/rootuserxing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 248, in popular_item_transaction
     while p_x[j][0] == s[i][0]:
 IndexError: li
 

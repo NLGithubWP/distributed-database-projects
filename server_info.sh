@@ -80,8 +80,8 @@ cockroach sql \
     -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-A.sql
 
 
-python3 cockroachDB_driver.py -u postgresql://naili:@xcnd55:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/1.txt -w A >logs/python100.log &
+python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd55:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/1.txt -w A >logs/python100.log &
 
 export PYTHONPATH=$(python3 -c "import site, os; print(os.path.join(site.USER_BASE, 'lib', 'python3.6', 'site-packages'))"):$PYTHONPATH
 
-addr = "postgresql://naili:@xcnd55:27257/cs5424db?sslmode=require"
+addr = "postgresql://rootuser:@xcnd55:27257/cs5424db?sslmode=require"

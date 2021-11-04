@@ -231,7 +231,7 @@ Running Tx DeliveryTxParams-update4 successful at the 2 time retry
 ============================ read file 31.txt, now total_tx_num reaches 19900, write log to logs/tx_log_31.txt =====================
 ============================ read file 31.txt, now total_tx_num reaches 20000, write log to logs/tx_log_31.txt =====================
 ============================ using file /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/31.txt where total txs 20000=====================
-connect to postgresql://naili:@xcnd56:27257/cs5424db, Read file /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/31.txt and run workload A
+connect to postgresql://rootuser:@xcnd56:27257/cs5424db, Read file /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/31.txt and run workload A
 required_tx_types is:
 {'DeliveryTxParams': 4000, 'PaymentTxParams': 4000, 'NewOrderTxParams': 8000, 'StockLevelTxParams': 800, 'RelCustomerTxParams': 400, 'OrderStatusTxParams': 800, 'PopItemTxParams': 800, 'TopBalanceTxParams': 1200}
 succeed_tx_types is:

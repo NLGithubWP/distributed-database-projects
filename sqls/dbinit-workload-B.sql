@@ -16,16 +16,16 @@ USE cs5424db;
 --SET CLUSTER SETTING kv.range_split.load_qps_threshold = 400;
 --
 ---- Create user
---CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
+--CREATE USER IF NOT EXISTS rootuser WITH LOGIN PASSWORD 'rootuser';
 
 
 -- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadB CASCADE;
-CREATE SCHEMA workloadB AUTHORIZATION naili;
+CREATE SCHEMA workloadB AUTHORIZATION rootuser;
 
 ---- grant to user
-GRANT all on DATABASE cs5424db to naili;
-GRANT all ON SCHEMA workloadB TO naili;
+GRANT all on DATABASE cs5424db to rootuser;
+GRANT all ON SCHEMA workloadB TO rootuser;
 
 -- Create databases and import data
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.warehouse (
@@ -211,7 +211,7 @@ IMPORT INTO cs5424db.workloadB.item_pair
 
 
 -- grant to user
-GRANT all on TABLE cs5424db.workloadB.* to naili;
+GRANT all on TABLE cs5424db.workloadB.* to rootuser;
 
 -- set schema
 set search_path to workloadB;

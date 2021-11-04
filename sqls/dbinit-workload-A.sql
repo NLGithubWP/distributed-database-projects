@@ -14,18 +14,18 @@ SET CLUSTER SETTING kv.range_split.by_load_enabled = true;
 SET CLUSTER SETTING kv.range_split.load_qps_threshold = 1000;
 
 -- Create user
--- local: CREATE USER IF NOT EXISTS naili WITH LOGIN PASSWORD 'naili';
+-- local: CREATE USER IF NOT EXISTS rootuser WITH LOGIN PASSWORD 'rootuser';
 -- server with following
-CREATE USER IF NOT EXISTS naili;
+CREATE USER IF NOT EXISTS rootuser;
 
 
 -- drop the schema, and reload
 DROP SCHEMA IF EXISTS workloadA CASCADE;
-CREATE SCHEMA workloadA AUTHORIZATION naili;
+CREATE SCHEMA workloadA AUTHORIZATION rootuser;
 
 -- grant to user
-GRANT all on DATABASE cs5424db to naili;
-GRANT all ON SCHEMA workloadA TO naili;
+GRANT all on DATABASE cs5424db to rootuser;
+GRANT all ON SCHEMA workloadA TO rootuser;
 
 -- Create databases and import data
 CREATE TABLE IF NOT EXISTS cs5424db.workloadA.warehouse (
@@ -194,7 +194,7 @@ IMPORT INTO cs5424db.workloadA.order_line (ol_w_id, ol_d_id, ol_o_id, ol_number,
 
 
 -- grant to user
-GRANT all on TABLE cs5424db.workloadA.* to naili;
+GRANT all on TABLE cs5424db.workloadA.* to rootuser;
 
 -- set schema
 set search_path to workloadA;

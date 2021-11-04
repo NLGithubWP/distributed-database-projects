@@ -409,7 +409,7 @@ if __name__ == "__main__":
         file_path = opt.path
         workload_type = opt.workload_type
 
-        # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
+        # addr = "postgresql://rootuser:rootuser@localhost:26257/cs5424db?sslmode=require"
         # file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/0.txt"
         # workload_type = "A"
         log_file_name = 'logs/tx_log_{}'.format(file_path.split("/")[-1])
