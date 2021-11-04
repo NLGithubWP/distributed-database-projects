@@ -385,13 +385,13 @@ if __name__ == "__main__":
     try:
 
         # set debug_log_enable to true, log each tx's time and each query time
-        debug_log_enable = True
+        debug_log_enable = False
         # many transactions run in this driver
         Max_txs = 21000
 
         TestTxConfig = False
         # if debug single transaction, set DebugSingleTx = true and assign name here
-        DebugSingleTx = True
+        DebugSingleTx = False
         SingleTxName = txs.NewOrderTxName
 
         begin_time = time.time()
