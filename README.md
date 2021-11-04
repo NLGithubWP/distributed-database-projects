@@ -28,7 +28,27 @@ For example
 python3 preprocess.py
 ```
 
-# 4.  Run "dbinit-workload-A.sql" to load tables to test workloadA
+# 4.  Run dbinit.sql to create database and user
+
+```sql
+cockroach sql \
+    --host=xcnd55:27257 \
+    --insecure \
+    --user=root \
+    -f <path to "dbinit.sql">
+```
+
+For example:
+
+```sql
+cockroach sql \
+    --host=xcnd55:27257 \
+    --insecure \
+    --user=root \
+    -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit.sql    
+```
+
+# 4.1. Run "dbinit-workload-A.sql" to load tables to test workloadA
 
 
 ```bash
@@ -49,7 +69,7 @@ cockroach sql \
     -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-A.sql
 ```
 
-# 5. Run "dbinit-workload-B.sql" to load tables to test workloadB
+# 4.2. Run "dbinit-workload-B.sql" to load tables to test workloadB
 
 
 ```bash
@@ -70,7 +90,7 @@ cockroach sql \
     -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-B.sql
 ```
 
-# 6. Run a single client driver
+# 5. Run a single client driver
 
 ```bash
 python3 cockroachDB_driver.py -u=<database url> -p=<path of workload files> -w=<workload_type>
@@ -90,7 +110,7 @@ run a driver to read 22.txt under workloadB
 python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd57:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_B/22.txt -w B
 ```
 
-# 7. Run 40 clients on server
+# 6. Run 40 clients on server
 
 ## Add configurations to config.py
 
@@ -134,7 +154,7 @@ python3 output/init_empty_csv.py
 python3 run_server.py
 ```
 
-# 8. Generate statistical results
+# 7. Generate statistical results
 
 ```
 python3 output/get_throughput_dbstate.py -u=<database url> -w=<workload_type>
@@ -146,8 +166,8 @@ For example:
 python3 output/get_throughput_dbstate.py -u=postgresql://rootuser:@xcnd57:27257/cs5424db -w=A
 ```
 
-# 9. Run some sql (optional)
+# 8. Run some sql (optional)
 
 ```bash
-./cockroach sql --certs-dir=certs --host=localhost:26257
+./cockroach sql --insecure --host=xcnd55:26257
 ```

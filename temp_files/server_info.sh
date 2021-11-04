@@ -32,20 +32,20 @@ cockroach start \
   --background
 
 cockroach start \
---insecure \
---store=node3 \
---listen-addr=xcnd57:27257 \
---http-addr=xcnd57:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node3 \
+  --listen-addr=xcnd57:27257 \
+  --http-addr=xcnd57:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 cockroach start \
---insecure \
---store=node4 \
---listen-addr=xcnd58:27257 \
---http-addr=xcnd58:8080 \
---join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
---background
+  --insecure \
+  --store=node4 \
+  --listen-addr=xcnd58:27257 \
+  --http-addr=xcnd58:8080 \
+  --join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257 \
+  --background
 
 cockroach start \
   --insecure \
@@ -80,8 +80,18 @@ cockroach sql \
     -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-A.sql
 
 
+cockroach sql \
+    --host=localhost:26257 \
+    --insecure \
+    --user=root \
+    -f /Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/sqls/dbinit-workload-A.sql
+
+
 python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd55:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/1.txt -w A >logs/python100.log &
 
 export PYTHONPATH=$(python3 -c "import site, os; print(os.path.join(site.USER_BASE, 'lib', 'python3.6', 'site-packages'))"):$PYTHONPATH
 
 addr = "postgresql://rootuser:@xcnd55:27257/cs5424db?sslmode=require"
+
+
+ps -ef | grep cock | grep -v grep | awk  '{print $2}' | xargs  kill -9
