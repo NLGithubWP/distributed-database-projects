@@ -529,3 +529,84 @@ SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = 7 AND D_ID = 4
 SELECT COUNT(DISTINCT OL_I_ID)
     FROM order_line JOIN stock ON OL_I_ID = stock.S_I_ID AND OL_W_ID = stock.S_W_ID
     WHERE OL_W_ID = 7 AND OL_D_ID = 4 AND OL_O_ID >= 2990 AND OL_O_ID < 3001 AND S_QUANTITY < '14'
+
+
+DEBUG:__main__:[SET TRANSACTION AS OF SYSTEM TIME '-5s']:   550 us
+DEBUG:__main__:[SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = 5 AND D_ID = 3]:   1423 us
+DEBUG:__main__:[ SELECT O_ID, O_ENTRY_D, C_FIRST, C_MIDDLE, C_LAST FROM order_ori JOIN customer ON order_ori.O_W_ID=customer.C_W_ID AND order_ori.O_D_ID=customer.C_D_ID AND order_ori.O_C_ID=customer.C_ID WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_ID >= 3012 AND O_ID < 3026 ORDER BY O_ID ]:   5434 us
+DEBUG:__main__:[WITH ol2 AS (SELECT OL_O_ID, OL_W_ID, OL_D_ID, MAX(OL_QUANTITY) AS MAX FROM order_line WHERE OL_W_ID = 5 AND OL_D_ID = 3 AND OL_O_ID >= 3012 AND OL_O_ID < 3026 GROUP BY OL_O_ID, OL_W_ID, OL_D_ID) SELECT order_line.OL_O_ID, order_line.OL_I_ID, item.I_NAME, order_line.OL_QUANTITY FROM order_line JOIN item ON order_line.OL_I_ID=item.I_ID INNER JOIN ol2 ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX ORDER BY order_line.OL_O_ID ]:   3823 us
+
+
+ERROR:__main__:Errored: Unknown Error in running tx: PopItemTxParams, ErrorMsg:
+[ list index out of range ], Traceback:
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 219, in <lambda>
+    lambda l_conn: m_tx_ins.popular_item_transaction(l_conn, m_params))
+  File "/Users/nailixing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/txs/tx_workloadA.py", line 248, in popular_item_transaction
+    while p_x[j][0] == s[i][0]:
+IndexError: li
+
+
+n-l = 3012
+n = 3026
+l = 14
+
+
+-- last order
+SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = 5 AND D_ID = 3
+
+-- order and customer
+SELECT O_ID, O_ENTRY_D, C_FIRST, C_MIDDLE, C_LAST
+    FROM order_ori JOIN customer
+    ON order_ori.O_W_ID=customer.C_W_ID AND order_ori.O_D_ID=customer.C_D_ID AND order_ori.O_C_ID=customer.C_ID
+    WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_ID >= 3012 AND O_ID < 3026 ORDER BY O_ID;
+
+select * from order_ori WHERE O_W_ID = 5 AND O_D_ID = 3 AND O_ID >= 3012 AND O_ID < 3026;
+select * from order_line WHERE OL_W_ID = 5 AND OL_D_ID = 3 AND OL_O_ID >= 3012 AND OL_O_ID < 3026;
+
+-- order line
+WITH ol2 AS
+    (SELECT OL_O_ID, OL_W_ID, OL_D_ID, MAX(OL_QUANTITY) AS MAX
+        FROM order_line
+        WHERE OL_W_ID = 5 AND OL_D_ID = 3 AND OL_O_ID >= 3012 AND OL_O_ID < 3026
+        GROUP BY OL_O_ID, OL_W_ID, OL_D_ID)
+
+    SELECT order_line.OL_O_ID, order_line.OL_I_ID, item.I_NAME, order_line.OL_QUANTITY
+        FROM order_line
+        JOIN item
+        ON order_line.OL_I_ID=item.I_ID
+        INNER JOIN ol2
+        ON order_line.OL_O_ID=ol2.OL_O_ID AND order_line.OL_W_ID=ol2.OL_W_ID AND order_line.OL_D_ID=ol2.OL_D_ID AND OL_QUANTITY=MAX
+        ORDER BY order_line.OL_O_ID;
+
+(5,3,3018,315,17,1)
+
+       pid                              | o_w_id | o_d_id | o_id | o_c_id | o_carrier_id | o_ol_cnt | o_all_local |           o_entry_d
+---------------------------------------+--------+--------+------+--------+--------------+----------+-------------+--------------------------------
+  063d7c5c-49fa-4163-a013-688dc2c5f4d1 |      5 |      3 | 3018 |    315 |         NULL |       17 |           1 | 2021-11-02 04:21:01.118621+00
+
+
+UPDATE district SET D_NEXT_O_ID = D_NEXT_O_ID + 1 WHERE D_W_ID = 1 and D_ID = 2 returning D_NEXT_O_ID, d_tax;
+
+
+USE cs5424db;
+set search_path to workloadA;
+
+UPDATE district SET D_NEXT_O_ID = D_NEXT_O_ID + 1 WHERE D_W_ID = 1 and D_ID = 3 returning D_NEXT_O_ID, d_tax;
+
+select * from order_ori where O_W_ID=1 and O_D_ID=2 and O_ID=3841;
+select * from order_line where OL_W_ID = 1 AND OL_D_ID = 2 AND OL_O_ID =3841;
+
+
+
+select * from order_ori where O_W_ID=1 and O_D_ID=2 and O_ID=3844;
+
+select * from district where d_w_id = 1 and d_id = 1;
+
+
+select count(distinct o_id) from order_ori;
+
+
+select * from order_ori LEFT join order_line on o_w_id = ol_w_id and o_d_id = ol_d_id and o_id = ol_o_id where ol_i_id = null;

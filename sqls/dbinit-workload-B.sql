@@ -247,4 +247,4 @@ WITH dw AS
 UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
     FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
 
--- de-normalization order_line is done by preprocessing csv
+-- de-normalization order_line is done by pre-processing csv
