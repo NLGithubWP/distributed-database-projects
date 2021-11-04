@@ -216,9 +216,9 @@ class TxForWorkloadB(Transactions):
         l = m_params.l
         pop_item_set = set()
 
-        print("-------------------------------")
-        print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id))
-        print("Number of orders to be examined: %s" % (l,))
+        # print("-------------------------------")
+        # print("District identifier (W_ID, D_ID): %s, %s" % (w_id, d_id))
+        # print("Number of orders to be examined: %s" % (l,))
         begin = time.time()
         with m_conn.cursor() as cur:
             cur.execute("SET TRANSACTION AS OF SYSTEM TIME '-5s'")
@@ -226,7 +226,7 @@ class TxForWorkloadB(Transactions):
             cur.execute("SELECT D_NEXT_O_ID FROM district WHERE D_W_ID = %s AND D_ID = %s", (w_id, d_id))
             res = cur.fetchone()
             n = res[0]
-            print("n is %s" % (n,))
+            # print("n is %s" % (n,))
 
             # Let S denote the set of last L orders for district (W ID,D ID)
             cur.execute(
@@ -257,15 +257,15 @@ class TxForWorkloadB(Transactions):
             # print results
             j = 0
             for i in range(l):
-                print("order: O_ID, O_ENTRY_ID")
-                print(s[i][0], s[i][1])
-
-                print("customer name")
-                print(s[i][2], s[i][3], s[i][4])
-
-                print("popular item: I_NAME, OL_QUANTITY")
+                # print("order: O_ID, O_ENTRY_ID")
+                # print(s[i][0], s[i][1])
+                #
+                # print("customer name")
+                # print(s[i][2], s[i][3], s[i][4])
+                #
+                # print("popular item: I_NAME, OL_QUANTITY")
                 while p_x[j][0]==s[i][0]:
-                    print(p_x[j][2], p_x[j][3])
+                    # print(p_x[j][2], p_x[j][3])
                     pop_item_set.add(p_x[j][1])
                     j+=1
                     if(j==len(p_x)):
@@ -281,12 +281,12 @@ class TxForWorkloadB(Transactions):
                         GROUP BY OL_I_ID
                      """, (w_id, d_id, n - l, n, pop_item_set))
             item_count = cur.fetchall()
-            print("items and their counts")
-            print(item_count)
+            # print("items and their counts")
+            # print(item_count)
 
             # for each distinct popular item, the percentage of orders in S that contain the popular item
-            for item in item_count:
-                print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
+            # for item in item_count:
+            #     print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
             m_conn.commit()
         end = time.time()
@@ -330,9 +330,11 @@ class TxForWorkloadB(Transactions):
         end = time.time()
         duration = end - begin
 
-        print("-------------------------------")
-        ("Related customers (W_ID, D_ID, C_ID):")
-        for customer in related_customers:
-            print(customer)
+        # print("-------------------------------")
+        # ("Related customers (W_ID, D_ID, C_ID):")
+        # for customer in related_customers:
+        #     print(customer)
+
+
         return duration
 

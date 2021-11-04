@@ -325,17 +325,17 @@ class TxForWorkloadA(Transactions):
         end = time.time()
         duration = end - begin
 
-        print("-------------------------------")
-        print("check correctness")
-        print("input value, [w_id, d_id, c_id] are")
-        print(w_id, d_id, c_id)
-        print("target customer's (w_id, d_id, c_id, o_id): matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
-        print(related_pair)
-        print("And then, check c_id from order_ori table according to matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
-        for customer in related_customers:
-            print(customer)
-
-        print("Related customers (W_ID, D_ID, C_ID):")
-        for customer in related_customers:
-            print(customer[0], customer[1], customer[3])
+        # print("-------------------------------")
+        # print("check correctness")
+        # print("input value, [w_id, d_id, c_id] are")
+        # print(w_id, d_id, c_id)
+        # print("target customer's (w_id, d_id, c_id, o_id): matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
+        # print(related_pair)
+        # print("And then, check c_id from order_ori table according to matched customer's (OL_W_ID, OL_D_ID, OL_O_ID)")
+        # for customer in related_customers:
+        #     print(customer)
+        #
+        # print("Related customers (W_ID, D_ID, C_ID):")
+        # for customer in related_customers:
+        #     print(customer[0], customer[1], customer[3])
         return duration
