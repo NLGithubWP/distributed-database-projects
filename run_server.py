@@ -20,8 +20,8 @@ def run(num, workload_files, workload_tables):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=ip, username=user, password=password)
-        p1 = "postgresql://rootuser:@{}:{}/cs5424db".format(ip.split(".")[0], server_port)
-        p2 = "/home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_{}/{}.txt".format(workload_files, client_index)
+        p1 = "postgresql://{}:@{}:{}/cs5424db".format(db_user, ip.split(".")[0], server_port)
+        p2 = "{}/project_files_4/xact_files_{}/{}.txt".format(folder_path, workload_files, client_index)
         # command = f"pwd; cd temp/tasks; pwd"
         command = \
             f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w {workload_tables} >logs/python{client_index}.log &"
