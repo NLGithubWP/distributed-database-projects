@@ -1,6 +1,9 @@
 # 1. run python file http sever before loading data
 
+go to system root path and then run the python server
+
 ```bash
+  cd /
   python3 -m http.server 3000
 ```
 
@@ -10,7 +13,7 @@ Please refer to office documents with following link
 
 https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html
 
-# 3. preprocess csv file
+# 3.  Preprocess csv file
 
 
 ```bash
@@ -25,7 +28,7 @@ For example
 python3 preprocess.py
 ```
 
-# 4.  run dbinit-workload-A.sql to load tables to test workloadA
+# 4.  Run "dbinit-workload-A.sql" to load tables to test workloadA
 
 
 ```bash
@@ -46,7 +49,7 @@ cockroach sql \
     -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-A.sql
 ```
 
-# 5. run dbinit-workload-B.sql to load tables to test workloadB
+# 5. Run "dbinit-workload-B.sql" to load tables to test workloadB
 
 
 ```bash
@@ -91,6 +94,11 @@ python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd57:27257/cs5424db -p
 
 ## Add configurations to config.py
 
+```
+```
+
+
+
 ## Create empty csv files for output
 
 
@@ -119,5 +127,5 @@ python3 output/get_throughput_dbstate.py -u=postgresql://rootuser:@xcnd57:27257/
 # 9. Run some sql (optional)
 
 ```bash
-cockroach sql --certs-dir=certs --host=localhost:26257
+./cockroach sql --certs-dir=certs --host=localhost:26257
 ```
