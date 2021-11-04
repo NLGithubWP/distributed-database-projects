@@ -1,162 +1,123 @@
-# 
-1. run python file http sever.
+# 1. run python file http sever before loading data
 
 ```bash
   python3 -m http.server 3000
-
 ```
 
-2. Start a new clusters with 5 instances
+# 2.Start a new clusters with 5 instances
 
-```
-rm -rf my-safe-directory
-rm -rf certs
-rm -rf node*
+Please refer to office documents with following link
 
-mkdir certs my-safe-directory
+https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html
 
-cockroach cert create-ca \
-    --certs-dir=certs \
-    --ca-key=my-safe-directory/ca.key
-
-cockroach cert create-node \
-    localhost \
-    $(hostname) \
-    --certs-dir=certs \
-    --ca-key=my-safe-directory/ca.key
-
-cockroach cert create-client \
-    root \
-    --certs-dir=certs \
-    --ca-key=my-safe-directory/ca.key
-
-
-cockroach start \
-        --certs-dir=certs \
-        --store=node1 \
-        --listen-addr=localhost:26257 \
-        --http-addr=localhost:8280 \
-        --join=localhost:26257,localhost:26258,localhost:26259,localhost:26260,localhost:26261 \
-        --background
-
-cockroach start \
-        --certs-dir=certs \
-        --store=node2 \
-        --listen-addr=localhost:26258 \
-        --http-addr=localhost:8281 \
-        --join=localhost:26257,localhost:26258,localhost:26259,localhost:26260,localhost:26261 \
-        --background
-
-cockroach start \
-        --certs-dir=certs \
-        --store=node3 \
-        --listen-addr=localhost:26259 \
-        --http-addr=localhost:8282 \
-        --join=localhost:26257,localhost:26258,localhost:26259,localhost:26260,localhost:26261 \
-        --background
-
-cockroach start \
-        --certs-dir=certs \
-        --store=node4 \
-        --listen-addr=localhost:26260 \
-        --http-addr=localhost:8283 \
-        --join=localhost:26257,localhost:26258,localhost:26259,localhost:26260,localhost:26261 \
-        --background
-cockroach start \
-        --certs-dir=certs \
-        --store=node5 \
-        --listen-addr=localhost:26261 \
-        --http-addr=localhost:8284 \
-        --join=localhost:26257,localhost:26258,localhost:26259,localhost:26260,localhost:26261 \
-        --background
-
-cockroach init --certs-dir=certs --host=localhost:26257
-
-ps aux | grep cock
-
-```
-
-3. preprocess csv file
+# 3. preprocess csv file
 
 
 ```bash
-
 python3 preprocess.py -f=<path to the folder where project_files is in>
-
 ```
 
+If the script "preprocess.py" and folder "project_files_4" are at the same folder. then can run directly. 
 
-4. run dbinit-workload-A.sql to load tables to test workloadA
+For example
+
+```bash
+python3 preprocess.py
+```
+
+# 4.  run dbinit-workload-A.sql to load tables to test workloadA
 
 
 ```bash
-
 cockroach sql \
-    --host=localhost:26257 \
-    --certs-dir=certs \
+    --host=xcnd55:27257 \
+    --insecure \
     --user=root \
-    -f /Users/rootuserxing/Documents/NUS_Modules/CS5424_Distributed_Database/projects/CS5424/sqls/dbinit-workload-A.sql
-
+    -f <path to "dbinit-workload-A.sql">
 ```
 
-
-5. run dbinit-workload-B.sql to load tables to test workloadB
-
+For example:
 
 ```bash
-
 cockroach sql \
-    --host=localhost:26258 \
-    --certs-dir=certs \
+    --host=xcnd55:27257 \
+    --insecure \
     --user=root \
-    -f ./sqls/dbinit-workload-B.sql
-
+    -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-A.sql
 ```
 
-
-6. run some sql
-
-```bash
-
-cockroach sql --certs-dir=certs --host=localhost:26257
-cockroach sql --certs-dir=certs --host=localhost:26258
-cockroach sql --certs-dir=certs --host=localhost:26259
-
-```
-
-7. create empty csv files for output
+# 5. run dbinit-workload-B.sql to load tables to test workloadB
 
 
 ```bash
-
-python3 output/init_empty_csv.py
-
+cockroach sql \
+    --host=xcnd55:27257 \
+    --insecure \
+    --user=root \
+    -f <path to "dbinit-workload-B.sql">
 ```
 
-8.run driver
-
+For example:
 
 ```bash
+cockroach sql \
+    --host=xcnd55:27257 \
+    --insecure \
+    --user=root \
+    -f /home/stuproj/cs4224p/temp/tasks/sqls/dbinit-workload-B.sql
+```
 
+# 6. Run a single client driver
+
+```bash
 python3 cockroachDB_driver.py -u=<database url> -p=<path of workload files> -w=<workload_type>
-
 ```
 
-9.after the drivers finish running,ensure that clients.csv has 40 entries. Then run the below script to get throughput and dbstate.
+For example
+
+run a driver to read 22.txt under workloadA
+
+```bash
+python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd57:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/22.txt -w A
+```
+
+run a driver to read 22.txt under workloadB
+
+```bash
+python3 cockroachDB_driver.py -u postgresql://rootuser:@xcnd57:27257/cs5424db -p /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_B/22.txt -w B
+```
+
+# 7. Run 40 clients on server
+
+## Add configurations to config.py
+
+## Create empty csv files for output
 
 
 ```bash
-
-python3  output/get_throughput_dbstate.py -u=<database url> -w=<workload_type>
-
+python3 output/init_empty_csv.py
 ```
 
+## Run script to launch 40 drivers across many nodes
 
-10. kill all process
-```shell script
-
-ps -ef | grep  cockroachDB_driver.py | grep -v grep | awk  '{print $2}' | xargs  kill -9
-
+```bash
+python3 run_server.py
 ```
 
+# 8. Generate statistical results
 
+```
+python3 output/get_throughput_dbstate.py -u=<database url> -w=<workload_type>
+```
+
+For example:
+
+```bash
+python3 output/get_throughput_dbstate.py -u=postgresql://rootuser:@xcnd57:27257/cs5424db -w=A
+```
+
+# 9. Run some sql (optional)
+
+```bash
+cockroach sql --certs-dir=certs --host=localhost:26257
+```

@@ -3,18 +3,7 @@ import time
 import paramiko
 
 
-# definitions for ssh connection and cluster
-ip_list = ['xcnd55.comp.nus.edu.sg',
-           'xcnd56.comp.nus.edu.sg',
-           'xcnd57.comp.nus.edu.sg',
-           'xcnd58.comp.nus.edu.sg',
-           'xcnd59.comp.nus.edu.sg']
-
-
-user = "cs4224p"
-password = "%Dwa2SL7"
-server_base_index = 55
-server_port = 27257
+from config import *
 
 stdouts = []
 clients = []
@@ -46,6 +35,7 @@ def run(num, workload_files, workload_tables):
     for i in range(len(stdouts)):
         print(stdouts[i].read())
         print(clients[i].close())
+
 
 def kill(term):
     for ip in ip_list:
@@ -84,7 +74,7 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    # run(40, "B", "B")
+    run(40, used_workload_type, used_workload_type)
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")
