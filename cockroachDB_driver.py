@@ -383,7 +383,7 @@ def parse_cmdline():
 if __name__ == "__main__":
 
     # set debug_log_enable to true, log each tx's time and each query time
-    debug_log_enable = True
+    debug_log_enable = False
     # many transactions run in this driver
     Max_txs = 21000
 

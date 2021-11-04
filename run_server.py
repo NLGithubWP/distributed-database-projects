@@ -36,6 +36,7 @@ def run(num, workload_files, workload_tables):
         # command = f"pwd; cd temp/tasks; pwd"
         command = \
             f"cd temp/tasks; python3 cockroachDB_driver.py -u {p1} -p {p2} -w {workload_tables} >logs/python{client_index}.log &"
+        print(command)
         stdin, stdout, stderr = client.exec_command(command)
         clients.append(client)
         stdouts.append(stdout)
@@ -83,7 +84,7 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    run(40, "B", "B")
+    run(40, "B", "A")
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")
