@@ -192,12 +192,12 @@ def execute_tx(m_tx_ins: Transactions, m_conn, m_params):
         tmp_tx_time2, cid_map = res
 
         tmp_status, tmp_tx_time3 = run_tx(m_conn, tx_name + "-update4",
-                                         lambda l_conn: m_tx_ins.delivery_update_transaction4(
-                                             l_conn, cid_map, sum_map))
+                                          lambda l_conn: m_tx_ins.delivery_update_transaction4(
+                                              l_conn, cid_map, sum_map))
         if not tmp_status:
             return
 
-        each_tx_time = tmp_tx_time1+tmp_tx_time2+tmp_tx_time3
+        each_tx_time = tmp_tx_time1 + tmp_tx_time2 + tmp_tx_time3
         status = True
 
 
@@ -382,126 +382,132 @@ def parse_cmdline():
 
 if __name__ == "__main__":
 
-    # set debug_log_enable to true, log each tx's time and each query time
-    debug_log_enable = False
-    # many transactions run in this driver
-    Max_txs = 21000
+    try:
 
-    TestTxConfig = False
-    # if debug single transaction, set DebugSingleTx = true and assign name here
-    DebugSingleTx = False
-    SingleTxName = txs.NewOrderTxName
+        # set debug_log_enable to true, log each tx's time and each query time
+        debug_log_enable = False
+        # many transactions run in this driver
+        Max_txs = 21000
 
-    begin_time = time.time()
-    # batch used to insert or select
-    update_batch_size = 100
-    select_batch_size = 100
+        TestTxConfig = False
+        # if debug single transaction, set DebugSingleTx = true and assign name here
+        DebugSingleTx = False
+        SingleTxName = txs.NewOrderTxName
 
-    # Schema names
-    workloadA_schema_name = "workloada"
-    workloadB_schema_name = "workloadb"
+        begin_time = time.time()
+        # batch used to insert or select
+        update_batch_size = 100
+        select_batch_size = 100
 
-    # parser result
-    opt = parse_cmdline()
-    addr = opt.url
-    file_path = opt.path
-    workload_type = opt.workload_type
+        # Schema names
+        workloadA_schema_name = "workloada"
+        workloadB_schema_name = "workloadb"
 
-    # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
-    # file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/0.txt"
-    # workload_type = "A"
-    log_file_name = 'logs/tx_log_{}'.format(file_path.split("/")[-1])
-    print("logging to file " + log_file_name)
-    logging.basicConfig(filename=log_file_name, level=logging.DEBUG)
-    logger = logging.getLogger(__name__)
+        # parser result
+        opt = parse_cmdline()
+        addr = opt.url
+        file_path = opt.path
+        workload_type = opt.workload_type
 
-    # Create a new database connection.
-    if debug_log_enable:
-        conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
-        conn.initialize(logger)
-    else:
-        conn = psycopg2.connect(dsn=addr)
-    logger.info("============================ connected to db! ============================")
+        # addr = "postgresql://naili:naili@localhost:26257/cs5424db?sslmode=require"
+        # file_path = "/mnt/c/a.SCHOOL/Master/distributed_database/tasks/project_files/xact_files_B/0.txt"
+        # workload_type = "A"
+        log_file_name = 'logs/tx_log_{}'.format(file_path.split("/")[-1])
+        print("logging to file " + log_file_name)
+        logging.basicConfig(filename=log_file_name, level=logging.DEBUG)
+        logger = logging.getLogger(__name__)
 
-    # choose workload
-    tx_ins = None
-    if workload_type == "A":
-        with conn.cursor() as cur:
-            cur.execute("set search_path to " + workloadA_schema_name)
-            conn.commit()
-        tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
-    elif workload_type == "B":
-        with conn.cursor() as cur:
-            cur.execute("set search_path to " + workloadB_schema_name)
-            conn.commit()
-        tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
-    else:
-        logger.error("============================ workload_type {} is not support ============================".format(workload_type))
-        exit(0)
+        # Create a new database connection.
+        if debug_log_enable:
+            conn = psycopg2.connect(dsn=addr, connection_factory=MyLoggingConnection)
+            conn.initialize(logger)
+        else:
+            conn = psycopg2.connect(dsn=addr)
+        logger.info("============================ connected to db! ============================")
 
-    # read from a single xact file
-    inputs = []
-    f = open(file_path)
-    logger.error("============================ reading file {} ============================".format(file_path))
-    line_content = f.readline()
-    while line_content.strip():
-        inputs.append(line_content.strip())
-        triggered, params = parse_stdin(inputs)
-        if TestTxConfig == True:
-            test_tx(tx_ins, conn)
-        if triggered:
-            if params.__class__.__name__ not in required_tx_types:
-                required_tx_types[params.__class__.__name__] = 1
-            else:
-                required_tx_types[params.__class__.__name__] += 1
+        # choose workload
+        tx_ins = None
+        if workload_type == "A":
+            with conn.cursor() as cur:
+                cur.execute("set search_path to " + workloadA_schema_name)
+                conn.commit()
+            tx_ins = TxForWorkloadA(update_batch_size, select_batch_size)
+        elif workload_type == "B":
+            with conn.cursor() as cur:
+                cur.execute("set search_path to " + workloadB_schema_name)
+                conn.commit()
+            tx_ins = TxForWorkloadB(update_batch_size, select_batch_size)
+        else:
+            logger.error(
+                "============================ workload_type {} is not support ============================".format(
+                    workload_type))
+            exit(0)
 
-            # test only one tx
-            if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
-            execute_tx(tx_ins, conn, params)
-            # clear the inputs, and wait for next inout arrays
-            inputs = []
-            # record the logs every 100 txs
-            if total_tx_num > 1 and total_tx_num % 100 == 0:
-                logger.info("============================ read file {}, now "
-                            "total_tx_num reaches {}, write log to {} =====================".
-                            format(file_path.split("/")[-1], total_tx_num, log_file_name))
-
-            if total_tx_num > Max_txs:
-                break
-
+        # read from a single xact file
+        inputs = []
+        f = open(file_path)
+        logger.error("============================ reading file {} ============================".format(file_path))
         line_content = f.readline()
+        while line_content.strip():
+            inputs.append(line_content.strip())
+            triggered, params = parse_stdin(inputs)
+            if TestTxConfig == True:
+                test_tx(tx_ins, conn)
+            if triggered:
+                if params.__class__.__name__ not in required_tx_types:
+                    required_tx_types[params.__class__.__name__] = 1
+                else:
+                    required_tx_types[params.__class__.__name__] += 1
 
-    f.close()
-    end_time = time.time()
-    total_time_used = end_time - begin_time
-    logger.info("============================ using file " + file_path + " where total txs {}=====================".
-                format(total_tx_num))
+                # test only one tx
+                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
+                execute_tx(tx_ins, conn, params)
+                # clear the inputs, and wait for next inout arrays
+                inputs = []
+                # record the logs every 100 txs
+                if total_tx_num > 1 and total_tx_num % 100 == 0:
+                    logger.info("============================ read file {}, now "
+                                "total_tx_num reaches {}, write log to {} =====================".
+                                format(file_path.split("/")[-1], total_tx_num, log_file_name))
 
-    for key in tx_times:
-        tx_times[key].sort()
+                if total_tx_num > Max_txs:
+                    break
 
-    infor = "connect to {}, Read file {} and run workload {}".format(addr, file_path, workload_type)
-    logger.info(infor)
-    logger.info("=======> required_tx_types is: ")
-    logger.info(required_tx_types)
-    logger.info("=======> succeed_tx_types is: ", succeed_tx_types)
-    logger.info(succeed_tx_types)
-    logger.info("=======> tx num percentages is: ", succeed_tx_types)
-    logger.info({key: str(100 * value / total_tx_num)[:5] + "%" for key, value in succeed_tx_types.items()})
-    logger.info("=======> tx_time_range [min-max] is : ", tx_time_range)
-    logger.info(tx_time_range)
-    logger.info("=======> tx_time middle time is : ")
-    logger.info({key: value[len(value) // 2] for key, value in tx_times.items()})
-    logger.info("=======> tx_time average time is : ")
-    logger.info({key: sum(value) / len(value) for key, value in tx_times.items()})
-    logger.info("=======> tx time percentage is : ")
-    logger.info({key: str(100 * sum(value) / total_time_used)[:5] + "%" for key, value in tx_times.items()})
+            line_content = f.readline()
 
-    logger.info(
-        "============================ total time used: {} second =====================".format(total_time_used))
+        f.close()
+        end_time = time.time()
+        total_time_used = end_time - begin_time
+        logger.info("============================ using file " + file_path + " where total txs {}=====================".
+                    format(total_tx_num))
 
-    logger.info("============> full tx time used ")
-    logger.info({key: value for key, value in tx_times.items()})
+        for key in tx_times:
+            tx_times[key].sort()
 
-    conn.close()
-    evaluate()
+        infor = "connect to {}, Read file {} and run workload {}".format(addr, file_path, workload_type)
+        logger.info(infor)
+        logger.info("=======> required_tx_types is: ")
+        logger.info(required_tx_types)
+        logger.info("=======> succeed_tx_types is: ", succeed_tx_types)
+        logger.info(succeed_tx_types)
+        logger.info("=======> tx num percentages is: ", succeed_tx_types)
+        logger.info({key: str(100 * value / total_tx_num)[:5] + "%" for key, value in succeed_tx_types.items()})
+        logger.info("=======> tx_time_range [min-max] is : ", tx_time_range)
+        logger.info(tx_time_range)
+        logger.info("=======> tx_time middle time is : ")
+        logger.info({key: value[len(value) // 2] for key, value in tx_times.items()})
+        logger.info("=======> tx_time average time is : ")
+        logger.info({key: sum(value) / len(value) for key, value in tx_times.items()})
+        logger.info("=======> tx time percentage is : ")
+        logger.info({key: str(100 * sum(value) / total_time_used)[:5] + "%" for key, value in tx_times.items()})
+
+        logger.info(
+            "============================ total time used: {} second =====================".format(total_time_used))
+
+        logger.info("============> full tx time used ")
+        logger.info({key: value for key, value in tx_times.items()})
+
+        conn.close()
+        evaluate()
+    except:
+        print(traceback.format_exc())
