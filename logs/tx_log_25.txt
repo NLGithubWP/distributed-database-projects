@@ -1,2 +1,0 @@
-INFO:__main__:============================ connected to db! ============================
-ERROR:__main__:============================ reading file /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_B/25.txt ============================
