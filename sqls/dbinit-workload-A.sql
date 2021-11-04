@@ -199,7 +199,7 @@ GRANT all on TABLE cs5424db.workloadA.* to naili;
 -- set schema
 set search_path to workloadA;
 
---de-normalization on custoemr
+--de-normalization on customer
 ALTER TABLE cs5424db.workloadA.customer
     ADD COLUMN C_W_NAME VARCHAR(10) FAMILY freqRead,
     ADD COLUMN C_D_NAME VARCHAR(10) FAMILY freqRead;
@@ -214,7 +214,10 @@ UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
 -- run some test sql
 SHOW INDEX FROM item;
 SHOW COLUMNS FROM item;
-show ranges from table item;
-show ranges from table customer;
 show ranges from table order_ori;
+show ranges from table customer;
 show ranges from table order_line;
+show ranges from table district;
+show ranges from table item;
+show ranges from table warehouse;
+show ranges from table stock;
