@@ -36,9 +36,10 @@ for id in range(20, 30):
                     fastest_slowest[file_name] += 1
 
 # 打印最快和最慢的client，然后人为地去看文件内的信息
-res.sort()
-print(mapper[res[0]])
-print(mapper[res[-1]])
+if len(res) > 0:
+    res.sort()
+    print(mapper[res[0]])
+    print(mapper[res[-1]])
 
 
 print(sorted(fastest_slowest.items(), key=lambda kv:(kv[1], kv[0])))
