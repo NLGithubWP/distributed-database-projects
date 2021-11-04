@@ -169,5 +169,5 @@ python3 output/get_throughput_dbstate.py -u=postgresql://rootuser:@xcnd57:27257/
 # 8. Run some sql (optional)
 
 ```bash
-./cockroach sql --insecure --host=xcnd55:26257
+./cockroach sql --insecure --host=xcnd55:27257
 ```
