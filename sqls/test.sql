@@ -2,7 +2,22 @@
 
 USE cs5424db;
 set search_path to workloadA;
+set search_path to workloadB;
 
+
+
+show ranges from table order_ori;
+show ranges from table customer;
+show ranges from table order_line;
+show ranges from table district;
+show ranges from table item;
+show ranges from table warehouse;
+show ranges from table stock;
+show ranges from table item_pair;
+
+
+
+ALTER INDEX order_ori@order_ori_joint_c_id SPLIT AT VALUES (1,1),(1,10),(2,1),(2,10),(3,1),(3,10),(4,1),(4,10),(5,1),(5,10),(6,1),(6,10),(7,1),(7,10),(8,1),(8,10),(9,1),(9,10),(10,1),(10,10);
 
 
 SET experimental_enable_hash_sharded_indexes=on;

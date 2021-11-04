@@ -216,14 +216,6 @@ GRANT all on TABLE cs5424db.workloadB.* to naili;
 -- set schema
 set search_path to workloadB;
 
-
--- run some test sql
---select * from item limit 100;
---SHOW INDEX FROM item;
---SHOW COLUMNS FROM item;
---show ranges from table item;
-
-
 -- de-normalization to make read faster, used in workload B
 
 -- de-normalization order_ori
@@ -248,3 +240,15 @@ UPDATE customer SET C_W_NAME = W_NAME, C_D_NAME = D_NAME
     FROM dw WHERE customer.C_W_ID = dw.D_W_ID AND customer.C_D_ID = dw.D_ID;
 
 -- de-normalization order_line is done by pre-processing csv
+
+-- run some test sql
+SHOW INDEX FROM item;
+SHOW COLUMNS FROM item;
+show ranges from table order_ori;
+show ranges from table customer;
+show ranges from table order_line;
+show ranges from table district;
+show ranges from table item;
+show ranges from table warehouse;
+show ranges from table stock;
+show ranges from table item_pair;
