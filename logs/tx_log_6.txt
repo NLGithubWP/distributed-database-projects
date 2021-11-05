@@ -1,0 +1,717 @@
+INFO:__main__:============================ connected to db! ============================
+ERROR:__main__:============================ reading file /home/stuproj/cs4224p/temp/tasks/project_files_4/xact_files_A/6.txt ============================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 1900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 2900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3100, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=aa3c6d7a key=/Table/56/1/6/3/1917/0 pri=0.02999604 epo=0 ts=1636117160.941033786,0 min=1636117160.941033786,0 seq=1} lock=true stat=ABORTED rts=1636117160.941033786,0 wto=false gul=1636117161.441033786,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=aa3c6d7a key=/Table/56/1/6/3/1917/0 pri=0.02999604 epo=0 ts=1636117160.941033786,0 min=1636117160.941033786,0 seq=1} lock=true stat=ABORTED rts=1636117160.941033786,0 wto=false gul=1636117161.441033786,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=69971d95 key=/Table/56/1/6/3/1917/0 pri=0.00856249 epo=0 ts=1636117161.426202281,0 min=1636117161.426202281,0 seq=1} lock=true stat=ABORTED rts=1636117161.426202281,0 wto=false gul=1636117161.926202281,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=69971d95 key=/Table/56/1/6/3/1917/0 pri=0.00856249 epo=0 ts=1636117161.426202281,0 min=1636117161.426202281,0 seq=1} lock=true stat=ABORTED rts=1636117161.426202281,0 wto=false gul=1636117161.926202281,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=3fddcf40 key=/Table/56/1/6/3/1917/0 pri=0.04633577 epo=0 ts=1636117163.291002417,0 min=1636117162.289471233,0 seq=1} lock=true stat=ABORTED rts=1636117162.710368127,2 wto=false gul=1636117162.789471233,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=3fddcf40 key=/Table/56/1/6/3/1917/0 pri=0.04633577 epo=0 ts=1636117163.291002417,0 min=1636117162.289471233,0 seq=1} lock=true stat=ABORTED rts=1636117162.710368127,2 wto=false gul=1636117162.789471233,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c67e3b3f key=/Table/56/1/6/3/1917/0 pri=0.05848943 epo=0 ts=1636117166.557404257,0 min=1636117164.556539403,0 seq=1} lock=true stat=ABORTED rts=1636117164.906211309,2 wto=false gul=1636117165.056539403,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c67e3b3f key=/Table/56/1/6/3/1917/0 pri=0.05848943 epo=0 ts=1636117166.557404257,0 min=1636117164.556539403,0 seq=1} lock=true stat=ABORTED rts=1636117164.906211309,2 wto=false gul=1636117165.056539403,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 5 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b0d27c83 key=/Table/56/1/6/3/1917/0 pri=0.05250503 epo=0 ts=1636117172.875666128,0 min=1636117168.874580223,0 seq=1} lock=true stat=ABORTED rts=1636117170.842675216,2 wto=false gul=1636117169.374580223,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b0d27c83 key=/Table/56/1/6/3/1917/0 pri=0.05250503 epo=0 ts=1636117172.875666128,0 min=1636117168.874580223,0 seq=1} lock=true stat=ABORTED rts=1636117170.842675216,2 wto=false gul=1636117169.374580223,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: Max Try time reached, tx DeliveryTxParams-update4 still error! 
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 3900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4200, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=009fc256 key=/Table/56/1/4/1/994/0 pri=0.02164608 epo=0 ts=1636117581.887598721,0 min=1636117581.887598721,0 seq=9} lock=true stat=ABORTED rts=1636117581.887598721,0 wto=false gul=1636117582.387598721,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=009fc256 key=/Table/56/1/4/1/994/0 pri=0.02164608 epo=0 ts=1636117581.887598721,0 min=1636117581.887598721,0 seq=9} lock=true stat=ABORTED rts=1636117581.887598721,0 wto=false gul=1636117582.387598721,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 4900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 5900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6500, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=42580afc key=/Table/56/1/6/3/2230/0 pri=0.03848015 epo=0 ts=1636118494.545331596,0 min=1636118494.545331596,0 seq=1} lock=true stat=ABORTED rts=1636118494.545331596,0 wto=false gul=1636118495.045331596,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=42580afc key=/Table/56/1/6/3/2230/0 pri=0.03848015 epo=0 ts=1636118494.545331596,0 min=1636118494.545331596,0 seq=1} lock=true stat=ABORTED rts=1636118494.545331596,0 wto=false gul=1636118495.045331596,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 6900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7000, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=861454a7 key=/Table/56/1/4/1/802/0 pri=0.00726469 epo=0 ts=1636118675.395067188,0 min=1636118675.395067188,0 seq=9} lock=true stat=ABORTED rts=1636118675.395067188,0 wto=false gul=1636118675.895067188,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=861454a7 key=/Table/56/1/4/1/802/0 pri=0.00726469 epo=0 ts=1636118675.395067188,0 min=1636118675.395067188,0 seq=9} lock=true stat=ABORTED rts=1636118675.395067188,0 wto=false gul=1636118675.895067188,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7200, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=cce3d82c key=/Table/56/1/6/3/2736/0 pri=0.04098136 epo=0 ts=1636118774.930690456,0 min=1636118774.930690456,0 seq=1} lock=true stat=ABORTED rts=1636118774.930690456,0 wto=false gul=1636118775.430690456,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_ABORT_SPAN): "sql txn" meta={id=cce3d82c key=/Table/56/1/6/3/2736/0 pri=0.04098136 epo=0 ts=1636118774.930690456,0 min=1636118774.930690456,0 seq=1} lock=true stat=ABORTED rts=1636118774.930690456,0 wto=false gul=1636118775.430690456,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_abort_span
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7700, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c937f2f9 key=/Table/56/1/5/1/2018/0 pri=0.01114951 epo=0 ts=1636118979.555074506,0 min=1636118979.555074506,0 seq=2} lock=true stat=ABORTED rts=1636118979.555074506,0 wto=false gul=1636118980.055074506,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c937f2f9 key=/Table/56/1/5/1/2018/0 pri=0.01114951 epo=0 ts=1636118979.555074506,0 min=1636118979.555074506,0 seq=2} lock=true stat=ABORTED rts=1636118979.555074506,0 wto=false gul=1636118980.055074506,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=93839fab key=/Table/56/1/5/1/2018/0 pri=0.02467004 epo=0 ts=1636118980.083949343,0 min=1636118980.083949343,0 seq=2} lock=true stat=ABORTED rts=1636118980.083949343,0 wto=false gul=1636118980.583949343,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=93839fab key=/Table/56/1/5/1/2018/0 pri=0.02467004 epo=0 ts=1636118980.083949343,0 min=1636118980.083949343,0 seq=2} lock=true stat=ABORTED rts=1636118980.083949343,0 wto=false gul=1636118980.583949343,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 3 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 7900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8200, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=4108b6f1 key=/Table/56/1/6/3/525/0 pri=0.00901693 epo=0 ts=1636119207.879328070,0 min=1636119207.879328070,0 seq=1} lock=true stat=ABORTED rts=1636119207.879328070,0 wto=false gul=1636119208.379328070,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=4108b6f1 key=/Table/56/1/6/3/525/0 pri=0.00901693 epo=0 ts=1636119207.879328070,0 min=1636119207.879328070,0 seq=1} lock=true stat=ABORTED rts=1636119207.879328070,0 wto=false gul=1636119208.379328070,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8300, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7dc4f8a6 key=/Table/56/1/5/3/2198/0 pri=0.03085537 epo=0 ts=1636119277.845297061,0 min=1636119276.843800609,0 seq=1} lock=true stat=ABORTED rts=1636119277.493851508,2 wto=false gul=1636119277.343800609,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7dc4f8a6 key=/Table/56/1/5/3/2198/0 pri=0.03085537 epo=0 ts=1636119277.845297061,0 min=1636119276.843800609,0 seq=1} lock=true stat=ABORTED rts=1636119277.493851508,2 wto=false gul=1636119277.343800609,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b63df79d key=/Table/56/1/5/3/2198/0 pri=0.00718692 epo=0 ts=1636119278.221370351,0 min=1636119278.221370351,0 seq=1} lock=true stat=ABORTED rts=1636119278.221370351,0 wto=false gul=1636119278.721370351,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b63df79d key=/Table/56/1/5/3/2198/0 pri=0.00718692 epo=0 ts=1636119278.221370351,0 min=1636119278.221370351,0 seq=1} lock=true stat=ABORTED rts=1636119278.221370351,0 wto=false gul=1636119278.721370351,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=5cc22391 key=/Table/56/1/5/3/2198/0 pri=0.04006135 epo=0 ts=1636119281.230441645,0 min=1636119279.228734479,0 seq=1} lock=true stat=ABORTED rts=1636119279.942213799,2 wto=false gul=1636119279.728734479,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=5cc22391 key=/Table/56/1/5/3/2198/0 pri=0.04006135 epo=0 ts=1636119281.230441645,0 min=1636119279.228734479,0 seq=1} lock=true stat=ABORTED rts=1636119279.942213799,2 wto=false gul=1636119279.728734479,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 4 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7f898073 key=/Table/56/1/5/1/1488/0 pri=0.06345809 epo=0 ts=1636119328.654153933,0 min=1636119328.654153933,0 seq=9} lock=true stat=ABORTED rts=1636119328.654153933,0 wto=false gul=1636119329.154153933,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7f898073 key=/Table/56/1/5/1/1488/0 pri=0.06345809 epo=0 ts=1636119328.654153933,0 min=1636119328.654153933,0 seq=9} lock=true stat=ABORTED rts=1636119328.654153933,0 wto=false gul=1636119329.154153933,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=12c950f6 key=/Table/56/1/5/1/1488/0 pri=0.00075768 epo=0 ts=1636119329.020895946,0 min=1636119329.020895946,0 seq=9} lock=true stat=ABORTED rts=1636119329.020895946,0 wto=false gul=1636119329.520895946,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=12c950f6 key=/Table/56/1/5/1/1488/0 pri=0.00075768 epo=0 ts=1636119329.020895946,0 min=1636119329.020895946,0 seq=9} lock=true stat=ABORTED rts=1636119329.020895946,0 wto=false gul=1636119329.520895946,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 3 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8400, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=90050ab2 key=/Table/56/1/5/3/91/0 pri=0.00696606 epo=0 ts=1636119372.824977401,0 min=1636119372.824977401,0 seq=1} lock=true stat=ABORTED rts=1636119372.824977401,0 wto=false gul=1636119373.324977401,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=90050ab2 key=/Table/56/1/5/3/91/0 pri=0.00696606 epo=0 ts=1636119372.824977401,0 min=1636119372.824977401,0 seq=1} lock=true stat=ABORTED rts=1636119372.824977401,0 wto=false gul=1636119373.324977401,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8600, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c59513d6 key=/Table/56/1/5/1/2875/0 pri=0.00626794 epo=0 ts=1636119442.647069587,0 min=1636119442.647069587,0 seq=9} lock=true stat=ABORTED rts=1636119442.647069587,0 wto=false gul=1636119443.147069587,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=c59513d6 key=/Table/56/1/5/1/2875/0 pri=0.00626794 epo=0 ts=1636119442.647069587,0 min=1636119442.647069587,0 seq=9} lock=true stat=ABORTED rts=1636119442.647069587,0 wto=false gul=1636119443.147069587,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e90d4c18 key=/Table/56/1/6/3/2996/0 pri=0.01808503 epo=0 ts=1636119467.511191139,0 min=1636119467.511191139,0 seq=1} lock=true stat=ABORTED rts=1636119467.511191139,0 wto=false gul=1636119468.011191139,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=e90d4c18 key=/Table/56/1/6/3/2996/0 pri=0.01808503 epo=0 ts=1636119467.511191139,0 min=1636119467.511191139,0 seq=1} lock=true stat=ABORTED rts=1636119467.511191139,0 wto=false gul=1636119468.011191139,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=6d5f1c2a key=/Table/56/1/6/3/2996/0 pri=0.05449695 epo=0 ts=1636119470.712552266,0 min=1636119468.710829584,0 seq=1} lock=true stat=ABORTED rts=1636119469.914310506,2 wto=false gul=1636119469.210829584,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=6d5f1c2a key=/Table/56/1/6/3/2996/0 pri=0.05449695 epo=0 ts=1636119470.712552266,0 min=1636119468.710829584,0 seq=1} lock=true stat=ABORTED rts=1636119469.914310506,2 wto=false gul=1636119469.210829584,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 3 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=25d9b664 key=/Table/56/1/6/3/2996/0 pri=0.06062440 epo=0 ts=1636119474.858243220,0 min=1636119471.856668912,0 seq=1} lock=true stat=ABORTED rts=1636119473.946248287,2 wto=false gul=1636119472.356668912,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=25d9b664 key=/Table/56/1/6/3/2996/0 pri=0.06062440 epo=0 ts=1636119474.858243220,0 min=1636119471.856668912,0 seq=1} lock=true stat=ABORTED rts=1636119473.946248287,2 wto=false gul=1636119472.356668912,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 4 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=1766593b key=/Table/56/1/6/3/2996/0 pri=0.01579053 epo=0 ts=1636119477.615928587,0 min=1636119476.613584149,0 seq=1} lock=true stat=ABORTED rts=1636119476.613584149,0 wto=false gul=1636119477.113584149,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=1766593b key=/Table/56/1/6/3/2996/0 pri=0.01579053 epo=0 ts=1636119477.615928587,0 min=1636119476.613584149,0 seq=1} lock=true stat=ABORTED rts=1636119476.613584149,0 wto=false gul=1636119477.113584149,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 5 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8800, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=68c4e548 key=/Table/56/1/6/3/1012/0 pri=0.01451545 epo=0 ts=1636119537.311410202,0 min=1636119537.311410202,0 seq=1} lock=true stat=ABORTED rts=1636119537.311410202,0 wto=false gul=1636119537.811410202,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=68c4e548 key=/Table/56/1/6/3/1012/0 pri=0.01451545 epo=0 ts=1636119537.311410202,0 min=1636119537.311410202,0 seq=1} lock=true stat=ABORTED rts=1636119537.311410202,0 wto=false gul=1636119537.811410202,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=121aebd5 key=/Table/56/1/4/1/2704/0 pri=0.01320564 epo=0 ts=1636119549.440757600,0 min=1636119549.440757600,0 seq=9} lock=true stat=ABORTED rts=1636119549.440757600,0 wto=false gul=1636119549.940757600,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=121aebd5 key=/Table/56/1/4/1/2704/0 pri=0.01320564 epo=0 ts=1636119549.440757600,0 min=1636119549.440757600,0 seq=9} lock=true stat=ABORTED rts=1636119549.440757600,0 wto=false gul=1636119549.940757600,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 8900, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ca7a8ca6 key=/Table/56/1/6/3/1884/0 pri=0.02726838 epo=0 ts=1636119607.225950057,0 min=1636119607.225950057,0 seq=1} lock=true stat=ABORTED rts=1636119607.225950057,0 wto=false gul=1636119607.725950057,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=ca7a8ca6 key=/Table/56/1/6/3/1884/0 pri=0.02726838 epo=0 ts=1636119607.225950057,0 min=1636119607.225950057,0 seq=1} lock=true stat=ABORTED rts=1636119607.225950057,0 wto=false gul=1636119607.725950057,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9500, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=d71290d0 key=/Table/56/1/5/1/369/0 pri=0.00961181 epo=0 ts=1636119894.282356122,0 min=1636119894.282356122,0 seq=9} lock=true stat=ABORTED rts=1636119894.282356122,0 wto=false gul=1636119894.782356122,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=d71290d0 key=/Table/56/1/5/1/369/0 pri=0.00961181 epo=0 ts=1636119894.282356122,0 min=1636119894.282356122,0 seq=9} lock=true stat=ABORTED rts=1636119894.282356122,0 wto=false gul=1636119894.782356122,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9700, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7847314c key=/Table/56/1/5/3/264/0 pri=0.01105019 epo=0 ts=1636119950.631536915,0 min=1636119950.631536915,0 seq=1} lock=true stat=ABORTED rts=1636119950.631536915,0 wto=false gul=1636119951.131536915,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=7847314c key=/Table/56/1/5/3/264/0 pri=0.01105019 epo=0 ts=1636119950.631536915,0 min=1636119950.631536915,0 seq=1} lock=true stat=ABORTED rts=1636119950.631536915,0 wto=false gul=1636119951.131536915,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=491a4d55 key=/Table/56/1/5/1/1511/0 pri=0.08593933 epo=0 ts=1636119962.330231712,0 min=1636119961.328281737,0 seq=9} lock=true stat=ABORTED rts=1636119961.328281737,0 wto=false gul=1636119961.828281737,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=491a4d55 key=/Table/56/1/5/1/1511/0 pri=0.08593933 epo=0 ts=1636119962.330231712,0 min=1636119961.328281737,0 seq=9} lock=true stat=ABORTED rts=1636119961.328281737,0 wto=false gul=1636119961.828281737,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+ERROR:__main__:Errored: 2 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=dca61969 key=/Table/56/1/5/1/1511/0 pri=0.04323581 epo=0 ts=1636119963.099826677,0 min=1636119963.099826677,0 seq=9} lock=true stat=ABORTED rts=1636119963.099826677,0 wto=false gul=1636119963.599826677,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=dca61969 key=/Table/56/1/5/1/1511/0 pri=0.04323581 epo=0 ts=1636119963.099826677,0 min=1636119963.099826677,0 seq=9} lock=true stat=ABORTED rts=1636119963.099826677,0 wto=false gul=1636119963.599826677,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 3 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 9900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10300, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=051af5d4 key=/Table/56/1/4/1/2491/0 pri=0.00487380 epo=0 ts=1636120207.957798960,0 min=1636120207.957798960,0 seq=9} lock=true stat=ABORTED rts=1636120207.957798960,0 wto=false gul=1636120208.457798960,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=051af5d4 key=/Table/56/1/4/1/2491/0 pri=0.00487380 epo=0 ts=1636120207.957798960,0 min=1636120207.957798960,0 seq=9} lock=true stat=ABORTED rts=1636120207.957798960,0 wto=false gul=1636120208.457798960,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 10900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 11900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12100, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=4f003458 key=/Table/56/1/4/1/362/0 pri=0.00812439 epo=0 ts=1636120849.271225006,0 min=1636120849.271225006,0 seq=9} lock=true stat=ABORTED rts=1636120849.271225006,0 wto=false gul=1636120849.771225006,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=4f003458 key=/Table/56/1/4/1/362/0 pri=0.00812439 epo=0 ts=1636120849.271225006,0 min=1636120849.271225006,0 seq=9} lock=true stat=ABORTED rts=1636120849.271225006,0 wto=false gul=1636120849.771225006,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 12900, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_TIMESTAMP_CACHE_REJECTED): "sql txn" meta={id=c4d4683d key=/Table/55/1/1/2 pri=0.01646131 epo=0 ts=1636121147.560256814,1 min=1636121147.370623232,0 seq=44} lock=true stat=PENDING rts=1636121147.560256814,1 wto=false gul=1636121147.870623232,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_timestamp_cache_rejected
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 104, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/tx_workloadA.py", line 163, in new_order_transaction
+    m_conn.commit()
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_TIMESTAMP_CACHE_REJECTED): "sql txn" meta={id=c4d4683d key=/Table/55/1/1/2 pri=0.01646131 epo=0 ts=1636121147.560256814,1 min=1636121147.370623232,0 seq=44} lock=true stat=PENDING rts=1636121147.560256814,1 wto=false gul=1636121147.870623232,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_timestamp_cache_rejected
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13100, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: NewOrderTxParams, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_NEW_LEASE_PREVENTS_TXN): "sql txn" meta={id=c6428044 key=/Table/55/1/1/1 pri=0.00982024 epo=0 ts=1636121219.010664497,0 min=1636121219.010664497,0 seq=121} lock=true stat=PENDING rts=1636121219.010664497,0 wto=false gul=1636121219.510664497,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_new_lease_prevents_txn
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 104, in <lambda>
+    lambda l_conn: m_tx_ins.new_order_transaction(l_conn, m_params))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/tx_workloadA.py", line 163, in new_order_transaction
+    m_conn.commit()
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_NEW_LEASE_PREVENTS_TXN): "sql txn" meta={id=c6428044 key=/Table/55/1/1/1 pri=0.00982024 epo=0 ts=1636121219.010664497,0 min=1636121219.010664497,0 seq=121} lock=true stat=PENDING rts=1636121219.010664497,0 wto=false gul=1636121219.510664497,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_new_lease_prevents_txn
+
+ ]
+INFO:__main__:Running Tx NewOrderTxParams successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13200, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=15194784 key=/Table/56/1/4/1/2881/0 pri=0.00633188 epo=0 ts=1636121224.257415291,0 min=1636121224.257415291,0 seq=9} lock=true stat=ABORTED rts=1636121224.257415291,0 wto=false gul=1636121224.757415291,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=15194784 key=/Table/56/1/4/1/2881/0 pri=0.00633188 epo=0 ts=1636121224.257415291,0 min=1636121224.257415291,0 seq=9} lock=true stat=ABORTED rts=1636121224.257415291,0 wto=false gul=1636121224.757415291,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 13900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14000, write log to logs/tx_log_6.txt =====================
+ERROR:__main__:Errored: 1 retry happened in running tx: DeliveryTxParams-update4, ErrorMsg: 
+[ restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b60e5a86 key=/Table/56/1/6/3/2673/0 pri=0.01412877 epo=0 ts=1636121431.277682487,0 min=1636121431.277682487,0 seq=1} lock=true stat=ABORTED rts=1636121431.277682487,0 wto=false gul=1636121431.777682487,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+ ], Traceback: 
+[ Traceback (most recent call last):
+  File "cockroachDB_driver.py", line 64, in run_tx
+    res = operation(m_conn)
+  File "cockroachDB_driver.py", line 196, in <lambda>
+    l_conn, cid_map, sum_map))
+  File "/home/stuproj/cs4224p/temp/tasks/txs/base.py", line 389, in delivery_update_transaction4
+    cur.execute(query)
+psycopg2.errors.SerializationFailure: restart transaction: TransactionRetryWithProtoRefreshError: TransactionAbortedError(ABORT_REASON_PUSHER_ABORTED): "sql txn" meta={id=b60e5a86 key=/Table/56/1/6/3/2673/0 pri=0.01412877 epo=0 ts=1636121431.277682487,0 min=1636121431.277682487,0 seq=1} lock=true stat=ABORTED rts=1636121431.277682487,0 wto=false gul=1636121431.777682487,0
+HINT:  See: https://www.cockroachlabs.com/docs/v21.1/transaction-retry-error-reference.html#abort_reason_pusher_aborted
+
+ ]
+INFO:__main__:Running Tx DeliveryTxParams-update4 successful at the 2 time retry
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14100, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14200, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14300, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14400, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14500, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14600, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14700, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14800, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 14900, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 15000, write log to logs/tx_log_6.txt =====================
+INFO:__main__:============================ read file 6.txt, now total_tx_num reaches 15100, write log to logs/tx_log_6.txt =====================
