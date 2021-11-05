@@ -12,7 +12,7 @@ opt = parser.parse_args()
 ## Throughput.csv ##
 throughput_col = ['min_throughput','max_throughput','avg_throughput']
 
-df_clients = pd.read_csv('output/workloadA_clients_single_district.csv')
+df_clients = pd.read_csv('output/clients.csv')
 df = pd.DataFrame([], columns = throughput_col)
 df = df.append({'min_throughput' : df_clients['xact_throughput'].min(),
                 'max_throughput' : df_clients['xact_throughput'].max(),
