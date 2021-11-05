@@ -392,7 +392,7 @@ if __name__ == "__main__":
         TestTxConfig = False
         # if debug single transaction, set DebugSingleTx = true and assign name here
         DebugSingleTx = True
-        SingleTxName = [txs.NewOrderTxName, txs.PaymentTxName, txs.DeliveryTxName, ]
+        SingleTxName = [txs.NewOrderTxName, txs.PaymentTxName, txs.DeliveryTxName]
 
         begin_time = time.time()
         # batch used to insert or select
