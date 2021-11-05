@@ -391,8 +391,8 @@ if __name__ == "__main__":
 
         TestTxConfig = False
         # if debug single transaction, set DebugSingleTx = true and assign name here
-        DebugSingleTx = False
-        SingleTxName = txs.NewOrderTxName
+        DebugSingleTx = True
+        SingleTxName = [txs.NewOrderTxName, txs.PaymentTxName, txs.DeliveryTxName, ]
 
         begin_time = time.time()
         # batch used to insert or select
@@ -460,7 +460,7 @@ if __name__ == "__main__":
                     required_tx_types[params.__class__.__name__] += 1
 
                 # test only one tx
-                if DebugSingleTx == True and params.__class__.__name__ != SingleTxName: inputs = []; line_content = f.readline(); continue
+                if DebugSingleTx == True and params.__class__.__name__ not in SingleTxName: inputs = []; line_content = f.readline(); continue
                 execute_tx(tx_ins, conn, params)
                 # clear the inputs, and wait for next inout arrays
                 inputs = []
