@@ -72,21 +72,21 @@ class Transactions(object):
         end = time.time()
         duration = end - begin
 
-        # print("payment_transaction, "
-        #       "w_street_1: %s,"
-        #       "w_street_2: %s,"
-        #       "w_city: %s,"
-        #       "w_state: %s,"
-        #       "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
-        #
-        # print("payment_transaction, "
-        #       "d_street_1: %s,"
-        #       "d_street_2: %s,"
-        #       "d_city: %s,"
-        #       "d_state: %s,"
-        #       "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
-        #
-        # print("customer:, ", res)
+        print("payment_transaction, "
+              "w_street_1: %s,"
+              "w_street_2: %s,"
+              "w_city: %s,"
+              "w_state: %s,"
+              "w_zip: %s," % (w_street_1, w_street_2, w_city, w_state, w_zip))
+
+        print("payment_transaction, "
+              "d_street_1: %s,"
+              "d_street_2: %s,"
+              "d_city: %s,"
+              "d_state: %s,"
+              "d_zip: %s," % (d_street_1, d_street_2, d_city, d_state, d_zip))
+
+        print("customer:, ", res)
         return duration
 
     def order_status_transaction(self, m_conn, m_params: OrderStatusTxParams):
@@ -142,7 +142,7 @@ class Transactions(object):
                         (c_id, w_id, d_id, w_id, d_id, c_id))
 
             res = cur.fetchall()
-            # print_res(res)
+            print_res(res)
         m_conn.commit()
         end = time.time()
         duration = end - begin
@@ -184,11 +184,11 @@ class Transactions(object):
         duration = end - begin
 
         # 3. Output the total number of items in S where its stock quantity at W_ID is below the threshold
-        # print("-------------------------------")
-        # print(
-        #     "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
-        #     % (w_id, d_id, threshold, l))
-        # print(count)
+        print("-------------------------------")
+        print(
+            "the number of items (W_ID: %s, D_ID: %s) with a stock level below the threshold %s within the last %s orders:"
+            % (w_id, d_id, threshold, l))
+        print(count)
 
         return duration
 
@@ -214,11 +214,11 @@ class Transactions(object):
         m_conn.commit()
         end = time.time()
         duration = end - begin
-        # print("-------------------------------")
-        # print("Top 10 customers ranked in descending order of outstanding balance:")
-        # print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
-        # for row in rows:
-        #     print(row)
+        print("-------------------------------")
+        print("Top 10 customers ranked in descending order of outstanding balance:")
+        print("C_FIRST, C_MIDDLE, C_LAST, C_BALANCE, W_NAME, D_NAME")
+        for row in rows:
+            print(row)
         return duration
 
     @abstractmethod

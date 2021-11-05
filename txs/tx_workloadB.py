@@ -186,23 +186,23 @@ class TxForWorkloadB(Transactions):
         end = time.time()
         duration = end-begin
 
-        # print("------------ result is ---------")
-        # print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
-        # print(w_id, d_id, c_id, c_last, c_credit, c_discount)
-        # print("Warehouse tax rate W TAX, District tax rate D TAX")
-        # print(w_tax, d_tax)
-        # print("Order number O_ID, entry date O_ENTRY_D")
-        # print(n, entry_d)
-        # print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
-        # print(num_items, total_amount)
-        #
-        # for i in range(len(item_number)):
-        #     print("ITEM NUMBER[i]: ", item_number[i])
-        #     print("I_NAME: ", i_name_list[i])
-        #     print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
-        #     print("QUANTITY[i]: ", quantity[i])
-        #     print("OL_AMOUNT: ", o_amount_list[i])
-        #     print("S_QUANTITY: ", s_quantity_list[i])
+        print("------------ result is ---------")
+        print("Customer identifier (W ID, D ID, C ID), lastname C_LAST, credit C_CREDIT, discount C_DISCOUNT")
+        print(w_id, d_id, c_id, c_last, c_credit, c_discount)
+        print("Warehouse tax rate W TAX, District tax rate D TAX")
+        print(w_tax, d_tax)
+        print("Order number O_ID, entry date O_ENTRY_D")
+        print(n, entry_d)
+        print("Number of items NUM_ITEMS, Total amount for order TOTAL_AMOUNT")
+        print(num_items, total_amount)
+
+        for i in range(len(item_number)):
+            print("ITEM NUMBER[i]: ", item_number[i])
+            print("I_NAME: ", i_name_list[i])
+            print("SUPPLIER_WAREHOUSE[i]: ", supplier_warehouse[i])
+            print("QUANTITY[i]: ", quantity[i])
+            print("OL_AMOUNT: ", o_amount_list[i])
+            print("S_QUANTITY: ", s_quantity_list[i])
         return duration
 
     def popular_item_transaction(self, m_conn, m_params: PopItemTxParams):
@@ -257,15 +257,15 @@ class TxForWorkloadB(Transactions):
             # print results
             j = 0
             for i in range(l):
-                # print("order: O_ID, O_ENTRY_ID")
-                # print(s[i][0], s[i][1])
-                #
-                # print("customer name")
-                # print(s[i][2], s[i][3], s[i][4])
-                #
-                # print("popular item: I_NAME, OL_QUANTITY")
+                print("order: O_ID, O_ENTRY_ID")
+                print(s[i][0], s[i][1])
+
+                print("customer name")
+                print(s[i][2], s[i][3], s[i][4])
+
+                print("popular item: I_NAME, OL_QUANTITY")
                 while p_x[j][0]==s[i][0]:
-                    # print(p_x[j][2], p_x[j][3])
+                    print(p_x[j][2], p_x[j][3])
                     pop_item_set.add(p_x[j][1])
                     j+=1
                     if(j==len(p_x)):
@@ -281,12 +281,12 @@ class TxForWorkloadB(Transactions):
                         GROUP BY OL_I_ID
                      """, (w_id, d_id, n - l, n, pop_item_set))
             item_count = cur.fetchall()
-            # print("items and their counts")
-            # print(item_count)
+            print("items and their counts")
+            print(item_count)
 
             # for each distinct popular item, the percentage of orders in S that contain the popular item
-            # for item in item_count:
-            #     print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
+            for item in item_count:
+                print("%% of orders that contain the popular item with I_ID (%s) is %s %%" % (item[0], (item[1] / l) * 100))
 
             m_conn.commit()
         end = time.time()
