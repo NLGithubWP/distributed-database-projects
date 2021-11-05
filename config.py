@@ -1,8 +1,8 @@
 
 
 # workload is A or B
-# used_workload_type = "A"
-used_workload_type = "B"
+used_workload_type = "A"
+# used_workload_type = "B"
 
 # folder path of project_files_4
 folder_path = "/home/stuproj/cs4224p/temp/tasks"

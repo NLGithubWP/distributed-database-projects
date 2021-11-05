@@ -74,7 +74,7 @@ def check():
 if __name__ == "__main__":
 
     """run"""
-    run(40, used_workload_type, used_workload_type)
+    # run(40, used_workload_type, used_workload_type)
 
     """kill"""
     # kill("join=xcnd55:27257,xcnd56:27257,xcnd57:27257,xcnd58:27257,xcnd59:27257")

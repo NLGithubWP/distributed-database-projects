@@ -148,7 +148,7 @@ server_port = 27257
 python3 output/init_empty_csv.py
 ```
 
-## Run script to launch 40 drivers across many nodes
+## Run script at local computer and launch 40 drivers across many nodes
 
 ```bash
 python3 run_server.py

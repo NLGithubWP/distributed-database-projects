@@ -52,7 +52,7 @@ IMPORT INTO cs5424db.workloadB.district
     CSV DATA ('http://xcnd55:3000/home/stuproj/cs4224p/temp/tasks/project_files_4/data_files/district.csv')
     WITH delimiter = e',', nullif = 'null';
 
-ALTER TABLE cs5424db.workloadB.district SPLIT AT VALUES (1,1),(2,10),(3,1),(4,10),(5,1),(6,10),(7,1),(8,10),(9,1),(10,10);
+ALTER TABLE cs5424db.workloadB.district SPLIT AT VALUES (1,1),(5,1),(10,10);
 
 CREATE TABLE IF NOT EXISTS cs5424db.workloadB.customer (
     C_W_ID INT NOT NULL,
