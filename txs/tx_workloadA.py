@@ -93,12 +93,12 @@ class TxForWorkloadA(Transactions):
                 s_quantity_list.append(s_quantity)
 
                 # update stock
-                adjusted_qty = s_quantity - quantity[i]
+                adjusted_qty = s_quantity - quantity[item_id]
 
                 if adjusted_qty < 10:
                     adjusted_qty = adjusted_qty + 100
 
-                if supplier_warehouse[i] == w_id:
+                if supplier_warehouse[item_id] == w_id:
                     cur.execute(
                         "UPDATE stock SET S_QUANTITY = %s, "
                         "S_YTD = S_YTD + %s,"
